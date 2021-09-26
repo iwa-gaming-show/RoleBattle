@@ -372,3 +372,299 @@ Received Import Request.
 Start importing Assets/MyGames/Scenes/Battle.unity using Guid(671a47f0070cb4b2bab8cc1bcb676914) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '654588c9349417f1f4b58c885dc6f140') in 0.001335 seconds
   Import took 0.004086 seconds .
 
+========================================================================
+Received Import Request.
+  Time since last request: 2728.401836 seconds.
+  path: Assets/MyGames/Textures/Cards
+  artifactKey: Guid(bbd69a1fff0f843b3885279eb21650d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards using Guid(bbd69a1fff0f843b3885279eb21650d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '78d4d7c211b1a3dca99c35fe51b7f6b5') in 0.015865 seconds
+  Import took 0.074224 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1735.165112 seconds.
+  path: Assets/Aekashics Librarium - Megapack III/Demo/Demo.unity
+  artifactKey: Guid(2cda990e2423bbf4892e6590ba056729) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aekashics Librarium - Megapack III/Demo/Demo.unity using Guid(2cda990e2423bbf4892e6590ba056729) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ef68610b749a61489a644cc02b67ab3d') in 0.067254 seconds
+  Import took 0.090800 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 22.840937 seconds.
+  path: Assets/MyGames/Scenes/Battle.unity
+  artifactKey: Guid(671a47f0070cb4b2bab8cc1bcb676914) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Scenes/Battle.unity using Guid(671a47f0070cb4b2bab8cc1bcb676914) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f8c0e573084ad3d355ad9cedd837b92a') in 0.007849 seconds
+  Import took 0.011576 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.171545 seconds.
+  path: Assets/Aekashics Librarium - Megapack III
+  artifactKey: Guid(9fd2f9be1be64409d9e41ee856a3d888) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aekashics Librarium - Megapack III using Guid(9fd2f9be1be64409d9e41ee856a3d888) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4ddbb27005750190f5a8782fbcfddbd8') in 0.002907 seconds
+  Import took 0.005163 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1557.620496 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts
+  artifactKey: Guid(567a55d372cbc4d15861e6f2a523a898) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts using Guid(567a55d372cbc4d15861e6f2a523a898) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5124b98de76c68785c0dc4285a4a20c9') in 0.004157 seconds
+  Import took 0.007849 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 84.083338 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/m39.png
+  artifactKey: Guid(e27cfda61c9734137a957f067f45cf23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/m39.png using Guid(e27cfda61c9734137a957f067f45cf23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ce73b99c40f3c3cdd163f2cb9712bf7e') in 1.643927 seconds
+  Import took 1.646973 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 50.088703 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/m4.png
+  artifactKey: Guid(d7146e0a7693e4c3b942cfec4437a391) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/m4.png using Guid(d7146e0a7693e4c3b942cfec4437a391) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24b2f2d986471a5680cac63afcb11f23') in 0.021438 seconds
+  Import took 0.024565 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000309 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/m19.png
+  artifactKey: Guid(d54e3be19f0fd49d78a090599f8ec759) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/m19.png using Guid(d54e3be19f0fd49d78a090599f8ec759) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '68051185c7146aac706f136b8e890bd4') in 0.023800 seconds
+  Import took 0.026352 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 32.841111 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/Devil.png
+  artifactKey: Guid(e27cfda61c9734137a957f067f45cf23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/Devil.png using Guid(e27cfda61c9734137a957f067f45cf23) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b16f5b72fe33b050f124e9d293a49887') in 0.018874 seconds
+  Import took 0.021140 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.570422 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/Princess.png
+  artifactKey: Guid(d7146e0a7693e4c3b942cfec4437a391) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/Princess.png using Guid(d7146e0a7693e4c3b942cfec4437a391) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2c11e15649a29a448bb00a7ac35c7e1') in 0.018520 seconds
+  Import took 0.020748 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.740838 seconds.
+  path: Assets/MyGames/Textures/Cards/Ilusts/Knight.png
+  artifactKey: Guid(d54e3be19f0fd49d78a090599f8ec759) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Cards/Ilusts/Knight.png using Guid(d54e3be19f0fd49d78a090599f8ec759) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8783daeb5fc084c45ab9e78d50d3f32e') in 0.045563 seconds
+  Import took 0.048037 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 794.957516 seconds.
+  path: Assets/MyGames/Prefabs/Card.prefab
+  artifactKey: Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Prefabs/Card.prefab using Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0be6fc7885e1011a064aab1f13ae615e') in 1.724996 seconds
+  Import took 1.728432 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000190 seconds.
+  path: Assets/MyGames/Prefabs/Card.prefab
+  artifactKey: Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Prefabs/Card.prefab using Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0be6fc7885e1011a064aab1f13ae615e') in 0.003489 seconds
+  Import took 0.005888 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1187.927212 seconds.
+  path: Assets/MyGames/Prefabs/Card.prefab
+  artifactKey: Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Prefabs/Card.prefab using Guid(2d2aebec91da447d7964d811b2ea2488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '034745f03c5bd758581aad2a5f059e66') in 0.004025 seconds
+  Import took 0.006213 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1257.172362 seconds.
+  path: Assets/MyGames/Textures/PointField
+  artifactKey: Guid(91873227adaea4e7caecf3622e2ee27a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField using Guid(91873227adaea4e7caecf3622e2ee27a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ab65f32007e27642573265dcd75ec5b') in 0.003209 seconds
+  Import took 0.005411 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.167631 seconds.
+  path: Assets/MyGames/Textures/Card
+  artifactKey: Guid(bbd69a1fff0f843b3885279eb21650d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/Card using Guid(bbd69a1fff0f843b3885279eb21650d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3bd5238758204524e9c7ff4affa04161') in 0.001015 seconds
+  Import took 0.004459 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 65.027410 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames
+  artifactKey: Guid(a19580da16a4b4a52bb550778724c934) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames using Guid(a19580da16a4b4a52bb550778724c934) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2ae0117aff51b050c2e9a9f0af3289c') in 0.002614 seconds
+  Import took 0.004806 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 106.489627 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/eichi_RARE_back.png
+  artifactKey: Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/eichi_RARE_back.png using Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e6631161986f03b72b8deecb6d6994ad') in 0.052102 seconds
+  Import took 0.055565 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 16.056548 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField.png
+  artifactKey: Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField.png using Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '14d2ef6956c27be8b2fc75f2d594b2a3') in 0.018714 seconds
+  Import took 0.021043 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.200496 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField1P.png
+  artifactKey: Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField1P.png using Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '64f1f615766e68c6b5c023b4d59c624c') in 0.019891 seconds
+  Import took 0.022068 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 57.612174 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back.png
+  artifactKey: Guid(5b99239aa6ef04e7ba0f13d1d6d19983) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back.png using Guid(5b99239aa6ef04e7ba0f13d1d6d19983) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '650ba795aeaee92ebbb43dae094f5757') in 0.041604 seconds
+  Import took 0.044161 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.976197 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField2P.png
+  artifactKey: Guid(5b99239aa6ef04e7ba0f13d1d6d19983) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField2P.png using Guid(5b99239aa6ef04e7ba0f13d1d6d19983) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c509c25ec4148931cca4291e4854a57b') in 0.052525 seconds
+  Import took 0.054718 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 382.282009 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back_2.png
+  artifactKey: Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back_2.png using Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '84a1ca5f1565fec8f4aff972fa9b565c') in 0.024131 seconds
+  Import took 0.028243 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.575782 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField2P.png
+  artifactKey: Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField2P.png using Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd2bb4d0c1729596b96c7acf7ed7029c5') in 0.017154 seconds
+  Import took 0.019528 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 428.312086 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts
+  artifactKey: Guid(91ac9ad40976f492686fe0330819177e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts using Guid(91ac9ad40976f492686fe0330819177e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3ed1f2197a529f54f05ebaf9fac010f3') in 0.002253 seconds
+  Import took 0.004845 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 652.894163 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png
+  artifactKey: Guid(b7e9bdb4f086b49e6b9ea415384ebace) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png using Guid(b7e9bdb4f086b49e6b9ea415384ebace) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24f885c036ed55b007e183367d66c9c5') in 0.060702 seconds
+  Import took 0.063672 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 436.355344 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png
+  artifactKey: Guid(b7e9bdb4f086b49e6b9ea415384ebace) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png using Guid(b7e9bdb4f086b49e6b9ea415384ebace) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd01e8b16ed019d9b1510bd7db338e11a') in 0.051341 seconds
+  Import took 0.053546 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 417.974039 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01_short.png
+  artifactKey: Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01_short.png using Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5270ff535099bb6ee75ccd8470a1a0b3') in 0.015123 seconds
+  Import took 0.017675 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.526306 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png
+  artifactKey: Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png using Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0346c1ad0c33f12597aaf214d9cea10') in 0.045108 seconds
+  Import took 0.047278 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 542.329071 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png
+  artifactKey: Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01.png using Guid(d224bd65eddbc48a4a1ca4d19171a5bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '755628501eddbccf8034a1e0196857a4') in 0.018861 seconds
+  Import took 0.021794 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 387.097611 seconds.
+  path: Assets/MyGames/Textures/PointField/Ilusts/player1_image_01_top.png
+  artifactKey: Guid(ac685f9fed51c4ca08bc619d070a6572) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Ilusts/player1_image_01_top.png using Guid(ac685f9fed51c4ca08bc619d070a6572) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '546bb4f744f902a140b3562ab9a1b9d3') in 0.017536 seconds
+  Import took 0.019733 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 539.070790 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField1P_old.png
+  artifactKey: Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField1P_old.png using Guid(ea2c1bf48e42d4f82866a9095f1aee0b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '897647847e6369a972100a7d1bacfcef') in 0.015757 seconds
+  Import took 0.018100 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.063398 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/eichi_RARE_back.png
+  artifactKey: Guid(eb4b18877dd134cecac72f305a11ea4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/eichi_RARE_back.png using Guid(eb4b18877dd134cecac72f305a11ea4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '222d349ddc16e8c154832732ee3d6f17') in 0.024452 seconds
+  Import took 0.027423 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.517215 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField1P.png
+  artifactKey: Guid(eb4b18877dd134cecac72f305a11ea4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField1P.png using Guid(eb4b18877dd134cecac72f305a11ea4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a93091d8a3f3894b694844f741e77007') in 0.014794 seconds
+  Import took 0.017141 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 152.403215 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField2P_old.png
+  artifactKey: Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField2P_old.png using Guid(d4b1a9c3fe41848e1829537bc7358b9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e92836c6802881defb924003920c863b') in 0.015027 seconds
+  Import took 0.017685 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.718317 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back.png
+  artifactKey: Guid(75b7a07588b19484890ffefc3ccae995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/yuuai_RARE_back.png using Guid(75b7a07588b19484890ffefc3ccae995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e3beb2dca68c24a9ea3bf959605c5ee') in 0.017436 seconds
+  Import took 0.019880 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.748422 seconds.
+  path: Assets/MyGames/Textures/PointField/Frames/PointField2P.png
+  artifactKey: Guid(75b7a07588b19484890ffefc3ccae995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MyGames/Textures/PointField/Frames/PointField2P.png using Guid(75b7a07588b19484890ffefc3ccae995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0e3574f76d16f69efbbf82ccebf8ca45') in 0.018563 seconds
+  Import took 0.020790 seconds .
+
