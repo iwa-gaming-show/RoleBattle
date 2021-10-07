@@ -6,13 +6,16 @@ public class CardController : MonoBehaviour
 {
     CardModel _cardModel;//カードデータ操作用
     CardView _cardView;//カード表示用
+    CardEvent _cardEvent;
 
     public CardModel CardModel => _cardModel;
+    public CardEvent CardEvent => _cardEvent;
 
     void Awake()
     {
         _cardModel = GetComponent<CardModel>();
         _cardView = GetComponent<CardView>();
+        _cardEvent = GetComponent<CardEvent>();
     }
 
     // Start is called before the first frame update

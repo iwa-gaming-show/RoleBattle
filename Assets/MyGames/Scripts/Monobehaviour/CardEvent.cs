@@ -13,26 +13,31 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         gameManager = GameManager._instance;
     }
 
+    /// <summary>
+    /// クリックイベント
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (gameManager.IsBattleFieldPlaced == false)
+        if (gameManager.IsBattleFieldPlaced == false && gameManager.IsMyTurn)
         {
             //確認UIを表示
             //1pならプレイヤーのフィールドへ移動
+            //1pと2pでフィールドフラグを分ける
             //フィールドには裏返して配置する
-            MoveToBattleField();
+            MoveToBattleField(gameManager.MyBattleFieldTransform);
             gameManager.SetBattleFieldPlaced(true);
             //相手のターンへ
-            gameManager.EnemyTurn();
+            gameManager.ChangeTurn();
         }
     }
 
     /// <summary>
     /// フィールドへ移動する
     /// </summary>
-    void MoveToBattleField()
+    public void MoveToBattleField(Transform targetTransform)
     {
-        transform.DOMove(gameManager.P1BattleFieldTransform.position, 0.5f);//移動演出
-        transform.SetParent(gameManager.P1BattleFieldTransform);//フィールドへカードを移動
+        transform.DOMove(targetTransform.position, 0.5f);//移動演出
+        transform.SetParent(targetTransform);//フィールドへカードを移動
     }
 }

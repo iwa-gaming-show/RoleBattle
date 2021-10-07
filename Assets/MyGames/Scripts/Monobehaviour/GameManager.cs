@@ -16,27 +16,29 @@ public class GameManager : MonoBehaviour
     CardController _cardPrefab;
 
     [SerializeField]
-    [Header("プレイヤーの手札")]
-    Transform _playerHandTransform;
+    [Header("自身の手札")]
+    Transform _myHandTransform;
 
     [SerializeField]
-    [Header("エネミーの手札")]
+    [Header("相手の手札")]
     Transform _enemyHandTransform;
 
     [SerializeField]
-    [Header("プレイヤーのバトルフィールド")]
-    Transform _p1BattleFieldTransform;
+    [Header("自身のバトルフィールド")]
+    Transform _myBattleFieldTransform;
 
     [SerializeField]
-    [Header("エネミーのバトルフィールド")]
-    Transform _p2BattleFieldTransform;
+    [Header("相手のバトルフィールド")]
+    Transform _enemyBattleFieldTransform;
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
-
+    bool _isMyTurn;//自身のターンか
+    bool _isEnemyTurn;//相手のターンか
 
     #region プロパティ
-    public Transform P1BattleFieldTransform => _p1BattleFieldTransform;
+    public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
+    public bool IsMyTurn => _isMyTurn;
     #endregion
 
     private void Awake()
@@ -70,6 +72,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
+        MyTurn();
         DistributeCards();
     }
 
@@ -81,7 +84,7 @@ public class GameManager : MonoBehaviour
         //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
         for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
         {
-            AddingCardToHand(_playerHandTransform, i);
+            AddingCardToHand(_myHandTransform, i);
             AddingCardToHand(_enemyHandTransform, i);
         }
     }
@@ -113,13 +116,51 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// ターンを切り替える
+    /// </summary>
+    public void ChangeTurn()
+    {
+        _isBattleFieldPlaced = false;
+
+        if (_isMyTurn)
+        {
+            _isMyTurn = false;
+            EnemyTurn();
+        }
+        else
+        {
+            _isEnemyTurn = false;
+            MyTurn();
+        }
+
+        //自身と相手のターンが終了した時、判定処理が走る
+    }
+
+    /// <summary>
+    /// 自分のターン
+    /// </summary>
+    public void MyTurn()
+    {
+        Debug.Log("自分のターンです");
+        _isMyTurn = true;
+    }
+
+    /// <summary>
     /// 相手のターン
     /// </summary>
     public void EnemyTurn()
     {
+        _isEnemyTurn = true;
+        Debug.Log("相手のターンです");
+        //エネミーの手札を取得
+        CardController[] cardControllers = _enemyHandTransform.GetComponentsInChildren<CardController>();
         //カードをランダムに選択
+        CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
         //カードをフィールドに移動
+        card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform);
         //ターンの終了
-        //判定へ
+        ChangeTurn();
+        // お互いにターンが終わったら判定が入る
+        //判定後自身のターンへ
     }
 }

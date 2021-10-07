@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 7559538}
   - component: {fileID: 7559537}
   m_Layer: 5
-  m_Name: 2PBattleFIeld
+  m_Name: EnemyBattleFIeld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 147842561}
   - component: {fileID: 147842560}
   m_Layer: 5
-  m_Name: 2PSpecialSkill
+  m_Name: EnemySpecialSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 692552798}
   - component: {fileID: 692552797}
   m_Layer: 5
-  m_Name: 2PPointFIeldPanel
+  m_Name: EnemyPointFIeldPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -658,7 +658,7 @@ GameObject:
   - component: {fileID: 1118084876}
   - component: {fileID: 1118084875}
   m_Layer: 5
-  m_Name: 2PHandPanel
+  m_Name: EnemyHandPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -759,7 +759,7 @@ GameObject:
   - component: {fileID: 1356960616}
   - component: {fileID: 1356960615}
   m_Layer: 5
-  m_Name: 1PSpecialSkill
+  m_Name: MySpecialSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 1449975013}
   - component: {fileID: 1449975012}
   m_Layer: 5
-  m_Name: 1PPointFIeldPanel
+  m_Name: MyPointFIeldPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1016,7 +1016,7 @@ GameObject:
   - component: {fileID: 1725595601}
   - component: {fileID: 1725595603}
   m_Layer: 5
-  m_Name: 1PHandPanel
+  m_Name: MyHandPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1136,10 +1136,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
   _cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
-  _playerHandTransform: {fileID: 1725595600}
+  _myHandTransform: {fileID: 1725595600}
   _enemyHandTransform: {fileID: 1118084874}
-  _p1BattleFieldTransform: {fileID: 1964589797}
-  _p2BattleFieldTransform: {fileID: 7559536}
+  _myBattleFieldTransform: {fileID: 1964589797}
+  _enemyBattleFieldTransform: {fileID: 7559536}
 --- !u!4 &1840731125
 Transform:
   m_ObjectHideFlags: 0
@@ -1272,7 +1272,7 @@ GameObject:
   - component: {fileID: 1964589799}
   - component: {fileID: 1964589798}
   m_Layer: 5
-  m_Name: 1PBattleFIeld
+  m_Name: MyBattleFIeld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
