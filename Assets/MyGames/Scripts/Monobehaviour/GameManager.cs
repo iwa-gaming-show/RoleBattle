@@ -5,30 +5,46 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [HideInInspector]
-    public GameManager instance;
+    public static GameManager _instance;
 
     [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
-    CardEntityList cardEntityList;
+    CardEntityList _cardEntityList;
 
     [SerializeField]
     [Header("カードプレハブ")]
-    CardController cardPrefab;
+    CardController _cardPrefab;
 
     [SerializeField]
     [Header("プレイヤーの手札")]
-    Transform playerHandTransform;
+    Transform _playerHandTransform;
 
     [SerializeField]
     [Header("エネミーの手札")]
-    Transform enemyHandTransform;
+    Transform _enemyHandTransform;
+
+    [SerializeField]
+    [Header("プレイヤーのバトルフィールド")]
+    Transform _p1BattleFieldTransform;
+
+    [SerializeField]
+    [Header("エネミーのバトルフィールド")]
+    Transform _p2BattleFieldTransform;
+
+    bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
+
+
+    #region プロパティ
+    public Transform P1BattleFieldTransform => _p1BattleFieldTransform;
+    public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
+    #endregion
 
     private void Awake()
     {
         //シングルトン化する
-        if (instance == null)
+        if (_instance == null)
         {
-            instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -63,10 +79,10 @@ public class GameManager : MonoBehaviour
     void DistributeCards()
     {
         //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
-        for (int i = 0; i < cardEntityList.GetCardEntityList.Count; i++)
+        for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
         {
-            AddingCardToHand(playerHandTransform, i);
-            AddingCardToHand(enemyHandTransform, i);
+            AddingCardToHand(_playerHandTransform, i);
+            AddingCardToHand(_enemyHandTransform, i);
         }
     }
 
@@ -84,7 +100,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void CreateCard(Transform hand, int cardIndex)
     {
-        CardController cardController = Instantiate(cardPrefab, hand, false);
+        CardController cardController = Instantiate(_cardPrefab, hand, false);
         cardController.Init(cardIndex);
+    }
+
+    /// <summary>
+    /// カードのフィールド配置フラグの設定
+    /// </summary>
+    public void SetBattleFieldPlaced(bool isBattleFieldPlaced)
+    {
+        _isBattleFieldPlaced = isBattleFieldPlaced;
+    }
+
+    /// <summary>
+    /// 相手のターン
+    /// </summary>
+    public void EnemyTurn()
+    {
+        //カードをランダムに選択
+        //カードをフィールドに移動
+        //ターンの終了
+        //判定へ
     }
 }

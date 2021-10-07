@@ -1134,11 +1134,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e101744175d14d2cbfa5cf80e32a92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance: {fileID: 0}
-  cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
-  cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
-  playerHandTransform: {fileID: 1725595600}
-  enemyHandTransform: {fileID: 1118084874}
+  _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
+  _cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
+  _playerHandTransform: {fileID: 1725595600}
+  _enemyHandTransform: {fileID: 1118084874}
+  _p1BattleFieldTransform: {fileID: 1964589797}
+  _p2BattleFieldTransform: {fileID: 7559536}
 --- !u!4 &1840731125
 Transform:
   m_ObjectHideFlags: 0
