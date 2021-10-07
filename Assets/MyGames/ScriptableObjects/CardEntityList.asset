@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d816ec2c8ee843679d56058258cc3bf, type: 3}
+  m_Name: CardEntityList
+  m_EditorClassIdentifier: 
+  _cardEntityList:
+  - _name: PRINCESS
+    _icon: {fileID: 21300000, guid: d7146e0a7693e4c3b942cfec4437a391, type: 3}
+    _cardType: 1
+  - _name: BRAVE
+    _icon: {fileID: 21300000, guid: d54e3be19f0fd49d78a090599f8ec759, type: 3}
+    _cardType: 2
+  - _name: DEVIL
+    _icon: {fileID: 21300000, guid: e27cfda61c9734137a957f067f45cf23, type: 3}
+    _cardType: 3
