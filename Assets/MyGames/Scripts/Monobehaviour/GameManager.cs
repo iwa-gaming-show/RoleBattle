@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
     bool _isMyTurn;//自身のターンか
     bool _isEnemyTurn;//相手のターンか
+    bool _isMyTurnEnd;
+    bool _isEnemyTurnEnd;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -125,15 +127,125 @@ public class GameManager : MonoBehaviour
         if (_isMyTurn)
         {
             _isMyTurn = false;
+            _isMyTurnEnd = true;
             EnemyTurn();
         }
         else
         {
             _isEnemyTurn = false;
-            MyTurn();
+            _isEnemyTurnEnd = true;
         }
 
-        //自身と相手のターンが終了した時、判定処理が走る
+        if (_isMyTurnEnd && _isEnemyTurnEnd)
+        {
+            //自身と相手のターンが終了した時、判定処理が走る
+            JudgeTheCard();
+        }
+    }
+
+    /// <summary>
+    /// カードを判定する
+    /// </summary>
+    void JudgeTheCard()
+    {
+        Debug.Log("判定");
+        //フィールドのカードを取得
+        CardController myCard = _myBattleFieldTransform.GetComponentInChildren<CardController>();
+        CardController enemyCard = _enemyBattleFieldTransform.GetComponentInChildren<CardController>();
+
+        //じゃんけんする
+        CardJudgement result = JudgmentResult(myCard, enemyCard);
+
+        ReflectTheResult(result);
+
+        _isMyTurnEnd = false;
+        _isEnemyTurnEnd = false;
+        //MyTurn();
+    }
+
+    /// <summary>
+    /// 判定結果
+    /// </summary>
+    /// <returns></returns>
+    CardJudgement JudgmentResult(CardController myCard, CardController enemyCard)
+    {
+        CardType myCardType = myCard.CardModel.CardType;
+        CardType enemyCardType = enemyCard.CardModel.CardType;
+
+        //姫
+        if (myCardType == CardType.PRINCESS)
+        {
+            if (enemyCardType == CardType.PRINCESS)
+            {
+                return CardJudgement.DRAW;
+            }
+            else if (enemyCardType == CardType.BRAVE)
+            {
+                return CardJudgement.WIN;
+            }
+            else
+            {
+                //魔王の場合
+                return CardJudgement.LOSE;
+            }
+        }
+        //勇者
+        else if (myCardType == CardType.BRAVE)
+        {
+            if (enemyCardType == CardType.PRINCESS)
+            {
+                return CardJudgement.LOSE;
+            }
+            else if (enemyCardType == CardType.BRAVE)
+            {
+                return CardJudgement.DRAW;
+            }
+            else
+            {
+                //魔王の場合
+                return CardJudgement.WIN;
+            }
+        }
+        //魔王
+        else
+        {
+            if (enemyCardType == CardType.PRINCESS)
+            {
+                return CardJudgement.WIN;
+            }
+            else if (enemyCardType == CardType.BRAVE)
+            {
+                return CardJudgement.LOSE;
+            }
+            else
+            {
+                //魔王の場合
+                return CardJudgement.DRAW;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 結果を反映します
+    /// </summary>
+    /// <param name="result"></param>
+    void ReflectTheResult(CardJudgement result)
+    {
+        switch(result)
+        {
+            case CardJudgement.WIN:
+                //スコアを加算
+                Debug.Log("勝ち");
+                break;
+            case CardJudgement.DRAW:
+                //スコア変動なし
+                Debug.Log("引き分け");
+                break;
+            case CardJudgement.LOSE:
+                //相手のスコアを加算
+                Debug.Log("負け");
+                break;
+        }
     }
 
     /// <summary>
