@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static WaitTimes;
+using static UIStrings;
 using static CardType;
 using static CardJudgement;
 
@@ -122,8 +123,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void ShowPoint()
     {
-        _myPointText.text = _myPoint.ToString() + "P";
-        _enemyPointText.text = _enemyPoint.ToString() + "P";
+        _myPointText.text = _myPoint.ToString() + POINT_SUFFIX;
+        _enemyPointText.text = _enemyPoint.ToString() + POINT_SUFFIX;
     }
 
     /// <summary>
@@ -133,11 +134,22 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowRoundCountText()
     {
         ToggleRoundCountText(true);
-        _roundCountText.text = "Round" + _roundCount.ToString();
+
+        if (_roundCount == _maxRoundCount)
+        {
+            //最終ラウンド
+            _roundCountText.text = FINAL_ROUND;
+        }
+        else
+        {
+            _roundCountText.text = ROUND_PREFIX + _roundCount.ToString();
+        }
 
         yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
         ToggleRoundCountText(false);
     }
+
+
 
     /// <summary>
     /// 盤面をリセットします
@@ -330,7 +342,7 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowJudgementResultText(string result)
     {
         ToggleJudgementResultText(true);
-        _judgementResultText.text = result + "！";
+        _judgementResultText.text = result + JUDGEMENT_RESULT_SUFFIX;
 
         yield return new WaitForSeconds(JUDGMENT_RESULT_DISPLAY_TIME);
         ToggleJudgementResultText(false);
