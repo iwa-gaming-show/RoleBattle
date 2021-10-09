@@ -47,7 +47,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Header("ラウンド毎の勝者の獲得ポイント")]
-    int _earnedPoint;
+    int _earnedPoint = 1;
+
+    [SerializeField]
+    [Header("最大ラウンド数")]
+    int _maxRoundCount = 5;
     #endregion
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
@@ -57,6 +61,7 @@ public class GameManager : MonoBehaviour
     bool _isEnemyTurnEnd;
     int _myPoint;
     int _enemyPoint;
+    int _roundCount;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -95,10 +100,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
-        ToggleJudgementResultText(false);
         ShowPoint();
-        MyTurn();
+        RestFieldCard();
         DistributeCards();
+        MyTurn();
     }
 
     /// <summary>
@@ -108,6 +113,27 @@ public class GameManager : MonoBehaviour
     {
         _myPointText.text = _myPoint.ToString() + "P";
         _enemyPointText.text = _enemyPoint.ToString() + "P";
+    }
+
+    /// <summary>
+    /// 盤面をリセットします
+    /// </summary>
+    void RestFieldCard()
+    {
+        //バトル場のカードを削除します
+        Destroy(GetBattleFieldCardBy(true)?.gameObject);
+        Destroy(GetBattleFieldCardBy(false)?.gameObject);
+
+        //手札のカードを削除します
+        foreach (CardController target in _myHandTransform.GetComponentsInChildren<CardController>())
+        {
+            Destroy(target.gameObject);
+        }
+
+        foreach (CardController target in _enemyHandTransform.GetComponentsInChildren<CardController>())
+        {
+            Destroy(target.gameObject);
+        }
     }
 
     /// <summary>
@@ -154,13 +180,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ChangeTurn()
     {
-        _isBattleFieldPlaced = false;
+        SetBattleFieldPlaced(false);
 
         if (_isMyTurn)
         {
             _isMyTurn = false;
             _isMyTurnEnd = true;
-            EnemyTurn();
+            StartCoroutine(EnemyTurn());
         }
         else
         {
@@ -180,24 +206,51 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void JudgeTheCard()
     {
-        Debug.Log("判定");
-        //フィールドのカードを取得
-        CardController myCard = _myBattleFieldTransform.GetComponentInChildren<CardController>();
-        CardController enemyCard = _enemyBattleFieldTransform.GetComponentInChildren<CardController>();
-
+        //バトル場のカードを取得
+        CardController myCard = GetBattleFieldCardBy(true);
+        CardController enemyCard = GetBattleFieldCardBy(false);
         //じゃんけんする
         CardJudgement result = JudgmentResult(myCard, enemyCard);
 
-        ReflectTheResult(result);
-
         _isMyTurnEnd = false;
         _isEnemyTurnEnd = false;
-        //MyTurn();
+
+        ReflectTheResult(result);
+        NextRound();
+    }
+
+    /// <summary>
+    /// バトル場のカードを取得する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    CardController GetBattleFieldCardBy(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return _myBattleFieldTransform.GetComponentInChildren<CardController>();
+        }
+        else
+        {
+            return _enemyBattleFieldTransform.GetComponentInChildren<CardController>();
+        }
+    }
+
+    /// <summary>
+    /// 次のラウンドへ
+    /// </summary>
+    void NextRound()
+    {
+        _roundCount++;
+        //盤面のリセット
+        StartGame();
     }
 
     /// <summary>
     /// 判定結果
     /// </summary>
+    /// <param name="myCard"></param>
+    /// <param name="enemyCard"></param>
     /// <returns></returns>
     CardJudgement JudgmentResult(CardController myCard, CardController enemyCard)
     {
@@ -328,7 +381,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 相手のターン
     /// </summary>
-    public void EnemyTurn()
+    public IEnumerator EnemyTurn()
     {
         _isEnemyTurn = true;
         Debug.Log("相手のターンです");
@@ -337,10 +390,7 @@ public class GameManager : MonoBehaviour
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
         //カードをフィールドに移動
-        card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform);
-        //ターンの終了
-        ChangeTurn();
-        // お互いにターンが終わったら判定が入る
-        //判定後自身のターンへ
+        StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
+        yield return null;
     }
 }
