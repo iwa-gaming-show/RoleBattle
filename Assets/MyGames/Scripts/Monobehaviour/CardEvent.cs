@@ -21,23 +21,25 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     {
         if (gameManager.IsBattleFieldPlaced == false && gameManager.IsMyTurn)
         {
+            //todo
             //確認UIを表示
             //1pならプレイヤーのフィールドへ移動
             //1pと2pでフィールドフラグを分ける
             //フィールドには裏返して配置する
-            MoveToBattleField(gameManager.MyBattleFieldTransform);
-            gameManager.SetBattleFieldPlaced(true);
-            //相手のターンへ
-            gameManager.ChangeTurn();
+            StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
         }
     }
 
     /// <summary>
     /// フィールドへ移動する
     /// </summary>
-    public void MoveToBattleField(Transform targetTransform)
+    public IEnumerator MoveToBattleField(Transform targetTransform)
     {
         transform.DOMove(targetTransform.position, 0.5f);//移動演出
         transform.SetParent(targetTransform);//フィールドへカードを移動
+        gameManager.SetBattleFieldPlaced(true);
+        yield return new WaitForSeconds(2f);
+        //相手のターンへ
+        gameManager.ChangeTurn();
     }
 }
