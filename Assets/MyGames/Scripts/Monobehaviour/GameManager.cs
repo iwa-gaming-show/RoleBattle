@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static WaitTimes;
+using static CardType;
+using static CardJudgement;
 
 public class GameManager : MonoBehaviour
 {
@@ -227,14 +229,18 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     CardController GetBattleFieldCardBy(bool isPlayer)
     {
-        if (isPlayer)
-        {
-            return _myBattleFieldTransform.GetComponentInChildren<CardController>();
-        }
-        else
-        {
-            return _enemyBattleFieldTransform.GetComponentInChildren<CardController>();
-        }
+        return GetTargetBattleFieldTransform(isPlayer).GetComponentInChildren<CardController>();
+    }
+
+    /// <summary>
+    /// 対象のバトル場のカードのTransformを取得する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    Transform GetTargetBattleFieldTransform(bool isPlayer)
+    {
+        if (isPlayer) return _myBattleFieldTransform;
+        return _enemyBattleFieldTransform;
     }
 
     /// <summary>
@@ -259,57 +265,11 @@ public class GameManager : MonoBehaviour
         CardType enemyCardType = enemyCard.CardModel.CardType;
 
         //じゃんけんによる勝敗の判定
-        //姫
-        if (myCardType == CardType.PRINCESS)
-        {
-            if (enemyCardType == CardType.PRINCESS)
-            {
-                return CardJudgement.DRAW;
-            }
-            else if (enemyCardType == CardType.BRAVE)
-            {
-                return CardJudgement.WIN;
-            }
-            else
-            {
-                //魔王の場合
-                return CardJudgement.LOSE;
-            }
-        }
-        //勇者
-        else if (myCardType == CardType.BRAVE)
-        {
-            if (enemyCardType == CardType.PRINCESS)
-            {
-                return CardJudgement.LOSE;
-            }
-            else if (enemyCardType == CardType.BRAVE)
-            {
-                return CardJudgement.DRAW;
-            }
-            else
-            {
-                //魔王の場合
-                return CardJudgement.WIN;
-            }
-        }
-        //魔王
-        else
-        {
-            if (enemyCardType == CardType.PRINCESS)
-            {
-                return CardJudgement.WIN;
-            }
-            else if (enemyCardType == CardType.BRAVE)
-            {
-                return CardJudgement.LOSE;
-            }
-            else
-            {
-                //魔王の場合
-                return CardJudgement.DRAW;
-            }
-        }
+        if (myCardType == enemyCardType) return DRAW;
+        if (myCardType == PRINCESS && enemyCardType == BRAVE) return WIN;
+        if (myCardType == BRAVE && enemyCardType == DEVIL) return WIN;
+        if (myCardType == DEVIL && enemyCardType == PRINCESS) return WIN;
+        return LOSE;
     }
 
     /// <summary>
@@ -318,14 +278,13 @@ public class GameManager : MonoBehaviour
     /// <param name="result"></param>
     void ReflectTheResult(CardJudgement result)
     {
-        switch(result)
+        if (result == WIN)
         {
-            case CardJudgement.WIN:
-                AddPointTo(true);
-                break;
-            case CardJudgement.LOSE:
-                AddPointTo(false);
-                break;
+            AddPointTo(true);
+        }
+        else if (result == LOSE)
+        {
+            AddPointTo(false);
         }
 
         //UIへの反映
