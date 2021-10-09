@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [HideInInspector]
     public static GameManager _instance;
 
+    #region インスペクターから設定
     [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
     CardEntityList _cardEntityList;
@@ -31,11 +33,30 @@ public class GameManager : MonoBehaviour
     [Header("相手のバトルフィールド")]
     Transform _enemyBattleFieldTransform;
 
+    [SerializeField]
+    [Header("自身の獲得ポイントUI")]
+    Text _myPointText;
+
+    [SerializeField]
+    [Header("相手の獲得ポイントUI")]
+    Text _enemyPointText;
+
+    [SerializeField]
+    [Header("ラウンドの勝敗の結果表示のテキスト")]
+    Text _judgementResultText;
+
+    [SerializeField]
+    [Header("ラウンド毎の勝者の獲得ポイント")]
+    int _earnedPoint;
+    #endregion
+
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
     bool _isMyTurn;//自身のターンか
     bool _isEnemyTurn;//相手のターンか
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
+    int _myPoint;
+    int _enemyPoint;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -74,8 +95,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
+        ToggleJudgementResultText(false);
+        ShowPoint();
         MyTurn();
         DistributeCards();
+    }
+
+    /// <summary>
+    /// ポイントの表示
+    /// </summary>
+    void ShowPoint()
+    {
+        _myPointText.text = _myPoint.ToString() + "P";
+        _enemyPointText.text = _enemyPoint.ToString() + "P";
     }
 
     /// <summary>
@@ -172,6 +204,7 @@ public class GameManager : MonoBehaviour
         CardType myCardType = myCard.CardModel.CardType;
         CardType enemyCardType = enemyCard.CardModel.CardType;
 
+        //じゃんけんによる勝敗の判定
         //姫
         if (myCardType == CardType.PRINCESS)
         {
@@ -234,17 +267,52 @@ public class GameManager : MonoBehaviour
         switch(result)
         {
             case CardJudgement.WIN:
-                //スコアを加算
-                Debug.Log("勝ち");
-                break;
-            case CardJudgement.DRAW:
-                //スコア変動なし
-                Debug.Log("引き分け");
+                AddPointTo(true);
                 break;
             case CardJudgement.LOSE:
-                //相手のスコアを加算
-                Debug.Log("負け");
+                AddPointTo(false);
                 break;
+        }
+
+        //UIへの反映
+        StartCoroutine(ShowJudgementResultText(result.ToString()));
+        ShowPoint();
+    }
+
+    /// <summary>
+    /// ラウンドの勝敗の結果を表示
+    /// </summary>
+    IEnumerator ShowJudgementResultText(string result)
+    {
+        ToggleJudgementResultText(true);
+        _judgementResultText.text = result + "！";
+
+        yield return new WaitForSeconds(1f);
+        ToggleJudgementResultText(false);
+    }
+
+    /// <summary>
+    /// ラウンドの勝敗の結果の表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleJudgementResultText(bool isActive)
+    {
+        _judgementResultText.gameObject?.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// ポイントの加算
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    void AddPointTo(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            _myPoint += _earnedPoint;
+        }
+        else
+        {
+            _enemyPoint += _earnedPoint;
         }
     }
 
