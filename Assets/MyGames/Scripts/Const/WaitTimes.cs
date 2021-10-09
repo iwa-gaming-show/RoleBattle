@@ -12,7 +12,17 @@ public static class WaitTimes
     public static readonly float TIME_BEFORE_CHANGING_TURN = 2f;
 
     /// <summary>
+    /// ラウンド変更までの時間
+    /// </summary>
+    public static readonly float TIME_BEFORE_CHANGING_ROUND = 2f;
+
+    /// <summary>
     /// カードの判定結果の表示時間
     /// </summary>
     public static readonly float JUDGMENT_RESULT_DISPLAY_TIME = 1f;
+
+    /// <summary>
+    /// カウント数の表示時間
+    /// </summary>
+    public static readonly float ROUND_COUNT_DISPLAY_TIME = 1f;
 }

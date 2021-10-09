@@ -49,12 +49,20 @@ public class GameManager : MonoBehaviour
     Text _judgementResultText;
 
     [SerializeField]
+    [Header("ラウンド数表示テキスト")]
+    Text _roundCountText;
+
+    [SerializeField]
     [Header("ラウンド毎の勝者の獲得ポイント")]
     int _earnedPoint = 1;
 
     [SerializeField]
     [Header("最大ラウンド数")]
     int _maxRoundCount = 5;
+
+    [SerializeField]
+    [Header("ラウンド数")]
+    int _roundCount = 1;
     #endregion
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
@@ -64,7 +72,6 @@ public class GameManager : MonoBehaviour
     bool _isEnemyTurnEnd;
     int _myPoint;
     int _enemyPoint;
-    int _roundCount;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -104,6 +111,7 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         ShowPoint();
+        StartCoroutine(ShowRoundCountText());
         RestFieldCard();
         DistributeCards();
         MyTurn();
@@ -116,6 +124,19 @@ public class GameManager : MonoBehaviour
     {
         _myPointText.text = _myPoint.ToString() + "P";
         _enemyPointText.text = _enemyPoint.ToString() + "P";
+    }
+
+    /// <summary>
+    /// ラウンド数を表示する
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator ShowRoundCountText()
+    {
+        ToggleRoundCountText(true);
+        _roundCountText.text = "Round" + _roundCount.ToString();
+
+        yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
+        ToggleRoundCountText(false);
     }
 
     /// <summary>
@@ -150,6 +171,15 @@ public class GameManager : MonoBehaviour
             AddingCardToHand(_myHandTransform, i);
             AddingCardToHand(_enemyHandTransform, i);
         }
+    }
+
+    /// <summary>
+    /// ラウンド数表示用テキストの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleRoundCountText(bool isActive)
+    {
+        _roundCountText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
@@ -200,14 +230,14 @@ public class GameManager : MonoBehaviour
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            JudgeTheCard();
+            StartCoroutine(JudgeTheCard());
         }
     }
 
     /// <summary>
     /// カードを判定する
     /// </summary>
-    void JudgeTheCard()
+    IEnumerator JudgeTheCard()
     {
         //バトル場のカードを取得
         CardController myCard = GetBattleFieldCardBy(true);
@@ -219,6 +249,8 @@ public class GameManager : MonoBehaviour
         _isEnemyTurnEnd = false;
 
         ReflectTheResult(result);
+
+        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
         NextRound();
     }
 
