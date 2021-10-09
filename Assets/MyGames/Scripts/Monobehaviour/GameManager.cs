@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static WaitTimes;
 
 public class GameManager : MonoBehaviour
 {
@@ -340,7 +341,7 @@ public class GameManager : MonoBehaviour
         ToggleJudgementResultText(true);
         _judgementResultText.text = result + "！";
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(JUDGMENT_RESULT_DISPLAY_TIME);
         ToggleJudgementResultText(false);
     }
 

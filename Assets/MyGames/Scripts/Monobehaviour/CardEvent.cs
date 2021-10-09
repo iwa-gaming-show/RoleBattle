@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using static WaitTimes;
 
 public class CardEvent : MonoBehaviour, IPointerClickHandler
 {
@@ -35,10 +36,10 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public IEnumerator MoveToBattleField(Transform targetTransform)
     {
-        transform.DOMove(targetTransform.position, 0.5f);//移動演出
+        transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);//移動演出
         transform.SetParent(targetTransform);//フィールドへカードを移動
         gameManager.SetBattleFieldPlaced(true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_TURN);
         //相手のターンへ
         gameManager.ChangeTurn();
     }
