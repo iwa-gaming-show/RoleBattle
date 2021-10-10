@@ -6,6 +6,7 @@ using static WaitTimes;
 using static UIStrings;
 using static CardType;
 using static CardJudgement;
+using static GameResult;
 
 public class GameManager : MonoBehaviour
 {
@@ -54,6 +55,10 @@ public class GameManager : MonoBehaviour
     Text _roundCountText;
 
     [SerializeField]
+    [Header("ゲーム勝敗の結果表示のテキスト")]
+    Text _gameResultText;
+
+    [SerializeField]
     [Header("ラウンド毎の勝者の獲得ポイント")]
     int _earnedPoint = 1;
 
@@ -73,6 +78,7 @@ public class GameManager : MonoBehaviour
     bool _isEnemyTurnEnd;
     int _myPoint;
     int _enemyPoint;
+    GameResult _gameResult;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -148,8 +154,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
         ToggleRoundCountText(false);
     }
-
-
 
     /// <summary>
     /// 盤面をリセットします
@@ -292,9 +296,59 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void NextRound()
     {
-        _roundCount++;
-        //盤面のリセット
-        StartGame();
+        if (_roundCount != _maxRoundCount)
+        {
+            _roundCount++;
+            //盤面のリセット
+            StartGame();
+        }
+        else
+        {
+            //最終ラウンドならゲーム終了
+            EndGame();
+        }
+    }
+
+    /// <summary>
+    /// ゲームを終了
+    /// </summary>
+    void EndGame()
+    {
+        //ポイントの比較
+        if (_myPoint > _enemyPoint)
+        {
+            _gameResult = GAME_WIN;
+        }
+        else if (_myPoint == _enemyPoint)
+        {
+            _gameResult = GAME_DRAW;
+        }
+        else
+        {
+            _gameResult = GAME_LOSE;
+        }
+        //勝ち負けの表示
+        ShowGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        //リトライUIの表示
+    }
+
+    /// <summary>
+    /// ゲームの勝敗を表示する
+    /// </summary>
+    /// <returns></returns>
+    void ShowGameResultText(string text)
+    {
+        ToggleGameResultText(true);
+        _gameResultText.text = text;
+    }
+
+    /// <summary>
+    /// ゲーム結果の表示の切り替え
+    /// </summary>
+    /// <param name="isAcitve"></param>
+    void ToggleGameResultText(bool isAcitve)
+    {
+        _gameResultText.gameObject.SetActive(isAcitve);
     }
 
     /// <summary>
