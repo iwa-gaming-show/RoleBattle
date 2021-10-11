@@ -159,6 +159,25 @@ public class GameManager : MonoBehaviour
             AddingCardToHand(_myHandTransform, i);
             AddingCardToHand(_enemyHandTransform, i);
         }
+        //お互いのカードをシャッフルする
+        ShuffleHandCard(_myHandTransform);
+        ShuffleHandCard(_enemyHandTransform);
+    }
+
+    /// <summary>
+    /// 手札のカードをシャッフルする
+    /// </summary>
+    void ShuffleHandCard(Transform targetTransform)
+    {
+        CardController[] handCards = targetTransform.GetComponentsInChildren<CardController>();
+
+        for (int i = 0; i < handCards.Length; i++)
+        {
+            int tempIndex = handCards[i].transform.GetSiblingIndex();
+            int randomIndex = Random.Range(0, handCards.Length);
+            handCards[i].transform.SetSiblingIndex(randomIndex);
+            handCards[randomIndex].transform.SetSiblingIndex(tempIndex);
+        }
     }
 
     /// <summary>
