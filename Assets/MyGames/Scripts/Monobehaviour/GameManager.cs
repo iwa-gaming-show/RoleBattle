@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using static WaitTimes;
-using static UIStrings;
 using static InitializationData;
 using static CardType;
 using static CardJudgement;
@@ -15,6 +13,10 @@ public class GameManager : MonoBehaviour
     public static GameManager _instance;
 
     #region インスペクターから設定
+    [SerializeField]
+    [Header("UI管理スクリプトを設定")]
+    UIManager uiManager;
+
     [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
     CardEntityList _cardEntityList;
@@ -38,30 +40,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Header("相手のバトルフィールド")]
     Transform _enemyBattleFieldTransform;
-
-    [SerializeField]
-    [Header("自身の獲得ポイントUI")]
-    Text _myPointText;
-
-    [SerializeField]
-    [Header("相手の獲得ポイントUI")]
-    Text _enemyPointText;
-
-    [SerializeField]
-    [Header("ラウンドの勝敗の結果表示のテキスト")]
-    Text _judgementResultText;
-
-    [SerializeField]
-    [Header("ラウンド数表示テキスト")]
-    Text _roundCountText;
-
-    [SerializeField]
-    [Header("ゲームの勝敗の結果表示のテキスト")]
-    Text _gameResultText;
-
-    [SerializeField]
-    [Header("ゲームの勝敗の結果表示用Canvas")]
-    GameObject _gameResultUI;
 
     [SerializeField]
     [Header("ラウンド毎の勝者の獲得ポイント")]
@@ -122,9 +100,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
-        HideUIAtStart();
-        ShowPoint();
-        StartCoroutine(ShowRoundCountText());
+        uiManager.HideUIAtStart();
+        uiManager.ShowPoint(_myPoint, _enemyPoint);
+        StartCoroutine(uiManager.ShowRoundCountText(_roundCount, _maxRoundCount));
         ResetFieldCard();
         DistributeCards();
         MyTurn();
@@ -140,16 +118,6 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 開始時に非表示にするUI
-    /// </summary>
-    void HideUIAtStart()
-    {
-        ToggleGameResultUI(false);
-        ToggleJudgementResultText(false);
-        ToggleRoundCountText(false);
-    }
-
-    /// <summary>
     /// ゲームデータを初期化する
     /// </summary>
     void InitializeGameData()
@@ -157,44 +125,6 @@ public class GameManager : MonoBehaviour
         _roundCount = INITIAL_ROUND_COUNT;
         _myPoint = INITIAL_POINT;
         _enemyPoint = INITIAL_POINT;
-    }
-
-    /// <summary>
-    /// ポイントの表示
-    /// </summary>
-    void ShowPoint()
-    {
-        _myPointText.text = _myPoint.ToString() + POINT_SUFFIX;
-        _enemyPointText.text = _enemyPoint.ToString() + POINT_SUFFIX;
-    }
-
-    /// <summary>
-    /// ラウンド数を表示する
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator ShowRoundCountText()
-    {
-        ToggleRoundCountText(true);
-        SetRoundCountText();
-
-        yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
-        ToggleRoundCountText(false);
-    }
-
-    /// <summary>
-    /// ラウンド表示用のテキストを設定する
-    /// </summary>
-    void SetRoundCountText()
-    {
-        if (_roundCount == _maxRoundCount)
-        {
-            //最終ラウンド
-            _roundCountText.text = FINAL_ROUND;
-        }
-        else
-        {
-            _roundCountText.text = ROUND_PREFIX + _roundCount.ToString();
-        }
     }
 
     /// <summary>
@@ -229,15 +159,6 @@ public class GameManager : MonoBehaviour
             AddingCardToHand(_myHandTransform, i);
             AddingCardToHand(_enemyHandTransform, i);
         }
-    }
-
-    /// <summary>
-    /// ラウンド数表示用テキストの切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    void ToggleRoundCountText(bool isActive)
-    {
-        _roundCountText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
@@ -358,8 +279,8 @@ public class GameManager : MonoBehaviour
         //ゲーム結果を判定
         JudgeGameResult();
         //勝敗の表示
-        ToggleGameResultUI(true);
-        SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        uiManager.ToggleGameResultUI(true);
+        uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
     }
 
     /// <summary>
@@ -379,24 +300,6 @@ public class GameManager : MonoBehaviour
         {
             _gameResult = GAME_LOSE;
         }
-    }
-
-    /// <summary>
-    /// ゲーム結果の表示の切り替え
-    /// </summary>
-    /// <param name="isAcitve"></param>
-    void ToggleGameResultUI(bool isAcitve)
-    {
-        _gameResultUI.SetActive(isAcitve);
-    }
-
-    /// <summary>
-    /// ゲームの勝敗のテキストを表示する
-    /// </summary>
-    /// <returns></returns>
-    void SetGameResultText(string text)
-    {
-        _gameResultText.text = text;
     }
 
     /// <summary>
@@ -434,29 +337,8 @@ public class GameManager : MonoBehaviour
         }
 
         //UIへの反映
-        StartCoroutine(ShowJudgementResultText(result.ToString()));
-        ShowPoint();
-    }
-
-    /// <summary>
-    /// ラウンドの勝敗の結果を表示
-    /// </summary>
-    IEnumerator ShowJudgementResultText(string result)
-    {
-        ToggleJudgementResultText(true);
-        _judgementResultText.text = result + JUDGEMENT_RESULT_SUFFIX;
-
-        yield return new WaitForSeconds(JUDGMENT_RESULT_DISPLAY_TIME);
-        ToggleJudgementResultText(false);
-    }
-
-    /// <summary>
-    /// ラウンドの勝敗の結果の表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    void ToggleJudgementResultText(bool isActive)
-    {
-        _judgementResultText.gameObject?.SetActive(isActive);
+        StartCoroutine(uiManager.ShowJudgementResultText(result.ToString()));
+        uiManager.ShowPoint(_myPoint, _enemyPoint);
     }
 
     /// <summary>

@@ -1908,18 +1908,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e101744175d14d2cbfa5cf80e32a92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 1919010377}
   _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
   _cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
   _myHandTransform: {fileID: 1725595600}
   _enemyHandTransform: {fileID: 1118084874}
   _myBattleFieldTransform: {fileID: 1964589797}
   _enemyBattleFieldTransform: {fileID: 7559536}
-  _myPointText: {fileID: 109704607}
-  _enemyPointText: {fileID: 2098996582}
-  _judgementResultText: {fileID: 1928669753}
-  _roundCountText: {fileID: 1024314044}
-  _gameResultText: {fileID: 1489662935}
-  _gameResultUI: {fileID: 483168577}
   _earnedPoint: 1
   _maxRoundCount: 5
   _roundCount: 1
@@ -1949,6 +1944,7 @@ GameObject:
   - component: {fileID: 1919010375}
   - component: {fileID: 1919010374}
   - component: {fileID: 1919010373}
+  - component: {fileID: 1919010377}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2044,6 +2040,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1919010377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919010372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3493a10bbb9c440fa7deb01ab0c3cc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myPointText: {fileID: 109704607}
+  _enemyPointText: {fileID: 2098996582}
+  _judgementResultText: {fileID: 1928669753}
+  _roundCountText: {fileID: 1024314044}
+  _gameResultText: {fileID: 1489662935}
+  _gameResultUI: {fileID: 483168577}
 --- !u!1 &1928669751
 GameObject:
   m_ObjectHideFlags: 0
