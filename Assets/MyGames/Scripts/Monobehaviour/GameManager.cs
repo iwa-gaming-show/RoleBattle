@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static WaitTimes;
 using static UIStrings;
+using static InitializationData;
 using static CardType;
 using static CardJudgement;
 using static GameResult;
@@ -55,8 +56,12 @@ public class GameManager : MonoBehaviour
     Text _roundCountText;
 
     [SerializeField]
-    [Header("ゲーム勝敗の結果表示のテキスト")]
+    [Header("ゲームの勝敗の結果表示のテキスト")]
     Text _gameResultText;
+
+    [SerializeField]
+    [Header("ゲームの勝敗の結果表示用Canvas")]
+    GameObject _gameResultUI;
 
     [SerializeField]
     [Header("ラウンド毎の勝者の獲得ポイント")]
@@ -68,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Header("ラウンド数")]
-    int _roundCount = 1;
+    int _roundCount = INITIAL_ROUND_COUNT;
     #endregion
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
@@ -117,11 +122,41 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
+        HideUIAtStart();
         ShowPoint();
         StartCoroutine(ShowRoundCountText());
-        RestFieldCard();
+        ResetFieldCard();
         DistributeCards();
         MyTurn();
+    }
+
+    /// <summary>
+    /// ゲームを再開する
+    /// </summary>
+    public void RetryGame()
+    {
+        InitializeGameData();
+        StartGame();
+    }
+
+    /// <summary>
+    /// 開始時に非表示にするUI
+    /// </summary>
+    void HideUIAtStart()
+    {
+        ToggleGameResultUI(false);
+        ToggleJudgementResultText(false);
+        ToggleRoundCountText(false);
+    }
+
+    /// <summary>
+    /// ゲームデータを初期化する
+    /// </summary>
+    void InitializeGameData()
+    {
+        _roundCount = INITIAL_ROUND_COUNT;
+        _myPoint = INITIAL_POINT;
+        _enemyPoint = INITIAL_POINT;
     }
 
     /// <summary>
@@ -140,7 +175,17 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowRoundCountText()
     {
         ToggleRoundCountText(true);
+        SetRoundCountText();
 
+        yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
+        ToggleRoundCountText(false);
+    }
+
+    /// <summary>
+    /// ラウンド表示用のテキストを設定する
+    /// </summary>
+    void SetRoundCountText()
+    {
         if (_roundCount == _maxRoundCount)
         {
             //最終ラウンド
@@ -150,15 +195,12 @@ public class GameManager : MonoBehaviour
         {
             _roundCountText.text = ROUND_PREFIX + _roundCount.ToString();
         }
-
-        yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
-        ToggleRoundCountText(false);
     }
 
     /// <summary>
     /// 盤面をリセットします
     /// </summary>
-    void RestFieldCard()
+    void ResetFieldCard()
     {
         //バトル場のカードを削除します
         Destroy(GetBattleFieldCardBy(true)?.gameObject);
@@ -299,7 +341,6 @@ public class GameManager : MonoBehaviour
         if (_roundCount != _maxRoundCount)
         {
             _roundCount++;
-            //盤面のリセット
             StartGame();
         }
         else
@@ -314,7 +355,18 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void EndGame()
     {
-        //ポイントの比較
+        //ゲーム結果を判定
+        JudgeGameResult();
+        //勝敗の表示
+        ToggleGameResultUI(true);
+        SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+    }
+
+    /// <summary>
+    /// ゲーム結果を判定する
+    /// </summary>
+    void JudgeGameResult()
+    {
         if (_myPoint > _enemyPoint)
         {
             _gameResult = GAME_WIN;
@@ -327,28 +379,24 @@ public class GameManager : MonoBehaviour
         {
             _gameResult = GAME_LOSE;
         }
-        //勝ち負けの表示
-        ShowGameResultText(CommonAttribute.GetStringValue(_gameResult));
-        //リトライUIの表示
-    }
-
-    /// <summary>
-    /// ゲームの勝敗を表示する
-    /// </summary>
-    /// <returns></returns>
-    void ShowGameResultText(string text)
-    {
-        ToggleGameResultText(true);
-        _gameResultText.text = text;
     }
 
     /// <summary>
     /// ゲーム結果の表示の切り替え
     /// </summary>
     /// <param name="isAcitve"></param>
-    void ToggleGameResultText(bool isAcitve)
+    void ToggleGameResultUI(bool isAcitve)
     {
-        _gameResultText.gameObject.SetActive(isAcitve);
+        _gameResultUI.SetActive(isAcitve);
+    }
+
+    /// <summary>
+    /// ゲームの勝敗のテキストを表示する
+    /// </summary>
+    /// <returns></returns>
+    void SetGameResultText(string text)
+    {
+        _gameResultText.text = text;
     }
 
     /// <summary>
