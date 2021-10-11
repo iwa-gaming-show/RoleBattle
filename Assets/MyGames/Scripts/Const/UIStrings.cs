@@ -1,4 +1,6 @@
-﻿//定数クラス UIに表示する文字列
+﻿/// <summary>
+/// 定数クラス UIに表示する文字列
+/// </summary>
 public static class UIStrings
 {
     /// <summary>

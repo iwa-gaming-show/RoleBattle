@@ -1,4 +1,6 @@
-﻿//定数クラス 待機時間のまとまり
+﻿/// <summary>
+/// 定数クラス 待機時間のまとまり
+/// </summary>
 public static class WaitTimes
 {
     /// <summary>
