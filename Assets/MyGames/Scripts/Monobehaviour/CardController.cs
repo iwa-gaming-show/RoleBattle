@@ -18,18 +18,6 @@ public class CardController : MonoBehaviour
         _cardEvent = GetComponent<CardEvent>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -38,5 +26,13 @@ public class CardController : MonoBehaviour
     {
         _cardModel.SetCardData(cardIndex, isPlayer);
         _cardView.SetCardView(_cardModel);
+    }
+
+    /// <summary>
+    /// カードを裏側にする
+    /// </summary>
+    public void TurnTheCardOver()
+    {
+        _cardView.ToggleBackSide(true);
     }
 }

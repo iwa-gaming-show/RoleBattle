@@ -17,6 +17,15 @@ public class CardView : MonoBehaviour
     {
         nameText.text = cardModel.Name;
         iconImage.sprite = cardModel.Icon;
-        backSide.SetActive(!cardModel.IsPlayerCard);//相手のカードは裏側で表示する
+        ToggleBackSide(!cardModel.IsPlayerCard);//相手のカードは裏側で表示する
+    }
+
+    /// <summary>
+    /// 裏側への切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleBackSide(bool isActive)
+    {
+        backSide.SetActive(isActive);
     }
 }

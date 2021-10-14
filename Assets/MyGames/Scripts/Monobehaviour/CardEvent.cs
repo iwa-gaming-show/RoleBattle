@@ -45,8 +45,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         //yesを押した時
         if (gameManager.UIManager.CanMoveToField)
         {
-            //todo フィールドにはカードを裏返して配置する
-
+            cardController.TurnTheCardOver();
             yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
             gameManager.ChangeTurn();
         }
