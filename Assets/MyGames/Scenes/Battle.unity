@@ -579,7 +579,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u3092\u30D0\u30C8\u30EB\u5834\u3078\u79FB\u52D5\u3057\u307E\u3059"
+  m_Text: "PRINCESS\u3092\u30D0\u30C8\u30EB\u5834\u3078\u79FB\u52D5\u3057\u307E\u3059"
 --- !u!222 &191260039
 CanvasRenderer:
   m_ObjectHideFlags: 0
