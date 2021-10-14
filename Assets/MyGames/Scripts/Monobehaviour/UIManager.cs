@@ -28,11 +28,15 @@ public class UIManager : MonoBehaviour
     Text _gameResultText;
 
     [SerializeField]
-    [Header("ゲームの勝敗の結果表示用Canvas")]
+    [Header("バトル場への確認画面のテキスト")]
+    Text _fieldConfirmationText;
+
+    [SerializeField]
+    [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
 
     [SerializeField]
-    [Header("バトル場へ送るカードの確認画面")]
+    [Header("バトル場へ送るカードの確認UI")]
     GameObject _confirmationPanelToField;
 
     bool _isClickedConfirmationFieldButton;//フィールドへの確認ボタンのをクリックしたか
@@ -114,6 +118,16 @@ public class UIManager : MonoBehaviour
     void ToggleRoundCountText(bool isActive)
     {
         _roundCountText.gameObject?.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// フィールドへ移動するカードを選択したとき
+    /// </summary>
+    public void SelectedToFieldCard(CardController selectedCard)
+    {
+        //確認画面のメッセージを、選択したカード名にする
+        _fieldConfirmationText.text = selectedCard.CardModel.Name + FIELD_CONFIRMATION_TEXT_SUFFIX;
+        ToggleConfirmationPanelToField(true);
     }
 
     /// <summary>

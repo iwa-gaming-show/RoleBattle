@@ -22,4 +22,9 @@ public static class UIStrings
     /// カードの判定結果の接尾時につける
     /// </summary>
     public static readonly string JUDGEMENT_RESULT_SUFFIX = "！";
+
+    /// <summary>
+    /// バトル場への移動の確認用テキスト、選択したカード名の接尾時につける
+    /// </summary>
+    public static readonly string FIELD_CONFIRMATION_TEXT_SUFFIX = "をバトル場へ移動します";
 }

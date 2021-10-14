@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 191260039}
   - component: {fileID: 191260038}
   m_Layer: 5
-  m_Name: ConfirmationText
+  m_Name: FieldConfirmationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -579,7 +579,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "PRINCESS\u3092\u30D0\u30C8\u30EB\u5834\u3078\u51FA\u3057\u307E\u3059\u304B?"
+  m_Text: "\u3092\u30D0\u30C8\u30EB\u5834\u3078\u79FB\u52D5\u3057\u307E\u3059"
 --- !u!222 &191260039
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2639,6 +2639,7 @@ MonoBehaviour:
   _judgementResultText: {fileID: 1928669753}
   _roundCountText: {fileID: 1024314044}
   _gameResultText: {fileID: 1489662935}
+  _fieldConfirmationText: {fileID: 191260038}
   _gameResultUI: {fileID: 483168577}
   _confirmationPanelToField: {fileID: 184845850}
 --- !u!1 &1928669751

@@ -38,8 +38,9 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         //すでに確認画面がでてるなら何もしない
         if (gameManager.UIManager.ConfirmationPanelToField.activeInHierarchy) yield break;
 
-        //確認画面を表示しYesならフィールドへ移動します
-        gameManager.UIManager.ToggleConfirmationPanelToField(true);
+        //カードを選択し、確認画面を表示しYesならフィールドへ移動します
+        CardController targetCard = GetComponent<CardController>();
+        gameManager.UIManager.SelectedToFieldCard(targetCard);
         yield return StartCoroutine(WaitFieldConfirmationButton());
 
         //yesを押した時
