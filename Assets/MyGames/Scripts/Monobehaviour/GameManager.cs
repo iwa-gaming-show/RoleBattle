@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     #region インスペクターから設定
     [SerializeField]
     [Header("UI管理スクリプトを設定")]
-    UIManager uiManager;
+    UIManager _uiManager;
 
     [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
     public bool IsMyTurn => _isMyTurn;
+    public UIManager UIManager => _uiManager;
     #endregion
 
     private void Awake()
@@ -100,9 +101,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
-        uiManager.HideUIAtStart();
-        uiManager.ShowPoint(_myPoint, _enemyPoint);
-        StartCoroutine(uiManager.ShowRoundCountText(_roundCount, _maxRoundCount));
+        _uiManager.HideUIAtStart();
+        _uiManager.ShowPoint(_myPoint, _enemyPoint);
+        StartCoroutine(_uiManager.ShowRoundCountText(_roundCount, _maxRoundCount));
         ResetFieldCard();
         DistributeCards();
         MyTurn();
@@ -298,8 +299,8 @@ public class GameManager : MonoBehaviour
         //ゲーム結果を判定
         JudgeGameResult();
         //勝敗の表示
-        uiManager.ToggleGameResultUI(true);
-        uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        _uiManager.ToggleGameResultUI(true);
+        _uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
     }
 
     /// <summary>
@@ -356,8 +357,8 @@ public class GameManager : MonoBehaviour
         }
 
         //UIへの反映
-        StartCoroutine(uiManager.ShowJudgementResultText(result.ToString()));
-        uiManager.ShowPoint(_myPoint, _enemyPoint);
+        StartCoroutine(_uiManager.ShowJudgementResultText(result.ToString()));
+        _uiManager.ShowPoint(_myPoint, _enemyPoint);
     }
 
     /// <summary>
@@ -397,7 +398,7 @@ public class GameManager : MonoBehaviour
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
         //カードをフィールドに移動
-        StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
-        yield return null;
+        yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
+        ChangeTurn();
     }
 }

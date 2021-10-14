@@ -22,13 +22,44 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     {
         if (gameManager.IsBattleFieldPlaced == false && gameManager.IsMyTurn)
         {
-            //todo
-            //確認UIを表示
+            StartCoroutine(TryToMoveToField());
             //1pならプレイヤーのフィールドへ移動
             //1pと2pでフィールドフラグを分ける
             //フィールドには裏返して配置する
-            StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
         }
+    }
+
+    /// <summary>
+    /// フィールドへの移動を試みます
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator TryToMoveToField()
+    {
+        //すでに確認画面がでてるなら何もしない
+        if (gameManager.UIManager.ConfirmationPanelToField.activeInHierarchy) yield break;
+
+        //確認画面を表示しYesならフィールドへ移動します
+        gameManager.UIManager.ToggleConfirmationPanelToField(true);
+        yield return StartCoroutine(WaitFieldConfirmationButton());
+
+        //yesを押した時
+        if (gameManager.UIManager.CanMoveToField)
+        {
+            yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
+            gameManager.ChangeTurn();
+        }
+
+        gameManager.UIManager.SetCanMoveToField(false);
+        gameManager.UIManager.SetIsClickedConfirmationFieldButton(false);
+    }
+
+    /// <summary>
+    /// フィールドへの確認画面の押下を待ちます
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator WaitFieldConfirmationButton()
+    {
+        yield return new WaitUntil(() => gameManager.UIManager.IsClickedConfirmationFieldButton);
     }
 
     /// <summary>
@@ -40,7 +71,5 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         transform.SetParent(targetTransform);//フィールドへカードを移動
         gameManager.SetBattleFieldPlaced(true);
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_TURN);
-        //相手のターンへ
-        gameManager.ChangeTurn();
     }
 }

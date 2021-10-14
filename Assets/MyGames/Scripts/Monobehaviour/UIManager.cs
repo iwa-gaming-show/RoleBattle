@@ -31,6 +31,19 @@ public class UIManager : MonoBehaviour
     [Header("ゲームの勝敗の結果表示用Canvas")]
     GameObject _gameResultUI;
 
+    [SerializeField]
+    [Header("バトル場へ送るカードの確認画面")]
+    GameObject _confirmationPanelToField;
+
+    bool _isClickedConfirmationFieldButton;//フィールドへの確認ボタンのをクリックしたか
+    bool _canMoveToField;//カードの移動ができる
+
+    #region//プロパティ
+    public bool CanMoveToField => _canMoveToField;
+    public bool IsClickedConfirmationFieldButton => _isClickedConfirmationFieldButton;
+    public GameObject ConfirmationPanelToField => _confirmationPanelToField;
+    #endregion
+
     /// <summary>
     /// 開始時に非表示にするUI
     /// </summary>
@@ -39,6 +52,7 @@ public class UIManager : MonoBehaviour
         ToggleGameResultUI(false);
         ToggleJudgementResultText(false);
         ToggleRoundCountText(false);
+        ToggleConfirmationPanelToField(false);
     }
 
     /// <summary>
@@ -100,6 +114,51 @@ public class UIManager : MonoBehaviour
     void ToggleRoundCountText(bool isActive)
     {
         _roundCountText.gameObject?.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// バトル場へ送るカードの確認画面
+    /// </summary>
+    public void ToggleConfirmationPanelToField(bool isActive)
+    {
+        _confirmationPanelToField.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// バトル場への確認画面でYesを押した時
+    /// </summary>
+    public void OnClickYesForFieldConfirmation()
+    {
+        ToggleConfirmationPanelToField(false);
+        _isClickedConfirmationFieldButton = true;
+        _canMoveToField = true;
+    }
+
+    /// <summary>
+    /// バトル場への確認画面でNoを押した時
+    /// </summary>
+    public void OnClickNoForFieldConfirmation()
+    {
+        ToggleConfirmationPanelToField(false);
+        _isClickedConfirmationFieldButton = true;
+        _canMoveToField = false;
+    }
+
+    /// <summary>
+    /// カード移動フラグのセット
+    /// </summary>
+    public void SetCanMoveToField(bool can)
+    {
+        _canMoveToField = can;
+    }
+
+    /// <summary>
+    /// バトル場への移動確認画面の押下フラグのセット
+    /// </summary>
+    /// <param name="isClicked"></param>
+    public void SetIsClickedConfirmationFieldButton(bool isClicked)
+    {
+        _isClickedConfirmationFieldButton = isClicked;
     }
 
     /// <summary>
