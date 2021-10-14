@@ -157,8 +157,8 @@ public class GameManager : MonoBehaviour
         //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
         for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
         {
-            AddingCardToHand(_myHandTransform, i);
-            AddingCardToHand(_enemyHandTransform, i);
+            AddingCardToHand(_myHandTransform, i, true);
+            AddingCardToHand(_enemyHandTransform, i, false);
         }
         //お互いのカードをシャッフルする
         ShuffleHandCard(_myHandTransform);
@@ -185,18 +185,18 @@ public class GameManager : MonoBehaviour
     /// カードを手札に加えます
     /// </summary>
     /// <param name="cardIndex"></param>
-    void AddingCardToHand(Transform hand, int cardIndex)
+    void AddingCardToHand(Transform hand, int cardIndex, bool isPlayer)
     {
-        CreateCard(hand, cardIndex);
+        CreateCard(hand, cardIndex, isPlayer);
     }
 
     /// <summary>
     /// カードを生成する
     /// </summary>
-    void CreateCard(Transform hand, int cardIndex)
+    void CreateCard(Transform hand, int cardIndex, bool isPlayer)
     {
         CardController cardController = Instantiate(_cardPrefab, hand, false);
-        cardController.Init(cardIndex);
+        cardController.Init(cardIndex, isPlayer);
     }
 
     /// <summary>

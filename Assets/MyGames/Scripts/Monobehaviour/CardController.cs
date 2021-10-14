@@ -34,9 +34,9 @@ public class CardController : MonoBehaviour
     /// 初期化処理
     /// </summary>
     /// <param name="cardIndex"></param>
-    public void Init(int cardIndex)
+    public void Init(int cardIndex, bool isPlayer)
     {
-        _cardModel.SetCardData(cardIndex);
+        _cardModel.SetCardData(cardIndex, isPlayer);
         _cardView.SetCardView(_cardModel);
     }
 }
