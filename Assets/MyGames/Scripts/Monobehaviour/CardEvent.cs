@@ -8,9 +8,11 @@ using static WaitTimes;
 public class CardEvent : MonoBehaviour, IPointerClickHandler
 {
     GameManager gameManager;
+    CardController cardController;
 
-    void Start()
+    void Awake()
     {
+        cardController = GetComponent<CardController>();
         gameManager = GameManager._instance;
     }
 
@@ -20,12 +22,10 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (gameManager.IsBattleFieldPlaced == false && gameManager.IsMyTurn)
+        bool controllablePlayerCard = gameManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
+        if (gameManager.IsBattleFieldPlaced == false && controllablePlayerCard)
         {
             StartCoroutine(TryToMoveToField());
-            //1pならプレイヤーのフィールドへ移動
-            //1pと2pでフィールドフラグを分ける
-            //フィールドには裏返して配置する
         }
     }
 
@@ -39,13 +39,14 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         if (gameManager.UIManager.ConfirmationPanelToField.activeInHierarchy) yield break;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
-        CardController targetCard = GetComponent<CardController>();
-        gameManager.UIManager.SelectedToFieldCard(targetCard);
+        gameManager.UIManager.SelectedToFieldCard(cardController);
         yield return StartCoroutine(WaitFieldConfirmationButton());
 
         //yesを押した時
         if (gameManager.UIManager.CanMoveToField)
         {
+            //todo フィールドにはカードを裏返して配置する
+
             yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
             gameManager.ChangeTurn();
         }
