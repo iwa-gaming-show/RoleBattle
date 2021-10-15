@@ -42,13 +42,13 @@ public class CardView : MonoBehaviour
         _cardInversionAngle *= -1;
 
         //-90度を越えるまで回転
-        yield return StartCoroutine(RotateTheCardTo(-90f));
+        yield return RotateTheCardTo(-90f);
 
         //90度あたりで裏面画像を非表示にする
         ToggleBackSide(false);
 
         //0度まで回転する
-        yield return StartCoroutine(RotateTheCardTo(0f));
+        yield return RotateTheCardTo(0f);
 
         //綺麗に0度にならないことがあるので明示的に0度に補正する
         transform.eulerAngles = new Vector3(0, 0, 0);
