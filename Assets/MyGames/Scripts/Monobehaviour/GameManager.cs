@@ -138,12 +138,16 @@ public class GameManager : MonoBehaviour
         Destroy(GetBattleFieldCardBy(false)?.gameObject);
 
         //手札のカードを削除します
-        foreach (CardController target in _myHandTransform.GetComponentsInChildren<CardController>())
-        {
-            Destroy(target.gameObject);
-        }
+        DestroyHandCard(_myHandTransform);
+        DestroyHandCard(_enemyHandTransform);
+    }
 
-        foreach (CardController target in _enemyHandTransform.GetComponentsInChildren<CardController>())
+    /// <summary>
+    /// 手札のカードを破壊します
+    /// </summary>
+    void DestroyHandCard(Transform handTransform)
+    {
+        foreach (CardController target in handTransform.GetComponentsInChildren<CardController>())
         {
             Destroy(target.gameObject);
         }
@@ -242,10 +246,14 @@ public class GameManager : MonoBehaviour
         CardController myCard = GetBattleFieldCardBy(true);
         CardController enemyCard = GetBattleFieldCardBy(false);
         //じゃんけんする
-        CardJudgement result = JudgmentResult(myCard, enemyCard);
+        CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         _isMyTurnEnd = false;
         _isEnemyTurnEnd = false;
+
+        //todo
+        //OPENのメッセージを出す
+        //カードを裏から表にする
 
         ReflectTheResult(result);
 
@@ -297,38 +305,29 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         //ゲーム結果を判定
-        JudgeGameResult();
+        _gameResult = JudgeGameResult();
         //勝敗の表示
         _uiManager.ToggleGameResultUI(true);
         _uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
     }
 
     /// <summary>
-    /// ゲーム結果を判定する
+    /// ゲーム結果を取得する
     /// </summary>
-    void JudgeGameResult()
+    GameResult JudgeGameResult()
     {
-        if (_myPoint > _enemyPoint)
-        {
-            _gameResult = GAME_WIN;
-        }
-        else if (_myPoint == _enemyPoint)
-        {
-            _gameResult = GAME_DRAW;
-        }
-        else
-        {
-            _gameResult = GAME_LOSE;
-        }
+        if (_myPoint > _enemyPoint) return GAME_WIN;
+        if (_myPoint == _enemyPoint) return GAME_DRAW;
+        return GAME_LOSE;
     }
 
     /// <summary>
-    /// 判定結果
+    /// カードの勝敗結果を取得する
     /// </summary>
     /// <param name="myCard"></param>
     /// <param name="enemyCard"></param>
     /// <returns></returns>
-    CardJudgement JudgmentResult(CardController myCard, CardController enemyCard)
+    CardJudgement JudgeCardResult(CardController myCard, CardController enemyCard)
     {
         CardType myCardType = myCard.CardModel.CardType;
         CardType enemyCardType = enemyCard.CardModel.CardType;
