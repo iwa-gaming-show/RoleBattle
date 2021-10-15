@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
     bool _isMyTurn;//自身のターンか
-    bool _isEnemyTurn;//相手のターンか
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
     int _myPoint;
@@ -87,26 +86,108 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartGame();
+        StartCoroutine(StartGame(true));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator StartGame(bool isFirstGame)
     {
+        //1ラウンド目に行う処理
+        if (isFirstGame)
+        {
+            _uiManager.ShowPoint(_myPoint, _enemyPoint);
+            DecideTheTurn();
+        }
+        //1ラウンド目以降に行う処理
+        else
+        {
+            _roundCount++;
+        }
 
+        _uiManager.HideUIAtStart();
+        ResetFieldCard();
+        yield return _uiManager.ShowRoundCountText(_roundCount, _maxRoundCount);
+        DistributeCards();
+        ChangeTurn();
     }
 
     /// <summary>
-    /// ゲーム開始処理
+    /// 先攻、後攻のターンを決めます
     /// </summary>
-    void StartGame()
+    void DecideTheTurn()
     {
-        _uiManager.HideUIAtStart();
-        _uiManager.ShowPoint(_myPoint, _enemyPoint);
-        StartCoroutine(_uiManager.ShowRoundCountText(_roundCount, _maxRoundCount));
-        ResetFieldCard();
-        DistributeCards();
-        MyTurn();
+        int random = Random.Range(0, 2);
+        if (random == 0)
+        {
+            _isMyTurn = true;
+        }
+    }
+
+    /// <summary>
+    /// ターンの終了
+    /// </summary>
+    public void EndTurn(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            _isMyTurn = false;
+            _isMyTurnEnd = true;
+        }
+        else
+        {
+            _isMyTurn = true;
+            _isEnemyTurnEnd = true;
+        }
+        
+        ChangeTurn();
+    }
+
+    /// <summary>
+    /// ターンを切り替える
+    /// </summary>
+    public void ChangeTurn()
+    {
+        SetBattleFieldPlaced(false);
+        StartCoroutine(CountDown());
+
+        if (_isMyTurn && _isMyTurnEnd == false)
+        {
+            MyTurn();
+        }
+        else if (_isEnemyTurnEnd == false)
+        {
+            StartCoroutine(EnemyTurn());
+        }
+
+        if (_isMyTurnEnd && _isEnemyTurnEnd)
+        {
+            //自身と相手のターンが終了した時、判定処理が走る
+            StartCoroutine(JudgeTheCard());
+        }
+    }
+
+    /// <summary>
+    /// カードを判定する
+    /// </summary>
+    IEnumerator JudgeTheCard()
+    {
+        //バトル場のカードを取得
+        CardController myCard = GetBattleFieldCardBy(true);
+        CardController enemyCard = GetBattleFieldCardBy(false);
+        //じゃんけんする
+        CardJudgement result = JudgeCardResult(myCard, enemyCard);
+
+        _isMyTurnEnd = false;
+        _isEnemyTurnEnd = false;
+
+        //OPENのメッセージを出す
+        yield return _uiManager.AnnounceToOpenTheCard();
+        //カードを裏から表にする
+        yield return OpenTheBattleFieldCards(myCard, enemyCard);
+        //結果を反映する
+        ReflectTheResult(result);
+
+        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
+        NextRound();
     }
 
     /// <summary>
@@ -115,7 +196,7 @@ public class GameManager : MonoBehaviour
     public void RetryGame()
     {
         InitializeGameData();
-        StartGame();
+        StartCoroutine(StartGame(true));
     }
 
     /// <summary>
@@ -212,65 +293,52 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ターンを切り替える
+    /// 自分のターン
     /// </summary>
-    public void ChangeTurn()
+    public void MyTurn()
     {
-        SetBattleFieldPlaced(false);
+        Debug.Log("自分のターンです");
+    }
 
-        if (_isMyTurn)
+    /// <summary>
+    /// 相手のターン
+    /// </summary>
+    public IEnumerator EnemyTurn()
+    {
+        Debug.Log("相手のターンです");
+        //エネミーの手札を取得
+        CardController[] cardControllers = _enemyHandTransform.GetComponentsInChildren<CardController>();
+        //カードをランダムに選択
+        CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
+        //カードをフィールドに移動
+        yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
+        EndTurn(false);
+    }
+
+    /// <summary>
+    /// カウントダウン
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CountDown()
+    {
+        StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
+        yield return null;
+    }
+
+    /// <summary>
+    /// 次のラウンドへ
+    /// </summary>
+    void NextRound()
+    {
+        if (_roundCount != _maxRoundCount)
         {
-            _isMyTurn = false;
-            _isMyTurnEnd = true;
-            StartCoroutine(EnemyTurn());
+            StartCoroutine(StartGame(false));
         }
         else
         {
-            _isEnemyTurn = false;
-            _isEnemyTurnEnd = true;
+            //最終ラウンドならゲーム終了
+            EndGame();
         }
-
-        if (_isMyTurnEnd && _isEnemyTurnEnd)
-        {
-            //自身と相手のターンが終了した時、判定処理が走る
-            StartCoroutine(JudgeTheCard());
-        }
-    }
-
-    /// <summary>
-    /// カードを判定する
-    /// </summary>
-    IEnumerator JudgeTheCard()
-    {
-        //バトル場のカードを取得
-        CardController myCard = GetBattleFieldCardBy(true);
-        CardController enemyCard = GetBattleFieldCardBy(false);
-        //じゃんけんする
-        CardJudgement result = JudgeCardResult(myCard, enemyCard);
-
-        _isMyTurnEnd = false;
-        _isEnemyTurnEnd = false;
-
-        //OPENのメッセージを出す
-        yield return AnnounceToOpenTheCard();
-        //カードを裏から表にする
-        yield return OpenTheBattleFieldCards(myCard, enemyCard);
-        //結果を反映する
-        ReflectTheResult(result);
-
-        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
-        NextRound();
-    }
-
-    /// <summary>
-    /// カードを開く演出を行います
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator AnnounceToOpenTheCard()
-    {
-        _uiManager.ToggleOpenPhaseText(true);
-        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
-        _uiManager.ToggleOpenPhaseText(false);
     }
 
     /// <summary>
@@ -301,23 +369,6 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayer) return _myBattleFieldTransform;
         return _enemyBattleFieldTransform;
-    }
-
-    /// <summary>
-    /// 次のラウンドへ
-    /// </summary>
-    void NextRound()
-    {
-        if (_roundCount != _maxRoundCount)
-        {
-            _roundCount++;
-            StartGame();
-        }
-        else
-        {
-            //最終ラウンドならゲーム終了
-            EndGame();
-        }
     }
 
     /// <summary>
@@ -395,30 +446,5 @@ public class GameManager : MonoBehaviour
         {
             _enemyPoint += _earnedPoint;
         }
-    }
-
-    /// <summary>
-    /// 自分のターン
-    /// </summary>
-    public void MyTurn()
-    {
-        Debug.Log("自分のターンです");
-        _isMyTurn = true;
-    }
-
-    /// <summary>
-    /// 相手のターン
-    /// </summary>
-    public IEnumerator EnemyTurn()
-    {
-        _isEnemyTurn = true;
-        Debug.Log("相手のターンです");
-        //エネミーの手札を取得
-        CardController[] cardControllers = _enemyHandTransform.GetComponentsInChildren<CardController>();
-        //カードをランダムに選択
-        CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
-        //カードをフィールドに移動
-        yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
-        ChangeTurn();
     }
 }

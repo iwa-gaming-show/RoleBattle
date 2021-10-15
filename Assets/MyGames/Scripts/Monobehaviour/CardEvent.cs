@@ -47,7 +47,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         {
             cardController.TurnTheCardOver();
             yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
-            gameManager.ChangeTurn();
+            gameManager.EndTurn(true);
         }
 
         gameManager.UIManager.SetCanMoveToField(false);
