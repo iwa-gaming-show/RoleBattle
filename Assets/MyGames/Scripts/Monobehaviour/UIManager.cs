@@ -99,6 +99,17 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// カードを開く演出を行います
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator AnnounceToOpenTheCard()
+    {
+        ToggleOpenPhaseText(true);
+        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
+        ToggleOpenPhaseText(false);
+    }
+
+    /// <summary>
     /// ゲーム結果の表示の切り替え
     /// </summary>
     /// <param name="isAcitve"></param>
