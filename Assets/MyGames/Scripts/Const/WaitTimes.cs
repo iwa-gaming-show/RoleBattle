@@ -27,4 +27,9 @@ public static class WaitTimes
     /// カウント数の表示時間
     /// </summary>
     public static readonly float ROUND_COUNT_DISPLAY_TIME = 1f;
+
+    /// <summary>
+    /// カードを開くアナウンスの表示時間
+    /// </summary>
+    public static readonly float ANNOUNCEMENT_TIME_TO_OPEN_CARD = 1f;
 }

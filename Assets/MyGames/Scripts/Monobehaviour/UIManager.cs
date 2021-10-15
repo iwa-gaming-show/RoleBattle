@@ -32,6 +32,10 @@ public class UIManager : MonoBehaviour
     Text _fieldConfirmationText;
 
     [SerializeField]
+    [Header("カードOPEN時のテキスト")]
+    Text _openPhaseText;
+
+    [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
 
@@ -57,6 +61,7 @@ public class UIManager : MonoBehaviour
         ToggleJudgementResultText(false);
         ToggleRoundCountText(false);
         ToggleConfirmationPanelToField(false);
+        ToggleOpenPhaseText(false);
     }
 
     /// <summary>
@@ -136,6 +141,15 @@ public class UIManager : MonoBehaviour
     public void ToggleConfirmationPanelToField(bool isActive)
     {
         _confirmationPanelToField.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// カードOPEN時のテキストの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleOpenPhaseText(bool isActive)
+    {
+        _openPhaseText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>

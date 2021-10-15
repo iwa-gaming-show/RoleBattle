@@ -2720,6 +2720,7 @@ MonoBehaviour:
   _roundCountText: {fileID: 1024314044}
   _gameResultText: {fileID: 1489662935}
   _fieldConfirmationText: {fileID: 191260038}
+  _openPhaseText: {fileID: 175381074}
   _gameResultUI: {fileID: 483168577}
   _confirmationPanelToField: {fileID: 184845850}
 --- !u!1 &1928669751

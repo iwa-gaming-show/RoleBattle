@@ -251,16 +251,37 @@ public class GameManager : MonoBehaviour
         _isMyTurnEnd = false;
         _isEnemyTurnEnd = false;
 
-        //todo
         //OPENのメッセージを出す
+        yield return AnnounceToOpenTheCard();
         //カードを裏から表にする
-
+        yield return OpenTheBattleFieldCards(myCard, enemyCard);
+        //結果を反映する
         ReflectTheResult(result);
 
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
         NextRound();
     }
 
+    /// <summary>
+    /// カードを開く演出を行います
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator AnnounceToOpenTheCard()
+    {
+        _uiManager.ToggleOpenPhaseText(true);
+        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
+        _uiManager.ToggleOpenPhaseText(false);
+    }
+
+    /// <summary>
+    /// バトル場のカードを表にします
+    /// </summary>
+    IEnumerator OpenTheBattleFieldCards(CardController myCard, CardController enemyCard)
+    {
+        myCard.TurnTheCardFaceUp();
+        enemyCard.TurnTheCardFaceUp();
+        yield return null;
+    }
     /// <summary>
     /// バトル場のカードを取得する
     /// </summary>

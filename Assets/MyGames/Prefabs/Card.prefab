@@ -243,9 +243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e9ce2f21b2704484adea5fcf54856e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 6594497202313826439}
-  iconImage: {fileID: 6594497203516697914}
-  backSide: {fileID: 8832197569409800368}
+  _nameText: {fileID: 6594497202313826439}
+  _iconImage: {fileID: 6594497203516697914}
+  _backSide: {fileID: 8832197569409800368}
+  _rotationalSpeed: 300
 --- !u!114 &306107444625144396
 MonoBehaviour:
   m_ObjectHideFlags: 0
