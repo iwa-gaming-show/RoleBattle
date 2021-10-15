@@ -45,7 +45,6 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         //yesを押した時
         if (gameManager.UIManager.CanMoveToField)
         {
-            cardController.TurnTheCardOver();
             yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
             gameManager.EndTurn(true);
         }
@@ -68,6 +67,9 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public IEnumerator MoveToBattleField(Transform targetTransform)
     {
+        if (gameManager.IsBattleFieldPlaced) yield break;
+
+        cardController.TurnTheCardOver();
         transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);//移動演出
         transform.SetParent(targetTransform);//フィールドへカードを移動
         gameManager.SetBattleFieldPlaced(true);

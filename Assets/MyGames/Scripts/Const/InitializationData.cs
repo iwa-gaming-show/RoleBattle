@@ -12,4 +12,9 @@ public static class InitializationData
     /// 最初の取得ポイント数
     /// </summary>
     public static readonly int INITIAL_POINT = 0;
+
+    /// <summary>
+    /// デフォルトのカウントダウンの秒数
+    /// </summary>
+    public static readonly int DEFAULT_COUNT_DOWN_TIME = 10;
 }

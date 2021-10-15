@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Header("ラウンド数")]
     int _roundCount = INITIAL_ROUND_COUNT;
+
+    [SerializeField]
+    [Header("カウントダウンの秒数を設定")]
+    int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
@@ -60,6 +64,7 @@ public class GameManager : MonoBehaviour
     bool _isEnemyTurnEnd;
     int _myPoint;
     int _enemyPoint;
+    int _countDownTime;
     GameResult _gameResult;
 
     #region プロパティ
@@ -147,14 +152,16 @@ public class GameManager : MonoBehaviour
     public void ChangeTurn()
     {
         SetBattleFieldPlaced(false);
-        StartCoroutine(CountDown());
+        StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
 
         if (_isMyTurn && _isMyTurnEnd == false)
         {
+            StartCoroutine(CountDown());
             MyTurn();
         }
         else if (_isEnemyTurnEnd == false)
         {
+            StartCoroutine(CountDown());
             StartCoroutine(EnemyTurn());
         }
 
@@ -163,6 +170,52 @@ public class GameManager : MonoBehaviour
             //自身と相手のターンが終了した時、判定処理が走る
             StartCoroutine(JudgeTheCard());
         }
+    }
+
+    /// <summary>
+    /// カウントダウン
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CountDown()
+    {
+        _countDownTime = _defaultCountDownTime;
+
+        while (_countDownTime > 0)
+        {
+            //1秒毎に減らしていきます
+            yield return new WaitForSeconds(1f);
+            _countDownTime--;
+            _uiManager.ShowCountDownText(_countDownTime);
+        }
+
+        //0になったらカードをランダムにフィールドへ移動しターンエンドする
+        CardController targetCard = GetRandomCardFrom(_isMyTurn);
+        Transform targetTransform = GetTargetBattleFieldTransform(_isMyTurn);
+
+        yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
+        EndTurn(_isMyTurn);
+    }
+
+    /// <summary>
+    /// 手札からランダムなカードを取得します
+    /// </summary>
+    /// <returns></returns>
+    CardController GetRandomCardFrom(bool isMyHand)
+    {
+        CardController[] handCards = GetAllHandCardsFor(isMyHand);
+        int randomCardIndex = Random.Range(0, handCards.Length);
+        return handCards[randomCardIndex];
+    }
+
+    /// <summary>
+    /// 手札のカードを全て取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public CardController[] GetAllHandCardsFor(bool isPlayer)
+    {
+        if (isPlayer) return _myHandTransform.GetComponentsInChildren<CardController>();
+        return _enemyHandTransform.GetComponentsInChildren<CardController>();
     }
 
     /// <summary>
@@ -219,16 +272,16 @@ public class GameManager : MonoBehaviour
         Destroy(GetBattleFieldCardBy(false)?.gameObject);
 
         //手札のカードを削除します
-        DestroyHandCard(_myHandTransform);
-        DestroyHandCard(_enemyHandTransform);
+        DestroyHandCard(true);
+        DestroyHandCard(false);
     }
 
     /// <summary>
     /// 手札のカードを破壊します
     /// </summary>
-    void DestroyHandCard(Transform handTransform)
+    void DestroyHandCard(bool isPlayer)
     {
-        foreach (CardController target in handTransform.GetComponentsInChildren<CardController>())
+        foreach (CardController target in GetAllHandCardsFor(isPlayer))
         {
             Destroy(target.gameObject);
         }
@@ -246,16 +299,16 @@ public class GameManager : MonoBehaviour
             AddingCardToHand(_enemyHandTransform, i, false);
         }
         //お互いのカードをシャッフルする
-        ShuffleHandCard(_myHandTransform);
-        ShuffleHandCard(_enemyHandTransform);
+        ShuffleHandCard(true);
+        ShuffleHandCard(false);
     }
 
     /// <summary>
     /// 手札のカードをシャッフルする
     /// </summary>
-    void ShuffleHandCard(Transform targetTransform)
+    void ShuffleHandCard(bool isPlayer)
     {
-        CardController[] handCards = targetTransform.GetComponentsInChildren<CardController>();
+        CardController[] handCards = GetAllHandCardsFor(isPlayer);
 
         for (int i = 0; i < handCards.Length; i++)
         {
@@ -307,22 +360,12 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("相手のターンです");
         //エネミーの手札を取得
-        CardController[] cardControllers = _enemyHandTransform.GetComponentsInChildren<CardController>();
+        CardController[] cardControllers = GetAllHandCardsFor(false);
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
         //カードをフィールドに移動
         yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
         EndTurn(false);
-    }
-
-    /// <summary>
-    /// カウントダウン
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator CountDown()
-    {
-        StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
-        yield return null;
     }
 
     /// <summary>

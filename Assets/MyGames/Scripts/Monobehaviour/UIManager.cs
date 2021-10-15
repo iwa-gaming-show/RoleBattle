@@ -36,6 +36,10 @@ public class UIManager : MonoBehaviour
     Text _openPhaseText;
 
     [SerializeField]
+    [Header("カウントダウンのテキスト")]
+    Text _countDownText;
+
+    [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
 
@@ -107,6 +111,14 @@ public class UIManager : MonoBehaviour
         ToggleOpenPhaseText(true);
         yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
         ToggleOpenPhaseText(false);
+    }
+
+    /// <summary>
+    /// カウントダウンを表示
+    /// </summary>
+    public void ShowCountDownText(int countDownTime)
+    {
+        _countDownText.text = countDownTime.ToString();
     }
 
     /// <summary>
