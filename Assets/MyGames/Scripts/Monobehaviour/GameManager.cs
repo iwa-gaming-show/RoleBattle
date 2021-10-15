@@ -130,9 +130,9 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ターンの終了
     /// </summary>
-    public void EndTurn(bool isPlayer)
+    public void EndTurn()
     {
-        if (isPlayer)
+        if (_isMyTurn)
         {
             _isMyTurn = false;
             _isMyTurnEnd = true;
@@ -193,7 +193,6 @@ public class GameManager : MonoBehaviour
         Transform targetTransform = GetTargetBattleFieldTransform(_isMyTurn);
 
         yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
-        EndTurn(_isMyTurn);
     }
 
     /// <summary>
@@ -365,7 +364,6 @@ public class GameManager : MonoBehaviour
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
         //カードをフィールドに移動
         yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
-        EndTurn(false);
     }
 
     /// <summary>
