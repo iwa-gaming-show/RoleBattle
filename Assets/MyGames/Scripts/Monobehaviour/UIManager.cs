@@ -40,6 +40,14 @@ public class UIManager : MonoBehaviour
     Text _countDownText;
 
     [SerializeField]
+    [Header("自分のターン時に表示するテキスト")]
+    Text _announceThePlayerTurnText;
+
+    [SerializeField]
+    [Header("相手のターン時に表示するテキスト")]
+    Text _announceTheEnemyTurnText;
+
+    [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
 
@@ -111,6 +119,32 @@ public class UIManager : MonoBehaviour
         ToggleOpenPhaseText(true);
         yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
         ToggleOpenPhaseText(false);
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時にテキストを表示する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public IEnumerator ShowThePlayerTurnText(bool isPlayer)
+    {
+        ToggleAnnounceTurnTextFor(true, isPlayer);
+        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT);
+        ToggleAnnounceTurnTextFor(false, isPlayer);
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時に表示するテキストの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleAnnounceTurnTextFor(bool isActive, bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            _announceThePlayerTurnText.gameObject?.SetActive(isActive);
+            return;
+        }
+        _announceTheEnemyTurnText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>

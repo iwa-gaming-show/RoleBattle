@@ -32,4 +32,9 @@ public static class WaitTimes
     /// カードを開くアナウンスの表示時間
     /// </summary>
     public static readonly float ANNOUNCEMENT_TIME_TO_OPEN_CARD = 1f;
+
+    /// <summary>
+    /// ターンをアナウンスするテキストの表示時間
+    /// </summary>
+    public static readonly float ANNOUNCEMENT_TIME_TO_TURN_TEXT = 1f;
 }

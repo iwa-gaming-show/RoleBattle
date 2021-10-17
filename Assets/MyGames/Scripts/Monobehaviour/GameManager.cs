@@ -349,7 +349,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void MyTurn()
     {
-        Debug.Log("自分のターンです");
+        StartCoroutine(_uiManager.ShowThePlayerTurnText(true));
     }
 
     /// <summary>
@@ -357,7 +357,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public IEnumerator EnemyTurn()
     {
-        Debug.Log("相手のターンです");
+        yield return _uiManager.ShowThePlayerTurnText(false);
         //エネミーの手札を取得
         CardController[] cardControllers = GetAllHandCardsFor(false);
         //カードをランダムに選択
