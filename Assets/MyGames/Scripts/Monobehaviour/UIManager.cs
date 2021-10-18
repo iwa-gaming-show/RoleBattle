@@ -40,12 +40,12 @@ public class UIManager : MonoBehaviour
     Text _countDownText;
 
     [SerializeField]
-    [Header("自分のターン時に表示するテキスト")]
-    Text _announceThePlayerTurnText;
+    [Header("自分のターンであることを知らせるUI")]
+    GameObject _announceThePlayerTurn;
 
     [SerializeField]
-    [Header("相手のターン時に表示するテキスト")]
-    Text _announceTheEnemyTurnText;
+    [Header("相手のターンであることを知らせるUI")]
+    GameObject _announceTheEnemyTurn;
 
     [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
@@ -104,6 +104,8 @@ public class UIManager : MonoBehaviour
         ToggleRoundCountText(false);
         ToggleConfirmationPanelToField(false);
         ToggleConfirmationPanelToSpecialSkill(false);
+        ToggleAnnounceTurnFor(false, true);
+        ToggleAnnounceTurnFor(false, true);
         ToggleProductionToSpecialSkill(false, true);
         ToggleProductionToSpecialSkill(false, false);
         ToggleOpenPhaseText(false);
@@ -161,23 +163,23 @@ public class UIManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator ShowThePlayerTurnText(bool isPlayer)
     {
-        ToggleAnnounceTurnTextFor(true, isPlayer);
+        ToggleAnnounceTurnFor(true, isPlayer);
         yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT);
-        ToggleAnnounceTurnTextFor(false, isPlayer);
+        ToggleAnnounceTurnFor(false, isPlayer);
     }
 
     /// <summary>
-    /// プレイヤーのターン時に表示するテキストの切り替え
+    /// プレイヤーのターン時に表示するUIの切り替え
     /// </summary>
     /// <param name="isActive"></param>
-    void ToggleAnnounceTurnTextFor(bool isActive, bool isPlayer)
+    void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
     {
         if (isPlayer)
         {
-            _announceThePlayerTurnText.gameObject?.SetActive(isActive);
+            _announceThePlayerTurn.SetActive(isActive);
             return;
         }
-        _announceTheEnemyTurnText.gameObject?.SetActive(isActive);
+        _announceTheEnemyTurn.SetActive(isActive);
     }
 
     /// <summary>

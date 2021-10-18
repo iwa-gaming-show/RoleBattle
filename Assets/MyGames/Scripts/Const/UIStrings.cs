@@ -21,7 +21,7 @@ public static class UIStrings
     /// <summary>
     /// カードの判定結果の接尾時につける
     /// </summary>
-    public static readonly string JUDGEMENT_RESULT_SUFFIX = "！";
+    public static readonly string JUDGEMENT_RESULT_SUFFIX = "!";
 
     /// <summary>
     /// バトル場への移動の確認用テキスト、選択したカード名の接尾時につける
