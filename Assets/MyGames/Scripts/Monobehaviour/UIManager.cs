@@ -76,8 +76,8 @@ public class UIManager : MonoBehaviour
     Image[] _specialSkillButtonImages;
 
     [SerializeField]
-    [Header("未使用、使用済みの順にColorを必殺技ボタンに設定する")]
-    Color[] _specialSkillButtonColors;
+    [Header("未使用、使用済みの順にアイコン画像を必殺技ボタンに設定する")]
+    Sprite[] _specialSkillButtonIcons;
 
     [SerializeField]
     [Header("必殺技の説明用のテキストを設定")]
@@ -313,17 +313,17 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void UsedSpecialSkillButton(bool isPlayer)
     {
-        SetSpecialSkillButtonImageForTarget(GetSpecialSkillButtonImageBy(isPlayer), _specialSkillButtonColors[1]);
+        SetSpecialSkillButtonSpriteForTarget(GetSpecialSkillButtonImageBy(isPlayer), _specialSkillButtonIcons[1]);
     }
 
     /// <summary>
-    /// 必殺技のImageを設定する
+    /// 必殺技のIconを設定する
     /// </summary>
     /// <param name="targetImage"></param>
-    /// <param name="setColor"></param>
-    void SetSpecialSkillButtonImageForTarget(Image targetImage, Color setColor)
+    /// <param name="setSprite"></param>
+    void SetSpecialSkillButtonSpriteForTarget(Image targetImage, Sprite setSprite)
     {
-        targetImage.color = setColor;
+        targetImage.sprite = setSprite;
     }
 
     /// <summary>
@@ -353,7 +353,7 @@ public class UIManager : MonoBehaviour
     {
         foreach (Image specialSkillButtonImage in _specialSkillButtonImages)
         {
-            SetSpecialSkillButtonImageForTarget(specialSkillButtonImage, _specialSkillButtonColors[0]);
+            SetSpecialSkillButtonSpriteForTarget(specialSkillButtonImage, _specialSkillButtonIcons[0]);
         }
     }
 
