@@ -62,6 +62,9 @@ public class GameManager : MonoBehaviour
     bool _isMyTurn;//自身のターンか
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
+    bool _canUseSpecialSkill;//必殺技が使用できるか
+    bool _isUsingSkillInRound;//必殺技を使用したラウンドか
+    bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _myPoint;
     int _enemyPoint;
     int _countDownTime;
@@ -71,6 +74,7 @@ public class GameManager : MonoBehaviour
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
     public bool IsMyTurn => _isMyTurn;
+    public bool CanUseSpecialSkill => _canUseSpecialSkill;
     public UIManager UIManager => _uiManager;
     #endregion
 
@@ -99,7 +103,9 @@ public class GameManager : MonoBehaviour
         //1ラウンド目に行う処理
         if (isFirstGame)
         {
+            _canUseSpecialSkill = true;//必殺技を使用可能に
             _uiManager.ShowPoint(_myPoint, _enemyPoint);
+            _uiManager.InitUIData();
             DecideTheTurn();
         }
         //1ラウンド目以降に行う処理
@@ -182,10 +188,16 @@ public class GameManager : MonoBehaviour
 
         while (_countDownTime > 0)
         {
-            //1秒毎に減らしていきます
-            yield return new WaitForSeconds(1f);
-            _countDownTime--;
-            _uiManager.ShowCountDownText(_countDownTime);
+            //必殺技の演出中はカウントしない
+            if (_isDuringProductionOfSpecialSkill == false)
+            {
+                //1秒毎に減らしていきます
+                yield return new WaitForSeconds(1f);
+                _countDownTime--;
+                _uiManager.ShowCountDownText(_countDownTime);
+            }
+
+            yield return null;
         }
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
@@ -193,6 +205,14 @@ public class GameManager : MonoBehaviour
         Transform targetTransform = GetTargetBattleFieldTransform(_isMyTurn);
 
         yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
+    }
+
+    /// <summary>
+    /// 必殺技の演出中かフラグをセットする
+    /// </summary>
+    public void SetIsDuringProductionOfSpecialSkill(bool isDuringProduction)
+    {
+        _isDuringProductionOfSpecialSkill = isDuringProduction;
     }
 
     /// <summary>
@@ -228,18 +248,27 @@ public class GameManager : MonoBehaviour
         //じゃんけんする
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
-        _isMyTurnEnd = false;
-        _isEnemyTurnEnd = false;
-
         //OPENのメッセージを出す
         yield return _uiManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         yield return OpenTheBattleFieldCards(myCard, enemyCard);
         //結果を反映する
         ReflectTheResult(result);
+        ResetRoundState();
 
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
         NextRound();
+    }
+
+    /// <summary>
+    /// ラウンドの状態をリセットする
+    /// </summary>
+    void ResetRoundState()
+    {
+        //スキルの発動状態をリセット
+        _isUsingSkillInRound = false;
+        _isMyTurnEnd = false;
+        _isEnemyTurnEnd = false;
     }
 
     /// <summary>
@@ -479,13 +508,35 @@ public class GameManager : MonoBehaviour
     /// <param name="isPlayer"></param>
     void AddPointTo(bool isPlayer)
     {
-        if (isPlayer)
-        {
-            _myPoint += _earnedPoint;
-        }
-        else
+        if (isPlayer == false)
         {
             _enemyPoint += _earnedPoint;
+            return;
         }
+
+        _myPoint += EarnPlayerPoint();
+    }
+
+    /// <summary>
+    /// プレイヤーの獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    int EarnPlayerPoint()
+    {
+        if (_isUsingSkillInRound)
+        {
+            return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
+        }
+
+        return _earnedPoint;
+    }
+
+    /// <summary>
+    /// 必殺技を使用します
+    /// </summary>
+    public void UsedSpecialSkill()
+    {
+        _canUseSpecialSkill = false;//使用済みに
+        _isUsingSkillInRound = true;
     }
 }

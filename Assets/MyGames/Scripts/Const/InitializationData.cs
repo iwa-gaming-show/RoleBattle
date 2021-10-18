@@ -17,4 +17,9 @@ public static class InitializationData
     /// デフォルトのカウントダウンの秒数
     /// </summary>
     public static readonly int DEFAULT_COUNT_DOWN_TIME = 10;
+
+    /// <summary>
+    /// 必殺技発動によって獲得できるボーナスの倍率、獲得ポイントに掛けて使用する
+    /// </summary>
+    public static readonly int SPECIAL_SKILL_MAGNIFICATION_BONUS = 2;
 }

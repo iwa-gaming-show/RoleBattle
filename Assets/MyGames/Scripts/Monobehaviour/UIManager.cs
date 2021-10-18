@@ -55,6 +55,32 @@ public class UIManager : MonoBehaviour
     [Header("バトル場へ送るカードの確認UI")]
     GameObject _confirmationPanelToField;
 
+    [SerializeField]
+    [Header("必殺技発動の確認UI")]
+    GameObject _confirmationPanelToSpecialSkill;
+
+    [SerializeField]
+    [Header("必殺技発動の演出UI")]
+    GameObject _productionToSpecialSkill;
+
+    [SerializeField]
+    [Header("必殺技の詳細を記述するテキストを格納する")]
+    Text[] _descriptionsOfSpecialSkill;
+
+    [SerializeField]
+    [Header("プレイヤー、エネミーの順に必殺技ボタンを格納する")]
+    Image[] _specialSkillButtonImages;
+
+    [SerializeField]
+    [Header("未使用、使用済みの順にColorを必殺技ボタンに設定する")]
+    Color[] _specialSkillButtonColors;
+
+    [SerializeField]
+    [Header("必殺技の説明用のテキストを設定")]
+    string _specialSkillDescription;
+
+
+
     bool _isClickedConfirmationFieldButton;//フィールドへの確認ボタンのをクリックしたか
     bool _canMoveToField;//カードの移動ができる
 
@@ -73,6 +99,8 @@ public class UIManager : MonoBehaviour
         ToggleJudgementResultText(false);
         ToggleRoundCountText(false);
         ToggleConfirmationPanelToField(false);
+        ToggleConfirmationPanelToSpecialSkill(false);
+        ToggleProductionToSpecialSkill(false);
         ToggleOpenPhaseText(false);
     }
 
@@ -201,6 +229,14 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 必殺技発動の確認UI
+    /// </summary>
+    public void ToggleConfirmationPanelToSpecialSkill(bool isActive)
+    {
+        _confirmationPanelToSpecialSkill.SetActive(isActive);
+    }
+
+    /// <summary>
     /// カードOPEN時のテキストの表示の切り替え
     /// </summary>
     /// <param name="isActive"></param>
@@ -227,6 +263,131 @@ public class UIManager : MonoBehaviour
         ToggleConfirmationPanelToField(false);
         _isClickedConfirmationFieldButton = true;
         _canMoveToField = false;
+    }
+
+    /// <summary>
+    /// 必殺技ボタンを押した時
+    /// </summary>
+    public void OnClickSpecialSkillButton()
+    {
+        //自分のターンのみ押せる
+        if (GameManager._instance.IsMyTurn == false) return;
+        //一度使用したら押せない
+        if (GameManager._instance.CanUseSpecialSkill == false) return;
+
+        ToggleConfirmationPanelToSpecialSkill(true);
+    }
+
+    /// <summary>
+    /// 必殺技発動の確認画面でYesを押した時
+    /// </summary>
+    public void OnClickYesForSpecialSkillConfirmation()
+    {
+        ToggleConfirmationPanelToSpecialSkill(false);
+        StartCoroutine(ActivateSpecialSkill());
+    }
+
+    /// <summary>
+    /// 必殺技を発動する
+    /// </summary>
+    IEnumerator ActivateSpecialSkill()
+    {
+        UsedSpecialSkillButton(true);
+        GameManager._instance.UsedSpecialSkill();
+        //必殺技を演出、 演出中はカウントダウンが止まる
+        GameManager._instance.SetIsDuringProductionOfSpecialSkill(true);
+
+        yield return ShowSpecialSkillDirection();
+        //カウントダウン再開
+        GameManager._instance.SetIsDuringProductionOfSpecialSkill(false);
+        
+    }
+
+    /// <summary>
+    /// 必殺技ボタンを使用済みにする
+    /// </summary>
+    void UsedSpecialSkillButton(bool isPlayer)
+    {
+        SetSpecialSkillButtonImageForTarget(GetSpecialSkillButtonImageBy(isPlayer), _specialSkillButtonColors[1]);
+    }
+
+    /// <summary>
+    /// 必殺技のImageを設定する
+    /// </summary>
+    /// <param name="targetImage"></param>
+    /// <param name="setColor"></param>
+    void SetSpecialSkillButtonImageForTarget(Image targetImage, Color setColor)
+    {
+        targetImage.color = setColor;
+    }
+
+    /// <summary>
+    /// UIデータの初期設定
+    /// </summary>
+    public void InitUIData()
+    {
+        InitSpecialSkillButtonImageByPlayers();
+        InitSpecialSkillDescriptions();
+    }
+
+    /// <summary>
+    /// 必殺技の説明文の設定
+    /// </summary>
+    void InitSpecialSkillDescriptions()
+    {
+        foreach (Text description in _descriptionsOfSpecialSkill)
+        {
+            description.text = _specialSkillDescription;
+        }
+    }
+
+    /// <summary>
+    /// プレイヤー毎に必殺技のImageを初期化する
+    /// </summary>
+    void InitSpecialSkillButtonImageByPlayers()
+    {
+        foreach (Image specialSkillButtonImage in _specialSkillButtonImages)
+        {
+            SetSpecialSkillButtonImageForTarget(specialSkillButtonImage, _specialSkillButtonColors[0]);
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーの必殺技ボタンのImageを取得します
+    /// </summary>
+    /// <returns></returns>
+    Image GetSpecialSkillButtonImageBy(bool isPlayer)
+    {
+        if (isPlayer) return _specialSkillButtonImages[0];
+        return _specialSkillButtonImages[1];
+    }
+
+    /// <summary>
+    /// 必殺技発動の演出
+    /// </summary>
+    IEnumerator ShowSpecialSkillDirection()
+    {
+        ToggleProductionToSpecialSkill(true);
+        yield return new WaitForSeconds(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME);
+        ToggleProductionToSpecialSkill(false);
+        yield return null;
+    }
+
+    /// <summary>
+    /// 必殺技演出UIの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleProductionToSpecialSkill(bool isActive)
+    {
+        _productionToSpecialSkill.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// 必殺技発動の確認画面でNoを押した時
+    /// </summary>
+    public void OnClickNoForSpecialSkillConfirmation()
+    {
+        ToggleConfirmationPanelToSpecialSkill(false);
     }
 
     /// <summary>

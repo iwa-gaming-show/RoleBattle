@@ -37,4 +37,9 @@ public static class WaitTimes
     /// ターンをアナウンスするテキストの表示時間
     /// </summary>
     public static readonly float ANNOUNCEMENT_TIME_TO_TURN_TEXT = 1f;
+
+    /// <summary>
+    /// 必殺技演出の表示時間
+    /// </summary>
+    public static readonly float SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME = 2f;
 }
