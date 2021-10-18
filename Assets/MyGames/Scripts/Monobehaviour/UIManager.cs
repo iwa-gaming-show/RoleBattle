@@ -60,8 +60,12 @@ public class UIManager : MonoBehaviour
     GameObject _confirmationPanelToSpecialSkill;
 
     [SerializeField]
-    [Header("必殺技発動の演出UI")]
-    GameObject _productionToSpecialSkill;
+    [Header("プレイヤーの必殺技発動の演出UI")]
+    GameObject _playerProductionToSpecialSkill;
+
+    [SerializeField]
+    [Header("エネミーの必殺技発動の演出UI")]
+    GameObject _enemyProductionToSpecialSkill;
 
     [SerializeField]
     [Header("必殺技の詳細を記述するテキストを格納する")]
@@ -100,7 +104,8 @@ public class UIManager : MonoBehaviour
         ToggleRoundCountText(false);
         ToggleConfirmationPanelToField(false);
         ToggleConfirmationPanelToSpecialSkill(false);
-        ToggleProductionToSpecialSkill(false);
+        ToggleProductionToSpecialSkill(false, true);
+        ToggleProductionToSpecialSkill(false, false);
         ToggleOpenPhaseText(false);
     }
 
@@ -273,7 +278,7 @@ public class UIManager : MonoBehaviour
         //自分のターンのみ押せる
         if (GameManager._instance.IsMyTurn == false) return;
         //一度使用したら押せない
-        if (GameManager._instance.CanUseSpecialSkill == false) return;
+        if (GameManager._instance.CanUsePlayerSpecialSkill == false) return;
 
         ToggleConfirmationPanelToSpecialSkill(true);
     }
@@ -284,20 +289,20 @@ public class UIManager : MonoBehaviour
     public void OnClickYesForSpecialSkillConfirmation()
     {
         ToggleConfirmationPanelToSpecialSkill(false);
-        StartCoroutine(ActivateSpecialSkill());
+        StartCoroutine(ActivateSpecialSkill(true));
     }
 
     /// <summary>
     /// 必殺技を発動する
     /// </summary>
-    IEnumerator ActivateSpecialSkill()
+    public IEnumerator ActivateSpecialSkill(bool isPlayer)
     {
-        UsedSpecialSkillButton(true);
-        GameManager._instance.UsedSpecialSkill();
+        UsedSpecialSkillButton(isPlayer);
+        GameManager._instance.UsedSpecialSkill(isPlayer);
         //必殺技を演出、 演出中はカウントダウンが止まる
         GameManager._instance.SetIsDuringProductionOfSpecialSkill(true);
 
-        yield return ShowSpecialSkillDirection();
+        yield return ShowSpecialSkillDirection(isPlayer);
         //カウントダウン再開
         GameManager._instance.SetIsDuringProductionOfSpecialSkill(false);
         
@@ -365,11 +370,11 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 必殺技発動の演出
     /// </summary>
-    IEnumerator ShowSpecialSkillDirection()
+    IEnumerator ShowSpecialSkillDirection(bool isPlayer)
     {
-        ToggleProductionToSpecialSkill(true);
+        ToggleProductionToSpecialSkill(true, isPlayer);
         yield return new WaitForSeconds(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME);
-        ToggleProductionToSpecialSkill(false);
+        ToggleProductionToSpecialSkill(false, isPlayer);
         yield return null;
     }
 
@@ -377,9 +382,15 @@ public class UIManager : MonoBehaviour
     /// 必殺技演出UIの表示の切り替え
     /// </summary>
     /// <param name="isActive"></param>
-    public void ToggleProductionToSpecialSkill(bool isActive)
+    public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
     {
-        _productionToSpecialSkill.SetActive(isActive);
+        if (isPlayer)
+        {
+            _playerProductionToSpecialSkill.SetActive(isActive);
+            return;
+        }
+
+        _enemyProductionToSpecialSkill.SetActive(isActive);
     }
 
     /// <summary>

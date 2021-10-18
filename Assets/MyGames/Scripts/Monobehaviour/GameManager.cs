@@ -62,11 +62,14 @@ public class GameManager : MonoBehaviour
     bool _isMyTurn;//自身のターンか
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
-    bool _canUseSpecialSkill;//必殺技が使用できるか
-    bool _isUsingSkillInRound;//必殺技を使用したラウンドか
+    bool _canUsePlayerSpecialSkill;//必殺技が使用できるか
+    bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
+    bool _canUseEnemySpecialSkill;
+    bool _isUsingEnemySkillInRound;
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _myPoint;
     int _enemyPoint;
+    int _enemySpecialSkillTurn;//敵が必殺技を使用するターン
     int _countDownTime;
     GameResult _gameResult;
 
@@ -74,7 +77,7 @@ public class GameManager : MonoBehaviour
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
     public bool IsMyTurn => _isMyTurn;
-    public bool CanUseSpecialSkill => _canUseSpecialSkill;
+    public bool CanUsePlayerSpecialSkill => _canUsePlayerSpecialSkill;
     public UIManager UIManager => _uiManager;
     #endregion
 
@@ -103,10 +106,12 @@ public class GameManager : MonoBehaviour
         //1ラウンド目に行う処理
         if (isFirstGame)
         {
-            _canUseSpecialSkill = true;//必殺技を使用可能に
+            _canUsePlayerSpecialSkill = true;//必殺技を使用可能に
+            _canUseEnemySpecialSkill = true;
             _uiManager.ShowPoint(_myPoint, _enemyPoint);
             _uiManager.InitUIData();
             DecideTheTurn();
+            DecideTheTurnOnEnemySp();
         }
         //1ラウンド目以降に行う処理
         else
@@ -131,6 +136,14 @@ public class GameManager : MonoBehaviour
         {
             _isMyTurn = true;
         }
+    }
+
+    /// <summary>
+    /// エネミーが必殺技を使用するターンを決めます
+    /// </summary>
+    void DecideTheTurnOnEnemySp()
+    {
+        _enemySpecialSkillTurn = Random.Range(INITIAL_ROUND_COUNT, _maxRoundCount + INITIAL_ROUND_COUNT);
     }
 
     /// <summary>
@@ -266,7 +279,8 @@ public class GameManager : MonoBehaviour
     void ResetRoundState()
     {
         //スキルの発動状態をリセット
-        _isUsingSkillInRound = false;
+        _isUsingPlayerSkillInRound = false;
+        _isUsingEnemySkillInRound = false;
         _isMyTurnEnd = false;
         _isEnemyTurnEnd = false;
     }
@@ -391,8 +405,16 @@ public class GameManager : MonoBehaviour
         CardController[] cardControllers = GetAllHandCardsFor(false);
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
+
+        bool useSpecialSkill = (_roundCount == _enemySpecialSkillTurn);
+
+        if (_canUseEnemySpecialSkill && useSpecialSkill)
+        {
+            yield return _uiManager.ActivateSpecialSkill(false);
+        }
+
         //カードをフィールドに移動
-        yield return StartCoroutine(card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform));
+        yield return card.CardEvent.MoveToBattleField(_enemyBattleFieldTransform);
     }
 
     /// <summary>
@@ -508,13 +530,27 @@ public class GameManager : MonoBehaviour
     /// <param name="isPlayer"></param>
     void AddPointTo(bool isPlayer)
     {
-        if (isPlayer == false)
+        if (isPlayer)
         {
-            _enemyPoint += _earnedPoint;
+            _myPoint += EarnPlayerPoint();
             return;
         }
 
-        _myPoint += EarnPlayerPoint();
+        _enemyPoint += EarnEnemyPoint();
+    }
+
+    /// <summary>
+    /// エネミーの獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    int EarnEnemyPoint()
+    {
+        if (_isUsingEnemySkillInRound)
+        {
+            return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
+        }
+
+        return _earnedPoint;
     }
 
     /// <summary>
@@ -523,7 +559,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     int EarnPlayerPoint()
     {
-        if (_isUsingSkillInRound)
+        if (_isUsingPlayerSkillInRound)
         {
             return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
         }
@@ -534,9 +570,16 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 必殺技を使用します
     /// </summary>
-    public void UsedSpecialSkill()
+    public void UsedSpecialSkill(bool isPlayer)
     {
-        _canUseSpecialSkill = false;//使用済みに
-        _isUsingSkillInRound = true;
+        if (isPlayer)
+        {
+            _canUsePlayerSpecialSkill = false;//使用済みに
+            _isUsingPlayerSkillInRound = true;
+            return;
+        }
+
+        _canUseEnemySpecialSkill = false;
+        _isUsingEnemySkillInRound = true;
     }
 }
