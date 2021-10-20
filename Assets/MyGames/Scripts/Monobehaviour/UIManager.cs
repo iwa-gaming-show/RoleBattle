@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
 using static WaitTimes;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
@@ -146,14 +147,45 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// カードを開く演出を行います
+    /// カードを開くことをアナウンスします
     /// </summary>
     /// <returns></returns>
     public IEnumerator AnnounceToOpenTheCard()
     {
-        ToggleOpenPhaseText(true);
-        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_OPEN_CARD);
-        ToggleOpenPhaseText(false);
+        RectTransform textRectTransform = _openPhaseText.rectTransform;
+        //画面端 = 画面の横幅÷2 + UIの横幅分
+        float screenEdge = (Screen.width / 2) + textRectTransform.sizeDelta.x;
+
+        //右端→真ん中→左端へ移動する
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(MoveAnchorPosX(textRectTransform, screenEdge, 0).OnStart(() => ToggleOpenPhaseText(true)));
+        sequence.Append(MoveAnchorPosX(textRectTransform, 0f, 0.25f));
+        sequence.Append(MoveAnchorPosX(textRectTransform, -screenEdge, 0.4f).SetDelay(1f).OnComplete(() => ToggleOpenPhaseText(false)));
+
+        yield return sequence
+            .Play()
+            .WaitForCompletion();
+    }
+
+    /// <summary>
+    /// DOTweenでアンカーのX軸を移動します
+    /// </summary>
+    /// <param name="rectTransform"></param>
+    /// <param name="endValue"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    Tween MoveAnchorPosX(RectTransform rectTransform, float endValue, float duration)
+    {
+        return rectTransform.DOAnchorPosX(endValue, duration);
+    }
+
+    /// <summary>
+    /// カードOPEN時のテキストの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleOpenPhaseText(bool isActive)
+    {
+        _openPhaseText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
@@ -241,15 +273,6 @@ public class UIManager : MonoBehaviour
     public void ToggleConfirmationPanelToSpecialSkill(bool isActive)
     {
         _confirmationPanelToSpecialSkill.SetActive(isActive);
-    }
-
-    /// <summary>
-    /// カードOPEN時のテキストの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleOpenPhaseText(bool isActive)
-    {
-        _openPhaseText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
