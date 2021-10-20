@@ -4,10 +4,10 @@
 /// </summary>
 public enum GameResult
 {
-    [StringValue("YOU WIN！")]
+    [StringValue("YOU WIN!")]
     GAME_WIN,
-    [StringValue("DRAW！")]
+    [StringValue("DRAW!")]
     GAME_DRAW,
-    [StringValue("YOU LOSE！")]
+    [StringValue("YOU LOSE!")]
     GAME_LOSE
 }
