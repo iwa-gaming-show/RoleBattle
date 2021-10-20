@@ -153,14 +153,13 @@ public class UIManager : MonoBehaviour
     public IEnumerator AnnounceToOpenTheCard()
     {
         RectTransform textRectTransform = _openPhaseText.rectTransform;
-        //画面端 = 画面の横幅÷2 + UIの横幅分
-        float screenEdge = (Screen.width / 2) + textRectTransform.sizeDelta.x;
+        float screenEdgeX = GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
 
         //右端→真ん中→左端へ移動する
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(MoveAnchorPosX(textRectTransform, screenEdge, 0).OnStart(() => ToggleOpenPhaseText(true)));
+        sequence.Append(MoveAnchorPosX(textRectTransform, screenEdgeX, 0).OnStart(() => ToggleOpenPhaseText(true)));
         sequence.Append(MoveAnchorPosX(textRectTransform, 0f, 0.25f));
-        sequence.Append(MoveAnchorPosX(textRectTransform, -screenEdge, 0.4f).SetDelay(1f).OnComplete(() => ToggleOpenPhaseText(false)));
+        sequence.Append(MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f).OnComplete(() => ToggleOpenPhaseText(false)));
 
         yield return sequence
             .Play()
@@ -177,6 +176,70 @@ public class UIManager : MonoBehaviour
     Tween MoveAnchorPosX(RectTransform rectTransform, float endValue, float duration)
     {
         return rectTransform.DOAnchorPosX(endValue, duration);
+    }
+
+    /// <summary>
+    /// targetを画面端に移動した場合のX方向の値を取得
+    /// </summary>
+    /// <returns></returns>
+    float GetScreenEdgeXFor(float targetWidthX)
+    {
+        //画面端 = 画面の横幅÷2 + UIの横幅分
+        return (Screen.width / 2) + targetWidthX;
+    }
+
+    /// <summary>
+    /// 必殺技発動の演出
+    /// </summary>
+    IEnumerator ShowSpecialSkillDirection(bool isPlayer)
+    {
+        RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
+        float screenEdgeX = GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
+        Sequence sequence = DOTween.Sequence();
+        Tween firstMove;
+        Tween lastMove;
+
+        //プレイヤーなら右から左へ移動, エネミーなら左から右へ移動する
+        if (isPlayer)
+        {
+            firstMove = MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0);
+            lastMove = MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0.4f);
+        }
+        else
+        {
+            firstMove = MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0f);
+            lastMove = MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0.4f);
+        }
+
+        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true, isPlayer)));
+        sequence.Append(MoveAnchorPosX(targetUIRectTranform, 0f, 0.25f));
+        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
+
+        yield return sequence
+            .Play()
+            .WaitForCompletion();
+    }
+
+    /// <summary>
+    /// 必殺技演出UIの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
+    {
+        GetProductionToSpecialSkillBy(isPlayer).SetActive(isActive);
+    }
+
+    /// <summary>
+    /// 必殺技演出UIを取得する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    GameObject GetProductionToSpecialSkillBy(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return _playerProductionToSpecialSkill;
+        }
+        return _enemyProductionToSpecialSkill;
     }
 
     /// <summary>
@@ -390,32 +453,6 @@ public class UIManager : MonoBehaviour
     {
         if (isPlayer) return _specialSkillButtonImages[0];
         return _specialSkillButtonImages[1];
-    }
-
-    /// <summary>
-    /// 必殺技発動の演出
-    /// </summary>
-    IEnumerator ShowSpecialSkillDirection(bool isPlayer)
-    {
-        ToggleProductionToSpecialSkill(true, isPlayer);
-        yield return new WaitForSeconds(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME);
-        ToggleProductionToSpecialSkill(false, isPlayer);
-        yield return null;
-    }
-
-    /// <summary>
-    /// 必殺技演出UIの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            _playerProductionToSpecialSkill.SetActive(isActive);
-            return;
-        }
-
-        _enemyProductionToSpecialSkill.SetActive(isActive);
     }
 
     /// <summary>
