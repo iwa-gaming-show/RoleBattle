@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Header("最大ラウンド数")]
-    int _maxRoundCount = 5;
+    int _maxRoundCount = 3;
 
     [SerializeField]
     [Header("ラウンド数")]
