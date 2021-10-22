@@ -82,10 +82,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     [Header("必殺技の説明用のテキストを設定")]
+
     string _specialSkillDescription;
-
-
-
     bool _isClickedConfirmationFieldButton;//フィールドへの確認ボタンのをクリックしたか
     bool _canMoveToField;//カードの移動ができる
 

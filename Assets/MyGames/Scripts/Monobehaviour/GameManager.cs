@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static WaitTimes;
 using static InitializationData;
-using static CardType;
 using static CardJudgement;
 using static GameResult;
 
@@ -16,18 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Header("UI管理スクリプトを設定")]
     UIManager _uiManager;
-
-    [SerializeField]
-    [Header("プレイヤーのターン管理スクリプト")]
-    TurnManager _turnManager;
-
-    [SerializeField]
-    [Header("カードリストを設定する(ScriptableObjectを参照)")]
-    CardEntityList _cardEntityList;
-
-    [SerializeField]
-    [Header("カードプレハブ")]
-    CardController _cardPrefab;
 
     [SerializeField]
     [Header("自身の手札")]
@@ -62,27 +49,30 @@ public class GameManager : MonoBehaviour
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
 
-    bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
     bool _canUsePlayerSpecialSkill;//必殺技が使用できるか
-    bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
     bool _canUseEnemySpecialSkill;
+    bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
     bool _isUsingEnemySkillInRound;
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _myPoint;
     int _enemyPoint;
     int _countDownTime;
     GameResult _gameResult;
+    TurnManager _turnManager;//プレイヤーのターン管理スクリプト
+    CardManager _cardManager;//カードの管理スクリプト
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public Transform EnemyBattleFieldTransform => _enemyBattleFieldTransform;
-    public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
+    public Transform MyHandTransform => _myHandTransform;
+    public Transform EnemyHandTransform => _enemyHandTransform;
     public bool CanUsePlayerSpecialSkill => _canUsePlayerSpecialSkill;
     public bool CanUseEnemySpecialSkill => _canUseEnemySpecialSkill;
     public int RoundCount => _roundCount;
     public int MaxRoundCount => _maxRoundCount;
     public UIManager UIManager => _uiManager;
     public TurnManager TurnManager => _turnManager;
+    public CardManager CardManager => _cardManager;
     #endregion
 
     private void Awake()
@@ -97,6 +87,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        _turnManager = GetComponent<TurnManager>();
+        _cardManager = GetComponent<CardManager>();
     }
 
     // Start is called before the first frame update
@@ -124,9 +117,9 @@ public class GameManager : MonoBehaviour
         }
 
         _uiManager.HideUIAtStart();
-        ResetFieldCard();
+        _cardManager.ResetFieldCard();
         yield return _uiManager.ShowRoundCountText(_roundCount, _maxRoundCount);
-        DistributeCards();
+        _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
     }
 
@@ -153,7 +146,7 @@ public class GameManager : MonoBehaviour
         }
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
-        CardController targetCard = GetRandomCardFrom(_turnManager.IsMyTurn);
+        CardController targetCard = _cardManager.GetRandomCardFrom(_turnManager.IsMyTurn);
         Transform targetTransform = GetTargetBattleFieldTransform(_turnManager.IsMyTurn);
 
         yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
@@ -168,54 +161,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 手札からランダムなカードを取得します
-    /// </summary>
-    /// <returns></returns>
-    CardController GetRandomCardFrom(bool isMyHand)
-    {
-        CardController[] handCards = GetAllHandCardsFor(isMyHand);
-        int randomCardIndex = Random.Range(0, handCards.Length);
-        return handCards[randomCardIndex];
-    }
-
-    /// <summary>
-    /// 手札のカードを全て取得します
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public CardController[] GetAllHandCardsFor(bool isPlayer)
-    {
-        if (isPlayer) return _myHandTransform.GetComponentsInChildren<CardController>();
-        return _enemyHandTransform.GetComponentsInChildren<CardController>();
-    }
-
-    /// <summary>
-    /// カードを判定する
-    /// </summary>
-    public IEnumerator JudgeTheCard()
-    {
-        //バトル場のカードを取得
-        CardController myCard = GetBattleFieldCardBy(true);
-        CardController enemyCard = GetBattleFieldCardBy(false);
-        //じゃんけんする
-        CardJudgement result = JudgeCardResult(myCard, enemyCard);
-
-        //OPENのメッセージを出す
-        yield return _uiManager.AnnounceToOpenTheCard();
-        //カードを裏から表にする
-        yield return OpenTheBattleFieldCards(myCard, enemyCard);
-        //結果を反映する
-        ReflectTheResult(result);
-        ResetRoundState();
-
-        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
-        NextRound();
-    }
-
-    /// <summary>
     /// ラウンドの状態をリセットする
     /// </summary>
-    void ResetRoundState()
+    public void ResetRoundState()
     {
         //スキルの発動状態をリセット
         _isUsingPlayerSkillInRound = false;
@@ -244,92 +192,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 盤面をリセットします
-    /// </summary>
-    void ResetFieldCard()
-    {
-        //バトル場のカードを削除します
-        Destroy(GetBattleFieldCardBy(true)?.gameObject);
-        Destroy(GetBattleFieldCardBy(false)?.gameObject);
-
-        //手札のカードを削除します
-        DestroyHandCard(true);
-        DestroyHandCard(false);
-    }
-
-    /// <summary>
-    /// 手札のカードを破壊します
-    /// </summary>
-    void DestroyHandCard(bool isPlayer)
-    {
-        foreach (CardController target in GetAllHandCardsFor(isPlayer))
-        {
-            Destroy(target.gameObject);
-        }
-    }
-
-    /// <summary>
-    /// カードを配ります
-    /// </summary>
-    void DistributeCards()
-    {
-        //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
-        for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
-        {
-            AddingCardToHand(_myHandTransform, i, true);
-            AddingCardToHand(_enemyHandTransform, i, false);
-        }
-        //お互いのカードをシャッフルする
-        ShuffleHandCard(true);
-        ShuffleHandCard(false);
-    }
-
-    /// <summary>
-    /// 手札のカードをシャッフルする
-    /// </summary>
-    void ShuffleHandCard(bool isPlayer)
-    {
-        CardController[] handCards = GetAllHandCardsFor(isPlayer);
-
-        for (int i = 0; i < handCards.Length; i++)
-        {
-            int tempIndex = handCards[i].transform.GetSiblingIndex();
-            int randomIndex = Random.Range(0, handCards.Length);
-            handCards[i].transform.SetSiblingIndex(randomIndex);
-            handCards[randomIndex].transform.SetSiblingIndex(tempIndex);
-        }
-    }
-
-    /// <summary>
-    /// カードを手札に加えます
-    /// </summary>
-    /// <param name="cardIndex"></param>
-    void AddingCardToHand(Transform hand, int cardIndex, bool isPlayer)
-    {
-        CreateCard(hand, cardIndex, isPlayer);
-    }
-
-    /// <summary>
-    /// カードを生成する
-    /// </summary>
-    void CreateCard(Transform hand, int cardIndex, bool isPlayer)
-    {
-        CardController cardController = Instantiate(_cardPrefab, hand, false);
-        cardController.Init(cardIndex, isPlayer);
-    }
-
-    /// <summary>
-    /// カードのフィールド配置フラグの設定
-    /// </summary>
-    public void SetBattleFieldPlaced(bool isBattleFieldPlaced)
-    {
-        _isBattleFieldPlaced = isBattleFieldPlaced;
-    }
-
-    /// <summary>
     /// 次のラウンドへ
     /// </summary>
-    void NextRound()
+    public void NextRound()
     {
         if (_roundCount != _maxRoundCount)
         {
@@ -343,30 +208,11 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場のカードを表にします
-    /// </summary>
-    IEnumerator OpenTheBattleFieldCards(CardController myCard, CardController enemyCard)
-    {
-        myCard.TurnTheCardFaceUp();
-        enemyCard.TurnTheCardFaceUp();
-        yield return null;
-    }
-    /// <summary>
-    /// バトル場のカードを取得する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    CardController GetBattleFieldCardBy(bool isPlayer)
-    {
-        return GetTargetBattleFieldTransform(isPlayer).GetComponentInChildren<CardController>();
-    }
-
-    /// <summary>
     /// 対象のバトル場のカードのTransformを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    Transform GetTargetBattleFieldTransform(bool isPlayer)
+    public Transform GetTargetBattleFieldTransform(bool isPlayer)
     {
         if (isPlayer) return _myBattleFieldTransform;
         return _enemyBattleFieldTransform;
@@ -395,29 +241,10 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// カードの勝敗結果を取得する
-    /// </summary>
-    /// <param name="myCard"></param>
-    /// <param name="enemyCard"></param>
-    /// <returns></returns>
-    CardJudgement JudgeCardResult(CardController myCard, CardController enemyCard)
-    {
-        CardType myCardType = myCard.CardModel.CardType;
-        CardType enemyCardType = enemyCard.CardModel.CardType;
-
-        //じゃんけんによる勝敗の判定
-        if (myCardType == enemyCardType) return DRAW;
-        if (myCardType == PRINCESS && enemyCardType == BRAVE) return WIN;
-        if (myCardType == BRAVE && enemyCardType == DEVIL) return WIN;
-        if (myCardType == DEVIL && enemyCardType == PRINCESS) return WIN;
-        return LOSE;
-    }
-
-    /// <summary>
     /// 結果を反映します
     /// </summary>
     /// <param name="result"></param>
-    void ReflectTheResult(CardJudgement result)
+    public void ReflectTheResult(CardJudgement result)
     {
         if (result == WIN)
         {

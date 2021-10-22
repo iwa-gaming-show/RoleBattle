@@ -65,7 +65,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void ChangeTurn()
     {
-        gameManager.SetBattleFieldPlaced(false);
+        gameManager.CardManager.SetBattleFieldPlaced(false);
         StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
 
         if (_isMyTurn && _isMyTurnEnd == false)
@@ -82,7 +82,7 @@ public class TurnManager : MonoBehaviour
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            StartCoroutine(gameManager.JudgeTheCard());
+            StartCoroutine(gameManager.CardManager.JudgeTheCard());
         }
     }
 
@@ -101,7 +101,7 @@ public class TurnManager : MonoBehaviour
     {
         yield return gameManager.UIManager.ShowThePlayerTurnText(false);
         //エネミーの手札を取得
-        CardController[] cardControllers = gameManager.GetAllHandCardsFor(false);
+        CardController[] cardControllers = gameManager.CardManager.GetAllHandCardsFor(false);
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
 
