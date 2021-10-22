@@ -22,7 +22,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        bool controllablePlayerCard = gameManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
+        bool controllablePlayerCard = gameManager.TurnManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
         if (gameManager.IsBattleFieldPlaced == false && controllablePlayerCard)
         {
             StartCoroutine(TryToMoveToField());
@@ -73,6 +73,6 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         transform.SetParent(targetTransform);//フィールドへカードを移動
         gameManager.SetBattleFieldPlaced(true);
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_TURN);
-        gameManager.EndTurn();
+        gameManager.TurnManager.EndTurn();
     }
 }

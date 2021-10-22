@@ -364,7 +364,7 @@ public class UIManager : MonoBehaviour
     public void OnClickSpecialSkillButton()
     {
         //自分のターンのみ押せる
-        if (GameManager._instance.IsMyTurn == false) return;
+        if (GameManager._instance.TurnManager.IsMyTurn == false) return;
         //一度使用したら押せない
         if (GameManager._instance.CanUsePlayerSpecialSkill == false) return;
 
