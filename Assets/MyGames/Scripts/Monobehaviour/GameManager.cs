@@ -49,25 +49,23 @@ public class GameManager : MonoBehaviour
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
 
-    bool _canUsePlayerSpecialSkill;//必殺技が使用できるか
-    bool _canUseEnemySpecialSkill;
     bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
     bool _isUsingEnemySkillInRound;
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
-    int _myPoint;
-    int _enemyPoint;
     int _countDownTime;
     GameResult _gameResult;
     TurnManager _turnManager;//プレイヤーのターン管理スクリプト
     CardManager _cardManager;//カードの管理スクリプト
+    PlayerData _player;
+    PlayerData _enemy;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
     public Transform EnemyBattleFieldTransform => _enemyBattleFieldTransform;
     public Transform MyHandTransform => _myHandTransform;
     public Transform EnemyHandTransform => _enemyHandTransform;
-    public bool CanUsePlayerSpecialSkill => _canUsePlayerSpecialSkill;
-    public bool CanUseEnemySpecialSkill => _canUseEnemySpecialSkill;
+    public PlayerData Player => _player;
+    public PlayerData Enemy => _enemy;
     public int RoundCount => _roundCount;
     public int MaxRoundCount => _maxRoundCount;
     public UIManager UIManager => _uiManager;
@@ -95,7 +93,17 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitPlayerData();
         StartCoroutine(StartGame(true));
+    }
+
+    /// <summary>
+    /// プレイヤーデータの初期化
+    /// </summary>
+    void InitPlayerData()
+    {
+        _player = new PlayerData(INITIAL_POINT);
+        _enemy = new PlayerData(INITIAL_POINT);
     }
 
     IEnumerator StartGame(bool isFirstGame)
@@ -103,9 +111,9 @@ public class GameManager : MonoBehaviour
         //1ラウンド目に行う処理
         if (isFirstGame)
         {
-            _canUsePlayerSpecialSkill = true;//必殺技を使用可能に
-            _canUseEnemySpecialSkill = true;
-            _uiManager.ShowPoint(_myPoint, _enemyPoint);
+            _player.SetCanUseSpecialSkill(true);//必殺技を使用可能に
+            _enemy.SetCanUseSpecialSkill(true);
+            _uiManager.ShowPoint(_player.Point, _enemy.Point);
             _uiManager.InitUIData();
             _turnManager.DecideTheTurn();
             _turnManager.DecideTheTurnOnEnemySp();
@@ -187,8 +195,8 @@ public class GameManager : MonoBehaviour
     void InitializeGameData()
     {
         _roundCount = INITIAL_ROUND_COUNT;
-        _myPoint = INITIAL_POINT;
-        _enemyPoint = INITIAL_POINT;
+        _player.SetPoint(INITIAL_POINT);
+        _enemy.SetPoint(INITIAL_POINT);
     }
 
     /// <summary>
@@ -235,8 +243,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     GameResult JudgeGameResult()
     {
-        if (_myPoint > _enemyPoint) return GAME_WIN;
-        if (_myPoint == _enemyPoint) return GAME_DRAW;
+        if (_player.Point > _enemy.Point) return GAME_WIN;
+        if (_player.Point == _enemy.Point) return GAME_DRAW;
         return GAME_LOSE;
     }
 
@@ -257,7 +265,7 @@ public class GameManager : MonoBehaviour
 
         //UIへの反映
         StartCoroutine(_uiManager.ShowJudgementResultText(result.ToString()));
-        _uiManager.ShowPoint(_myPoint, _enemyPoint);
+        _uiManager.ShowPoint(_player.Point, _enemy.Point);
     }
 
     /// <summary>
@@ -268,38 +276,24 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            _myPoint += EarnPlayerPoint();
+            _player.AddPoint(EarnPoint(_isUsingPlayerSkillInRound));
             return;
         }
 
-        _enemyPoint += EarnEnemyPoint();
+        _enemy.AddPoint(EarnPoint(_isUsingEnemySkillInRound));
     }
 
     /// <summary>
-    /// エネミーの獲得ポイント
+    /// 獲得ポイント
     /// </summary>
     /// <returns></returns>
-    int EarnEnemyPoint()
+    int EarnPoint(bool isUsingSkillInRound)
     {
-        if (_isUsingEnemySkillInRound)
+        //このラウンドの間必殺技を使用していた場合
+        if (isUsingSkillInRound)
         {
             return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
         }
-
-        return _earnedPoint;
-    }
-
-    /// <summary>
-    /// プレイヤーの獲得ポイント
-    /// </summary>
-    /// <returns></returns>
-    int EarnPlayerPoint()
-    {
-        if (_isUsingPlayerSkillInRound)
-        {
-            return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
-        }
-
         return _earnedPoint;
     }
 
@@ -310,12 +304,12 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            _canUsePlayerSpecialSkill = false;//使用済みに
+            _player.SetCanUseSpecialSkill(false);
             _isUsingPlayerSkillInRound = true;
             return;
         }
 
-        _canUseEnemySpecialSkill = false;
+        _enemy.SetCanUseSpecialSkill(false);
         _isUsingEnemySkillInRound = true;
     }
 }

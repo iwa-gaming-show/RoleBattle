@@ -107,7 +107,7 @@ public class TurnManager : MonoBehaviour
 
         bool useSpecialSkill = (gameManager.RoundCount == _enemySpecialSkillTurn);
 
-        if (gameManager.CanUseEnemySpecialSkill && useSpecialSkill)
+        if (gameManager.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
             yield return gameManager.UIManager.ActivateSpecialSkill(false);
         }
