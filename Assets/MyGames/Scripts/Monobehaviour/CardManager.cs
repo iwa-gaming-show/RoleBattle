@@ -4,6 +4,7 @@ using UnityEngine;
 using static WaitTimes;
 using static CardType;
 using static CardJudgement;
+using GM = GameManager;
 
 public class CardManager : MonoBehaviour
 {
@@ -18,16 +19,10 @@ public class CardManager : MonoBehaviour
     #endregion
 
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
-    GameManager gameManager;
 
     #region プロパティ
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
     #endregion
-
-    void Start()
-    {
-        gameManager = GameManager._instance;
-    }
 
     /// <summary>
     /// 手札からランダムなカードを取得します
@@ -47,8 +42,8 @@ public class CardManager : MonoBehaviour
     /// <returns></returns>
     public CardController[] GetAllHandCardsFor(bool isPlayer)
     {
-        if (isPlayer) return gameManager.MyHandTransform.GetComponentsInChildren<CardController>();
-        return gameManager.EnemyHandTransform.GetComponentsInChildren<CardController>();
+        if (isPlayer) return GM._instance.MyHandTransform.GetComponentsInChildren<CardController>();
+        return GM._instance.EnemyHandTransform.GetComponentsInChildren<CardController>();
     }
 
     /// <summary>
@@ -63,15 +58,15 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        yield return gameManager.UIManager.AnnounceToOpenTheCard();
+        yield return GM._instance.UIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         yield return OpenTheBattleFieldCards(myCard, enemyCard);
         //結果を反映する
-        gameManager.ReflectTheResult(result);
-        gameManager.ResetRoundState();
+        GM._instance.ReflectTheResult(result);
+        GM._instance.ResetGameState();
 
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
-        gameManager.NextRound();
+        GM._instance.RoundManager.NextRound();
     }
 
     /// <summary>
@@ -107,8 +102,8 @@ public class CardManager : MonoBehaviour
         //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
         for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
         {
-            AddingCardToHand(gameManager.MyHandTransform, i, true);
-            AddingCardToHand(gameManager.EnemyHandTransform, i, false);
+            AddingCardToHand(GM._instance.MyHandTransform, i, true);
+            AddingCardToHand(GM._instance.EnemyHandTransform, i, false);
         }
         //お互いのカードをシャッフルする
         ShuffleHandCard(true);
@@ -173,7 +168,7 @@ public class CardManager : MonoBehaviour
     /// <returns></returns>
     CardController GetBattleFieldCardBy(bool isPlayer)
     {
-        return gameManager.GetTargetBattleFieldTransform(isPlayer).GetComponentInChildren<CardController>();
+        return GM._instance.GetTargetBattleFieldTransform(isPlayer).GetComponentInChildren<CardController>();
     }
 
     /// <summary>

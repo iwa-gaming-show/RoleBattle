@@ -2483,6 +2483,7 @@ GameObject:
   - component: {fileID: 1840731124}
   - component: {fileID: 1840731126}
   - component: {fileID: 1840731127}
+  - component: {fileID: 1840731128}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2508,8 +2509,6 @@ MonoBehaviour:
   _myBattleFieldTransform: {fileID: 2134151291}
   _enemyBattleFieldTransform: {fileID: 7559536}
   _earnedPoint: 1
-  _maxRoundCount: 3
-  _roundCount: 1
   _defaultCountDownTime: 15
 --- !u!4 &1840731125
 Transform:
@@ -2551,6 +2550,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
   _cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
+--- !u!114 &1840731128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840731123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a4e26569be7743b795f3fc9650509f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxRoundCount: 3
+  _roundCount: 1
 --- !u!1 &1919010372
 GameObject:
   m_ObjectHideFlags: 0

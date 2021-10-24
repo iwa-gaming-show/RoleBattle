@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
+using GM = GameManager;
 
 public class TurnManager : MonoBehaviour
 {
@@ -9,17 +10,10 @@ public class TurnManager : MonoBehaviour
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
     int _enemySpecialSkillTurn;//敵が必殺技を使用するターン
-    GameManager gameManager;
 
     #region プロパティ
     public bool IsMyTurn => _isMyTurn;
     #endregion
-
-    void Start()
-    {
-        //Awakeで取得予定だったがGameManagerのAwakeより先に呼ばれると参照が取得できないためStartで取得する
-        gameManager = GameManager._instance;
-    }
 
     /// <summary>
     /// 先攻、後攻のターンを決めます
@@ -38,7 +32,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void DecideTheTurnOnEnemySp()
     {
-        _enemySpecialSkillTurn = Random.Range(INITIAL_ROUND_COUNT, gameManager.MaxRoundCount + INITIAL_ROUND_COUNT);
+        _enemySpecialSkillTurn = Random.Range(INITIAL_ROUND_COUNT, GM._instance.RoundManager.MaxRoundCount + INITIAL_ROUND_COUNT);
     }
 
     /// <summary>
@@ -65,24 +59,24 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void ChangeTurn()
     {
-        gameManager.CardManager.SetBattleFieldPlaced(false);
+        GM._instance.CardManager.SetBattleFieldPlaced(false);
         StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
 
         if (_isMyTurn && _isMyTurnEnd == false)
         {
-            StartCoroutine(gameManager.CountDown());
+            StartCoroutine(GM._instance.CountDown());
             MyTurn();
         }
         else if (_isEnemyTurnEnd == false)
         {
-            StartCoroutine(gameManager.CountDown());
+            StartCoroutine(GM._instance.CountDown());
             StartCoroutine(EnemyTurn());
         }
 
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            StartCoroutine(gameManager.CardManager.JudgeTheCard());
+            StartCoroutine(GM._instance.CardManager.JudgeTheCard());
         }
     }
 
@@ -91,7 +85,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void MyTurn()
     {
-        StartCoroutine(gameManager.UIManager.ShowThePlayerTurnText(true));
+        StartCoroutine(GM._instance.UIManager.ShowThePlayerTurnText(true));
     }
 
     /// <summary>
@@ -99,21 +93,21 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public IEnumerator EnemyTurn()
     {
-        yield return gameManager.UIManager.ShowThePlayerTurnText(false);
+        yield return GM._instance.UIManager.ShowThePlayerTurnText(false);
         //エネミーの手札を取得
-        CardController[] cardControllers = gameManager.CardManager.GetAllHandCardsFor(false);
+        CardController[] cardControllers = GM._instance.CardManager.GetAllHandCardsFor(false);
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
 
-        bool useSpecialSkill = (gameManager.RoundCount == _enemySpecialSkillTurn);
+        bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _enemySpecialSkillTurn);
 
-        if (gameManager.Enemy.CanUseSpecialSkill && useSpecialSkill)
+        if (GM._instance.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
-            yield return gameManager.UIManager.ActivateSpecialSkill(false);
+            yield return GM._instance.UIManager.ActivateSpecialSkill(false);
         }
 
         //カードをフィールドに移動
-        yield return card.CardEvent.MoveToBattleField(gameManager.EnemyBattleFieldTransform);
+        yield return card.CardEvent.MoveToBattleField(GM._instance.EnemyBattleFieldTransform);
     }
 
     /// <summary>
@@ -132,5 +126,14 @@ public class TurnManager : MonoBehaviour
     public void SetIsEnemyTurnEnd(bool isEnd)
     {
         _isEnemyTurnEnd = isEnd;
+    }
+
+    /// <summary>
+    /// ターンの終了をリセットする
+    /// </summary>
+    public void ResetTurn()
+    {
+        SetIsMyTurnEnd(false);
+        SetIsEnemyTurnEnd(false);
     }
 }

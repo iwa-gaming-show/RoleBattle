@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static WaitTimes;
 using static InitializationData;
 using static CardJudgement;
 using static GameResult;
@@ -37,25 +36,16 @@ public class GameManager : MonoBehaviour
     int _earnedPoint = 1;
 
     [SerializeField]
-    [Header("最大ラウンド数")]
-    int _maxRoundCount = 3;
-
-    [SerializeField]
-    [Header("ラウンド数")]
-    int _roundCount = INITIAL_ROUND_COUNT;
-
-    [SerializeField]
     [Header("カウントダウンの秒数を設定")]
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
 
-    bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
-    bool _isUsingEnemySkillInRound;
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
     GameResult _gameResult;
     TurnManager _turnManager;//プレイヤーのターン管理スクリプト
     CardManager _cardManager;//カードの管理スクリプト
+    RoundManager _roundManager;//ラウンドの管理スクリプト
     PlayerData _player;
     PlayerData _enemy;
 
@@ -66,11 +56,10 @@ public class GameManager : MonoBehaviour
     public Transform EnemyHandTransform => _enemyHandTransform;
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
-    public int RoundCount => _roundCount;
-    public int MaxRoundCount => _maxRoundCount;
     public UIManager UIManager => _uiManager;
     public TurnManager TurnManager => _turnManager;
     public CardManager CardManager => _cardManager;
+    public RoundManager RoundManager => _roundManager;
     #endregion
 
     private void Awake()
@@ -86,6 +75,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        _roundManager = GetComponent<RoundManager>();
         _turnManager = GetComponent<TurnManager>();
         _cardManager = GetComponent<CardManager>();
     }
@@ -106,7 +96,7 @@ public class GameManager : MonoBehaviour
         _enemy = new PlayerData(INITIAL_POINT);
     }
 
-    IEnumerator StartGame(bool isFirstGame)
+    public IEnumerator StartGame(bool isFirstGame)
     {
         //1ラウンド目に行う処理
         if (isFirstGame)
@@ -121,12 +111,12 @@ public class GameManager : MonoBehaviour
         //1ラウンド目以降に行う処理
         else
         {
-            _roundCount++;
+            _roundManager.AddRoundCount();
         }
 
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard();
-        yield return _uiManager.ShowRoundCountText(_roundCount, _maxRoundCount);
+        yield return _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
     }
@@ -169,15 +159,12 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ラウンドの状態をリセットする
+    /// ゲームの状態をリセットする
     /// </summary>
-    public void ResetRoundState()
+    public void ResetGameState()
     {
-        //スキルの発動状態をリセット
-        _isUsingPlayerSkillInRound = false;
-        _isUsingEnemySkillInRound = false;
-        _turnManager.SetIsMyTurnEnd(false);
-        _turnManager.SetIsEnemyTurnEnd(false);
+        _turnManager.ResetTurn();
+        _roundManager.ResetRoundState();
     }
 
     /// <summary>
@@ -194,25 +181,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void InitializeGameData()
     {
-        _roundCount = INITIAL_ROUND_COUNT;
+        _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
         _player.SetPoint(INITIAL_POINT);
         _enemy.SetPoint(INITIAL_POINT);
-    }
-
-    /// <summary>
-    /// 次のラウンドへ
-    /// </summary>
-    public void NextRound()
-    {
-        if (_roundCount != _maxRoundCount)
-        {
-            StartCoroutine(StartGame(false));
-        }
-        else
-        {
-            //最終ラウンドならゲーム終了
-            EndGame();
-        }
     }
 
     /// <summary>
@@ -229,7 +200,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームを終了
     /// </summary>
-    void EndGame()
+    public void EndGame()
     {
         //ゲーム結果を判定
         _gameResult = JudgeGameResult();
@@ -276,11 +247,11 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            _player.AddPoint(EarnPoint(_isUsingPlayerSkillInRound));
+            _player.AddPoint(EarnPoint(_roundManager.IsUsingPlayerSkillInRound));
             return;
         }
 
-        _enemy.AddPoint(EarnPoint(_isUsingEnemySkillInRound));
+        _enemy.AddPoint(EarnPoint(_roundManager.IsUsingEnemySkillInRound));
     }
 
     /// <summary>
@@ -305,11 +276,11 @@ public class GameManager : MonoBehaviour
         if (isPlayer)
         {
             _player.SetCanUseSpecialSkill(false);
-            _isUsingPlayerSkillInRound = true;
+            _roundManager.SetUsingSkillRound(isPlayer, true);
             return;
         }
 
         _enemy.SetCanUseSpecialSkill(false);
-        _isUsingEnemySkillInRound = true;
+        _roundManager.SetUsingSkillRound(isPlayer, true);
     }
 }
