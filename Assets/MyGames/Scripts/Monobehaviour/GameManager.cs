@@ -32,10 +32,6 @@ public class GameManager : MonoBehaviour
     Transform _enemyBattleFieldTransform;
 
     [SerializeField]
-    [Header("ラウンド毎の勝者の獲得ポイント")]
-    int _earnedPoint = 1;
-
-    [SerializeField]
     [Header("カウントダウンの秒数を設定")]
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
@@ -43,9 +39,10 @@ public class GameManager : MonoBehaviour
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
     GameResult _gameResult;
-    TurnManager _turnManager;//プレイヤーのターン管理スクリプト
-    CardManager _cardManager;//カードの管理スクリプト
-    RoundManager _roundManager;//ラウンドの管理スクリプト
+    TurnManager _turnManager;//プレイヤーのターン管理
+    CardManager _cardManager;//カードの管理
+    RoundManager _roundManager;//ラウンドの管理
+    PointManager _pointManager;//ポイントの管理
     PlayerData _player;
     PlayerData _enemy;
 
@@ -60,6 +57,7 @@ public class GameManager : MonoBehaviour
     public TurnManager TurnManager => _turnManager;
     public CardManager CardManager => _cardManager;
     public RoundManager RoundManager => _roundManager;
+    public PointManager PointManager => _pointManager;
     #endregion
 
     private void Awake()
@@ -78,6 +76,7 @@ public class GameManager : MonoBehaviour
         _roundManager = GetComponent<RoundManager>();
         _turnManager = GetComponent<TurnManager>();
         _cardManager = GetComponent<CardManager>();
+        _pointManager = GetComponent<PointManager>();
     }
 
     // Start is called before the first frame update
@@ -227,45 +226,16 @@ public class GameManager : MonoBehaviour
     {
         if (result == WIN)
         {
-            AddPointTo(true);
+            _pointManager.AddPointTo(true);
         }
         else if (result == LOSE)
         {
-            AddPointTo(false);
+            _pointManager.AddPointTo(false);
         }
 
         //UIへの反映
         StartCoroutine(_uiManager.ShowJudgementResultText(result.ToString()));
         _uiManager.ShowPoint(_player.Point, _enemy.Point);
-    }
-
-    /// <summary>
-    /// ポイントの加算
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    void AddPointTo(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            _player.AddPoint(EarnPoint(_roundManager.IsUsingPlayerSkillInRound));
-            return;
-        }
-
-        _enemy.AddPoint(EarnPoint(_roundManager.IsUsingEnemySkillInRound));
-    }
-
-    /// <summary>
-    /// 獲得ポイント
-    /// </summary>
-    /// <returns></returns>
-    int EarnPoint(bool isUsingSkillInRound)
-    {
-        //このラウンドの間必殺技を使用していた場合
-        if (isUsingSkillInRound)
-        {
-            return _earnedPoint * SPECIAL_SKILL_MAGNIFICATION_BONUS;
-        }
-        return _earnedPoint;
     }
 
     /// <summary>
