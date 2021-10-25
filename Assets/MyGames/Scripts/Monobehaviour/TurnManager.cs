@@ -89,7 +89,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void MyTurn()
     {
-        StartCoroutine(GM._instance.UIManager.ShowThePlayerTurnText(true));
+        StartCoroutine(GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(true));
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public IEnumerator EnemyTurn()
     {
-        yield return GM._instance.UIManager.ShowThePlayerTurnText(false);
+        yield return GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
 
         //エネミーの手札を取得
         CardController[] cardControllers = GM._instance.CardManager.GetAllHandCardsFor(false);

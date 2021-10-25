@@ -60,7 +60,7 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        yield return GM._instance.UIManager.AnnounceToOpenTheCard();
+        yield return GM._instance.UIManager.DirectionUIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         yield return OpenTheBattleFieldCards(myCard, enemyCard);
         //結果を反映する
