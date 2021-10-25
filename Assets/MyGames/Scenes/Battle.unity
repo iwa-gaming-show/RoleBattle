@@ -422,6 +422,7 @@ GameObject:
   - component: {fileID: 184845851}
   - component: {fileID: 184845853}
   - component: {fileID: 184845852}
+  - component: {fileID: 184845854}
   m_Layer: 5
   m_Name: ConfirmationToField
   m_TagString: Untagged
@@ -489,6 +490,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 184845850}
   m_CullTransparentMesh: 1
+--- !u!114 &184845854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184845850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae862d5cf24b407cbe9884e70eaeb0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &191260036
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,7 +888,7 @@ PrefabInstance:
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1919010377}
+      objectReference: {fileID: 1068863815}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -886,7 +899,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickYesForSpecialSkillConfirmation
+      value: OnClickYes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationPanelToSpecialSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -1643,13 +1660,14 @@ GameObject:
   - component: {fileID: 1068863812}
   - component: {fileID: 1068863814}
   - component: {fileID: 1068863813}
+  - component: {fileID: 1068863815}
   m_Layer: 5
   m_Name: ConfirmationToSpecialSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1068863812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1711,6 +1729,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068863811}
   m_CullTransparentMesh: 1
+--- !u!114 &1068863815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068863811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340a6ed7a87794ed3b99375f9b3c0d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1118084873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2376,12 +2406,40 @@ PrefabInstance:
       value: NoButton
       objectReference: {fileID: 0}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1919010377}
+      objectReference: {fileID: 1068863815}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickNoForSpecialSkillConfirmation
+      value: OnClickNo
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationPanelToSpecialSkill, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
@@ -2509,7 +2567,7 @@ MonoBehaviour:
   _enemyHandTransform: {fileID: 1118084874}
   _myBattleFieldTransform: {fileID: 2134151291}
   _enemyBattleFieldTransform: {fileID: 7559536}
-  _defaultCountDownTime: 15
+  _defaultCountDownTime: 10
 --- !u!4 &1840731125
 Transform:
   m_ObjectHideFlags: 0
@@ -2710,8 +2768,8 @@ MonoBehaviour:
   _announceThePlayerTurn: {fileID: 1831395376}
   _announceTheEnemyTurn: {fileID: 1658817600}
   _gameResultUI: {fileID: 483168577}
-  _confirmationPanelToField: {fileID: 184845850}
-  _confirmationPanelToSpecialSkill: {fileID: 1068863811}
+  _confirmationPanelToField: {fileID: 184845854}
+  _confirmationPanelToSpecialSkill: {fileID: 1068863815}
   _playerProductionToSpecialSkill: {fileID: 1477384893}
   _enemyProductionToSpecialSkill: {fileID: 1262912827}
   _descriptionsOfSpecialSkill:
@@ -2724,6 +2782,9 @@ MonoBehaviour:
   _specialSkillButtonIcons:
   - {fileID: 21300000, guid: 5204c4a5f9b80744192b880dd0d3345f, type: 3}
   - {fileID: 21300000, guid: f0712dd86bb641b4a9894bab9b6bf218, type: 3}
+  BattleConfirmationPanels:
+  - {fileID: 1068863811}
+  - {fileID: 184845850}
   _specialSkillDescription: "\u3053\u306E\u30E9\u30A6\u30F3\u30C9\u306E\u9593\u3001\u30D0\u30C8\u30EB\u306B\u52DD\u3063\u305F\u6642\u306B\u7372\u5F97\u3067\u304D\u308B\u30DD\u30A4\u30F3\u30C8\u3092\u4E8C\u500D\u306B\u3059\u308B"
 --- !u!1 &1928669751
 GameObject:
@@ -3651,7 +3712,15 @@ PrefabInstance:
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1919010377}
+      objectReference: {fileID: 184845854}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickNo
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationPanelToField, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
 --- !u!1001 &8190501148812027038
@@ -3664,7 +3733,15 @@ PrefabInstance:
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1919010377}
+      objectReference: {fileID: 184845854}
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickYes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationPanelToField, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148515, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_Sprite
       value: 
