@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
 using static WaitTimes;
-using static BattlePhase;
-using GM = GameManager;
 using DG.Tweening;
 
 public class UIManager : MonoBehaviour
@@ -59,39 +57,16 @@ public class UIManager : MonoBehaviour
     ConfirmationPanelToField _confirmationPanelToField;
 
     [SerializeField]
-    [Header("必殺技発動の確認UI")]
-    ConfirmationPanelToSpecialSkill _confirmationPanelToSpecialSkill;
-
-    [SerializeField]
-    [Header("プレイヤーの必殺技発動の演出UI")]
-    GameObject _playerProductionToSpecialSkill;
-
-    [SerializeField]
-    [Header("エネミーの必殺技発動の演出UI")]
-    GameObject _enemyProductionToSpecialSkill;
-
-    [SerializeField]
-    [Header("必殺技の詳細を記述するテキストを格納する")]
-    Text[] _descriptionsOfSpecialSkill;
-
-    [SerializeField]
-    [Header("プレイヤー、エネミーの順に必殺技ボタンを格納する")]
-    Image[] _specialSkillButtonImages;
-
-    [SerializeField]
-    [Header("未使用、使用済みの順にアイコン画像を必殺技ボタンに設定する")]
-    Sprite[] _specialSkillButtonIcons;
+    [Header("必殺技のUIマネージャーを設定")]
+    SpecialSkillUIManager _specialSkillUIManager;
 
     [SerializeField]
     [Header("バトル中に使用する確認画面のUIを格納する")]
     GameObject[] BattleConfirmationPanels;
 
-    [SerializeField]
-    [Header("必殺技の説明用のテキストを設定")]
-    string _specialSkillDescription;
-
     #region//プロパティ
     public ConfirmationPanelToField ConfirmationPanelToField => _confirmationPanelToField;
+    public SpecialSkillUIManager SpecialSkillUIManager => _specialSkillUIManager;
     #endregion
 
     /// <summary>
@@ -102,13 +77,13 @@ public class UIManager : MonoBehaviour
         ToggleGameResultUI(false);
         ToggleJudgementResultText(false);
         ToggleRoundCountText(false);
-        _confirmationPanelToField.ToggleUI(false);
-        _confirmationPanelToSpecialSkill.ToggleUI(false);
         ToggleAnnounceTurnFor(false, true);
         ToggleAnnounceTurnFor(false, true);
-        ToggleProductionToSpecialSkill(false, true);
-        ToggleProductionToSpecialSkill(false, false);
         ToggleOpenPhaseText(false);
+        _confirmationPanelToField.ToggleUI(false);
+        _specialSkillUIManager.ConfirmationPanel.ToggleUI(false);
+        _specialSkillUIManager.ToggleProductionToSpecialSkill(false, true);
+        _specialSkillUIManager.ToggleProductionToSpecialSkill(false, false);
     }
 
     /// <summary>
@@ -172,7 +147,7 @@ public class UIManager : MonoBehaviour
     /// <param name="endValue"></param>
     /// <param name="duration"></param>
     /// <returns></returns>
-    Tween MoveAnchorPosX(RectTransform rectTransform, float endValue, float duration)
+    public Tween MoveAnchorPosX(RectTransform rectTransform, float endValue, float duration)
     {
         return rectTransform.DOAnchorPosX(endValue, duration);
     }
@@ -181,64 +156,10 @@ public class UIManager : MonoBehaviour
     /// targetを画面端に移動した場合のX方向の値を取得
     /// </summary>
     /// <returns></returns>
-    float GetScreenEdgeXFor(float targetWidthX)
+    public float GetScreenEdgeXFor(float targetWidthX)
     {
         //画面端 = 画面の横幅÷2 + UIの横幅分
         return (Screen.width / 2) + targetWidthX;
-    }
-
-    /// <summary>
-    /// 必殺技発動の演出
-    /// </summary>
-    IEnumerator ShowSpecialSkillDirection(bool isPlayer)
-    {
-        RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
-        float screenEdgeX = GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
-        Sequence sequence = DOTween.Sequence();
-        Tween firstMove;
-        Tween lastMove;
-
-        //プレイヤーなら右から左へ移動, エネミーなら左から右へ移動する
-        if (isPlayer)
-        {
-            firstMove = MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0);
-            lastMove = MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0.4f);
-        }
-        else
-        {
-            firstMove = MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0f);
-            lastMove = MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0.4f);
-        }
-
-        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true, isPlayer)));
-        sequence.Append(MoveAnchorPosX(targetUIRectTranform, 0f, 0.25f));
-        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
-
-        yield return sequence
-            .Play()
-            .WaitForCompletion();
-    }
-
-    /// <summary>
-    /// 必殺技演出UIの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
-    {
-        GetProductionToSpecialSkillBy(isPlayer).SetActive(isActive);
-    }
-
-    /// <summary>
-    /// 必殺技演出UIを取得する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    GameObject GetProductionToSpecialSkillBy(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            return _playerProductionToSpecialSkill;
-        }
-        return _enemyProductionToSpecialSkill;
     }
 
     /// <summary>
@@ -333,103 +254,12 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 必殺技ボタンを押した時
-    /// </summary>
-    public void OnClickSpecialSkillButton()
-    {
-        //自分のターンのみ押せる
-        if (GM._instance.TurnManager.IsMyTurn == false) return;
-        //一度使用したら押せない
-        if (GM._instance.Player.CanUseSpecialSkill == false) return;
-        //選択フェイズでなければ押せない
-        if (GM._instance.BattlePhase != SELECTION) return;
-
-        _confirmationPanelToSpecialSkill.ToggleUI(true);
-    }
-
-    /// <summary>
-    /// UIから必殺技を発動する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    public void ActivateSpecialSkillByUI(bool isPlayer)
-    {
-        //UIが非アクティブになるとコルーチンが動作しなくなるので一度こちらのメソッドを経由します
-        StartCoroutine(ActivateSpecialSkill(isPlayer));
-    }
-
-    /// <summary>
-    /// 必殺技を発動する
-    /// </summary>
-    public IEnumerator ActivateSpecialSkill(bool isPlayer)
-    {
-        //必殺技を使用済みにする
-        UsedSpecialSkillButton(isPlayer);
-        GM._instance.UsedSpecialSkill(isPlayer);
-
-        //必殺技を演出、 演出中はカウントダウンが止まる
-        GM._instance.SetIsDuringProductionOfSpecialSkill(true);
-        yield return ShowSpecialSkillDirection(isPlayer);
-        //カウントダウン再開
-        GM._instance.SetIsDuringProductionOfSpecialSkill(false);
-    }
-
-    /// <summary>
-    /// 必殺技ボタンを使用済みにする
-    /// </summary>
-    void UsedSpecialSkillButton(bool isPlayer)
-    {
-        SetSpecialSkillButtonSpriteForTarget(GetSpecialSkillButtonImageBy(isPlayer), _specialSkillButtonIcons[1]);
-    }
-
-    /// <summary>
-    /// 必殺技のIconを設定する
-    /// </summary>
-    /// <param name="targetImage"></param>
-    /// <param name="setSprite"></param>
-    void SetSpecialSkillButtonSpriteForTarget(Image targetImage, Sprite setSprite)
-    {
-        targetImage.sprite = setSprite;
-    }
-
-    /// <summary>
     /// UIデータの初期設定
     /// </summary>
     public void InitUIData()
     {
-        InitSpecialSkillButtonImageByPlayers();
-        InitSpecialSkillDescriptions();
-    }
-
-    /// <summary>
-    /// 必殺技の説明文の設定
-    /// </summary>
-    void InitSpecialSkillDescriptions()
-    {
-        foreach (Text description in _descriptionsOfSpecialSkill)
-        {
-            description.text = _specialSkillDescription;
-        }
-    }
-
-    /// <summary>
-    /// プレイヤー毎に必殺技のImageを初期化する
-    /// </summary>
-    void InitSpecialSkillButtonImageByPlayers()
-    {
-        foreach (Image specialSkillButtonImage in _specialSkillButtonImages)
-        {
-            SetSpecialSkillButtonSpriteForTarget(specialSkillButtonImage, _specialSkillButtonIcons[0]);
-        }
-    }
-
-    /// <summary>
-    /// プレイヤーの必殺技ボタンのImageを取得します
-    /// </summary>
-    /// <returns></returns>
-    Image GetSpecialSkillButtonImageBy(bool isPlayer)
-    {
-        if (isPlayer) return _specialSkillButtonImages[0];
-        return _specialSkillButtonImages[1];
+        _specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
+        _specialSkillUIManager.InitSpecialSkillDescriptions();
     }
 
     /// <summary>

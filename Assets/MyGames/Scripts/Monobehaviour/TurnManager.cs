@@ -108,7 +108,7 @@ public class TurnManager : MonoBehaviour
         bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _enemySpecialSkillTurn);
         if (GM._instance.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
-            yield return GM._instance.UIManager.ActivateSpecialSkill(false);
+            yield return GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkill(false);
         }
 
         //カードをフィールドに移動
