@@ -36,20 +36,20 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     IEnumerator TryToMoveToField()
     {
         //すでに確認画面がでてるなら何もしない
-        if (gameManager.UIManager.ConfirmationPanelToField.activeInHierarchy) yield break;
+        if (gameManager.UIManager.ConfirmationPanelToField.gameObject.activeInHierarchy) yield break;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
         gameManager.UIManager.SelectedToFieldCard(cardController);
         yield return StartCoroutine(WaitFieldConfirmationButton());
 
         //yesを押した時
-        if (gameManager.UIManager.CanMoveToField)
+        if (gameManager.UIManager.ConfirmationPanelToField.CanMoveToField)
         {
             yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
         }
 
-        gameManager.UIManager.SetCanMoveToField(false);
-        gameManager.UIManager.SetIsClickedConfirmationFieldButton(false);
+        gameManager.UIManager.ConfirmationPanelToField.SetCanMoveToField(false);
+        gameManager.UIManager.ConfirmationPanelToField.SetIsClickedConfirmationButton(false);
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// <returns></returns>
     IEnumerator WaitFieldConfirmationButton()
     {
-        yield return new WaitUntil(() => gameManager.UIManager.IsClickedConfirmationFieldButton);
+        yield return new WaitUntil(() => gameManager.UIManager.ConfirmationPanelToField.IsClickedConfirmationButton);
     }
 
     /// <summary>

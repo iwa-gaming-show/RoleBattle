@@ -142,6 +142,9 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+        //確認画面を全て閉じる
+        _uiManager.CloseAllConfirmationPanels();
+
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
         CardController targetCard = _cardManager.GetRandomCardFrom(_turnManager.IsMyTurn);
         Transform targetTransform = GetTargetBattleFieldTransform(_turnManager.IsMyTurn);
