@@ -2567,7 +2567,7 @@ MonoBehaviour:
   _enemyHandTransform: {fileID: 1118084874}
   _myBattleFieldTransform: {fileID: 2134151291}
   _enemyBattleFieldTransform: {fileID: 7559536}
-  _defaultCountDownTime: 10
+  _defaultCountDownTime: 5
 --- !u!4 &1840731125
 Transform:
   m_ObjectHideFlags: 0

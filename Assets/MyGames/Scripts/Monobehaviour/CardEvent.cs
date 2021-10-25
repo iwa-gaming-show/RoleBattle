@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using static WaitTimes;
+using static BattlePhase;
 
 public class CardEvent : MonoBehaviour, IPointerClickHandler
 {
@@ -23,7 +24,12 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         bool controllablePlayerCard = gameManager.TurnManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
-        if (gameManager.CardManager.IsBattleFieldPlaced == false && controllablePlayerCard)
+        bool selectionPhase = (gameManager.BattlePhase == SELECTION);
+        bool placeable = gameManager.CardManager.IsBattleFieldPlaced == false;
+        //選択フェイズで自身のカードが配置可能な場合操作可能
+        bool controllable = controllablePlayerCard && selectionPhase && placeable;
+
+        if (controllable)
         {
             StartCoroutine(TryToMoveToField());
         }
@@ -68,6 +74,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     {
         if (gameManager.CardManager.IsBattleFieldPlaced) yield break;
 
+        gameManager.ChangeBattlePhase(SELECTED);
         cardController.TurnTheCardOver();
         transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);//移動演出
         transform.SetParent(targetTransform);//フィールドへカードを移動

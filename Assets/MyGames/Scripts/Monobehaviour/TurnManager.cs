@@ -62,17 +62,19 @@ public class TurnManager : MonoBehaviour
         GM._instance.CardManager.SetBattleFieldPlaced(false);
         StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
 
+        //自身のターン
         if (_isMyTurn && _isMyTurnEnd == false)
         {
             StartCoroutine(GM._instance.CountDown());
             MyTurn();
         }
+        //敵のターン
         else if (_isEnemyTurnEnd == false)
         {
             StartCoroutine(GM._instance.CountDown());
             StartCoroutine(EnemyTurn());
         }
-
+        //カードの判定
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る

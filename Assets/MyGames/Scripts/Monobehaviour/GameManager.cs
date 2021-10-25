@@ -4,6 +4,7 @@ using UnityEngine;
 using static InitializationData;
 using static CardJudgement;
 using static GameResult;
+using static BattlePhase;
 
 public class GameManager : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
     GameResult _gameResult;
+    BattlePhase _battlePhase;
     TurnManager _turnManager;//プレイヤーのターン管理
     CardManager _cardManager;//カードの管理
     RoundManager _roundManager;//ラウンドの管理
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
     public CardManager CardManager => _cardManager;
     public RoundManager RoundManager => _roundManager;
     public PointManager PointManager => _pointManager;
+    public BattlePhase BattlePhase => _battlePhase;
     #endregion
 
     private void Awake()
@@ -113,11 +116,22 @@ public class GameManager : MonoBehaviour
             _roundManager.AddRoundCount();
         }
 
+        ResetGameState();
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard();
         yield return _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
+        ChangeBattlePhase(SELECTION);
         _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
+    }
+
+    /// <summary>
+    /// バトルの段階を切り替える
+    /// </summary>
+    /// <param name="phase"></param>
+    public void ChangeBattlePhase(BattlePhase phase)
+    {
+        _battlePhase = phase;
     }
 
     /// <summary>
@@ -227,6 +241,8 @@ public class GameManager : MonoBehaviour
     /// <param name="result"></param>
     public void ReflectTheResult(CardJudgement result)
     {
+        ChangeBattlePhase(RESULT);
+
         if (result == WIN)
         {
             _pointManager.AddPointTo(true);

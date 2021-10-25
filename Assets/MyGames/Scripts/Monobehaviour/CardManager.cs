@@ -4,6 +4,7 @@ using UnityEngine;
 using static WaitTimes;
 using static CardType;
 using static CardJudgement;
+using static BattlePhase;
 using GM = GameManager;
 
 public class CardManager : MonoBehaviour
@@ -51,6 +52,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public IEnumerator JudgeTheCard()
     {
+        GM._instance.ChangeBattlePhase(JUDGEMENT);
         //バトル場のカードを取得
         CardController myCard = GetBattleFieldCardBy(true);
         CardController enemyCard = GetBattleFieldCardBy(false);
@@ -63,7 +65,6 @@ public class CardManager : MonoBehaviour
         yield return OpenTheBattleFieldCards(myCard, enemyCard);
         //結果を反映する
         GM._instance.ReflectTheResult(result);
-        GM._instance.ResetGameState();
 
         yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
         GM._instance.RoundManager.NextRound();

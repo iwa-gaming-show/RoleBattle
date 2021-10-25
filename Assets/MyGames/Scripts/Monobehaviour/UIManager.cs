@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
 using static WaitTimes;
+using static BattlePhase;
+using GM = GameManager;
 using DG.Tweening;
 
 public class UIManager : MonoBehaviour
@@ -336,9 +338,11 @@ public class UIManager : MonoBehaviour
     public void OnClickSpecialSkillButton()
     {
         //自分のターンのみ押せる
-        if (GameManager._instance.TurnManager.IsMyTurn == false) return;
+        if (GM._instance.TurnManager.IsMyTurn == false) return;
         //一度使用したら押せない
-        if (GameManager._instance.Player.CanUseSpecialSkill == false) return;
+        if (GM._instance.Player.CanUseSpecialSkill == false) return;
+        //選択フェイズでなければ押せない
+        if (GM._instance.BattlePhase != SELECTION) return;
 
         _confirmationPanelToSpecialSkill.ToggleUI(true);
     }
@@ -351,7 +355,7 @@ public class UIManager : MonoBehaviour
     {
         //必殺技を使用済みにする
         UsedSpecialSkillButton(isPlayer);
-        GameManager._instance.UsedSpecialSkill(isPlayer);
+        GM._instance.UsedSpecialSkill(isPlayer);
         //発動
         StartCoroutine(ActivateSpecialSkill(isPlayer));
     }
@@ -362,10 +366,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator ActivateSpecialSkill(bool isPlayer)
     {
         //必殺技を演出、 演出中はカウントダウンが止まる
-        GameManager._instance.SetIsDuringProductionOfSpecialSkill(true);
+        GM._instance.SetIsDuringProductionOfSpecialSkill(true);
         yield return ShowSpecialSkillDirection(isPlayer);
         //カウントダウン再開
-        GameManager._instance.SetIsDuringProductionOfSpecialSkill(false);
+        GM._instance.SetIsDuringProductionOfSpecialSkill(false);
     }
 
     /// <summary>
