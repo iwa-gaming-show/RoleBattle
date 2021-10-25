@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard();
         yield return _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
-        ChangeBattlePhase(SELECTION);
         _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
     }

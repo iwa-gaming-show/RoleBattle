@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
+using static BattlePhase;
 using GM = GameManager;
 
 public class TurnManager : MonoBehaviour
@@ -60,6 +61,7 @@ public class TurnManager : MonoBehaviour
     public void ChangeTurn()
     {
         GM._instance.CardManager.SetBattleFieldPlaced(false);
+        GM._instance.ChangeBattlePhase(SELECTION);
         StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
 
         //自身のターン
@@ -96,13 +98,14 @@ public class TurnManager : MonoBehaviour
     public IEnumerator EnemyTurn()
     {
         yield return GM._instance.UIManager.ShowThePlayerTurnText(false);
+
         //エネミーの手札を取得
         CardController[] cardControllers = GM._instance.CardManager.GetAllHandCardsFor(false);
         //カードをランダムに選択
         CardController card = cardControllers[Random.Range(0, cardControllers.Length)];
 
+        //必殺技の発動
         bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _enemySpecialSkillTurn);
-
         if (GM._instance.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
             yield return GM._instance.UIManager.ActivateSpecialSkill(false);

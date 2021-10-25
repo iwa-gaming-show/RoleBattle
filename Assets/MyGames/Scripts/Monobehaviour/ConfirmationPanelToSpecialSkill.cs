@@ -25,7 +25,7 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     /// </summary>
     public void OnClickYes()
     {
-        GM._instance.UIManager.PrepareActivateSpecialSkill(true);
+        GM._instance.UIManager.ActivateSpecialSkillByUI(true);
         ToggleUI(false);
     }
 

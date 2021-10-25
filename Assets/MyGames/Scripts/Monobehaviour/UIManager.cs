@@ -348,15 +348,12 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 必殺技の実行準備をする
+    /// UIから必殺技を発動する
     /// </summary>
     /// <param name="isPlayer"></param>
-    public void PrepareActivateSpecialSkill(bool isPlayer)
+    public void ActivateSpecialSkillByUI(bool isPlayer)
     {
-        //必殺技を使用済みにする
-        UsedSpecialSkillButton(isPlayer);
-        GM._instance.UsedSpecialSkill(isPlayer);
-        //発動
+        //UIが非アクティブになるとコルーチンが動作しなくなるので一度こちらのメソッドを経由します
         StartCoroutine(ActivateSpecialSkill(isPlayer));
     }
 
@@ -365,6 +362,10 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public IEnumerator ActivateSpecialSkill(bool isPlayer)
     {
+        //必殺技を使用済みにする
+        UsedSpecialSkillButton(isPlayer);
+        GM._instance.UsedSpecialSkill(isPlayer);
+
         //必殺技を演出、 演出中はカウントダウンが止まる
         GM._instance.SetIsDuringProductionOfSpecialSkill(true);
         yield return ShowSpecialSkillDirection(isPlayer);
