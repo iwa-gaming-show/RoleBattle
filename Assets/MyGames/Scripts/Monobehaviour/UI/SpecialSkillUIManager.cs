@@ -79,7 +79,8 @@ public class SpecialSkillUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
     {
-        GetProductionToSpecialSkillBy(isPlayer).SetActive(isActive);
+        UIManager UIManager = GM._instance.UIManager;
+        UIManager.ToggleUIGameObject(GetProductionToSpecialSkillBy(isPlayer), isActive, transform);
     }
 
     /// <summary>

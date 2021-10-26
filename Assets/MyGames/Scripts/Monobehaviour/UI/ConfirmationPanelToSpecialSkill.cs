@@ -17,7 +17,8 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        gameObject?.SetActive(isActive);
+        UIManager UIManager = GM._instance.UIManager;
+        UIManager.ToggleUIGameObject(gameObject, isActive, UIManager.SpecialSkillUIManager.transform);
     }
 
     /// <summary>

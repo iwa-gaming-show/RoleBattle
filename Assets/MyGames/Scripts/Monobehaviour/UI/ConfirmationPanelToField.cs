@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GM = GameManager;
 
 /// <summary>
 /// バトル場へ送るカードの確認UI
@@ -24,7 +25,8 @@ public class ConfirmationPanelToField : MonoBehaviour,
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        gameObject.SetActive(isActive);
+        UIManager UIManager = GM._instance.UIManager;
+        UIManager.ToggleUIGameObject(gameObject, isActive, UIManager.DirectionUIManager.transform);
     }
 
     /// <summary>

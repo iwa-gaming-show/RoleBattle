@@ -77,22 +77,17 @@ public class DirectionUIManager : MonoBehaviour
 
         //右端→真ん中→左端へ移動する
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, screenEdgeX, 0).OnStart(() => ToggleOpenPhaseText(true)));
+        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, screenEdgeX, 0)
+            .OnStart(() => ToggleOpenPhaseText(true)));
+
         sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, 0f, 0.25f));
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f).OnComplete(() => ToggleOpenPhaseText(false)));
+
+        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
+            .OnComplete(() => ToggleOpenPhaseText(false)));
 
         yield return sequence
             .Play()
             .WaitForCompletion();
-    }
-
-    /// <summary>
-    /// カードOPEN時のテキストの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleOpenPhaseText(bool isActive)
-    {
-        _openPhaseText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
@@ -108,52 +103,11 @@ public class DirectionUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーのターン時に表示するUIの切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            _announceThePlayerTurn.SetActive(isActive);
-            return;
-        }
-        _announceTheEnemyTurn.SetActive(isActive);
-    }
-
-    /// <summary>
     /// カウントダウンを表示
     /// </summary>
     public void ShowCountDownText(int countDownTime)
     {
         _countDownText.text = countDownTime.ToString();
-    }
-
-    /// <summary>
-    /// ゲーム結果の表示の切り替え
-    /// </summary>
-    /// <param name="isAcitve"></param>
-    public void ToggleGameResultUI(bool isAcitve)
-    {
-        _gameResultUI.SetActive(isAcitve);
-    }
-
-    /// <summary>
-    /// ラウンドの勝敗の結果の表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleJudgementResultText(bool isActive)
-    {
-        _judgementResultText.gameObject?.SetActive(isActive);
-    }
-
-    /// <summary>
-    /// ラウンド数表示用テキストの切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleRoundCountText(bool isActive)
-    {
-        _roundCountText.gameObject?.SetActive(isActive);
     }
 
     /// <summary>
@@ -179,5 +133,61 @@ public class DirectionUIManager : MonoBehaviour
         {
             _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
         }
+    }
+
+    /// <summary>
+    /// カードOPEN時のテキストの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleOpenPhaseText(bool isActive)
+    {
+        GM._instance.UIManager.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時に表示するUIの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
+    {
+        GameObject AnnounceThePlayerTurnGameObject;
+
+        if (isPlayer)
+        {
+            AnnounceThePlayerTurnGameObject = _announceThePlayerTurn.gameObject;
+        }
+        else
+        {
+            AnnounceThePlayerTurnGameObject = _announceTheEnemyTurn.gameObject;
+        }
+
+        GM._instance.UIManager.ToggleUIGameObject(AnnounceThePlayerTurnGameObject, isActive, transform);
+    }
+
+    /// <summary>
+    /// ゲーム結果の表示の切り替え
+    /// </summary>
+    /// <param name="isAcitve"></param>
+    public void ToggleGameResultUI(bool isActive)
+    {
+        GM._instance.UIManager.ToggleUIGameObject(_gameResultUI, isActive, transform);
+    }
+
+    /// <summary>
+    /// ラウンドの勝敗の結果の表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleJudgementResultText(bool isActive)
+    {
+        GM._instance.UIManager.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
+    }
+
+    /// <summary>
+    /// ラウンド数表示用テキストの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleRoundCountText(bool isActive)
+    {
+        GM._instance.UIManager.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
     }
 }
