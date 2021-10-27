@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
 
         ResetGameState();
         _uiManager.HideUIAtStart();
-        _cardManager.ResetFieldCard();
+        await _cardManager.ResetFieldCard();
         await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
         CardController targetCard = _cardManager.GetRandomCardFrom(_turnManager.IsMyTurn);
         Transform targetTransform = GetTargetBattleFieldTransform(_turnManager.IsMyTurn);
 
-        yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
+        yield return targetCard.CardEvent.MoveToBattleField(targetTransform).ToCoroutine();
     }
 
     public void Cancel()

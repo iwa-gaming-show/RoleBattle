@@ -69,13 +69,14 @@ public class CardManager : MonoBehaviour
         GM._instance.ReflectTheResult(result);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
+
         GM._instance.RoundManager.NextRound();
     }
 
     /// <summary>
     /// 盤面をリセットします
     /// </summary>
-    public void ResetFieldCard()
+    public async UniTask ResetFieldCard()
     {
         //バトル場のカードを削除します
         Destroy(GetBattleFieldCardBy(true)?.gameObject);
@@ -84,6 +85,7 @@ public class CardManager : MonoBehaviour
         //手札のカードを削除します
         DestroyHandCard(true);
         DestroyHandCard(false);
+        await UniTask.Yield();
     }
 
     /// <summary>
@@ -160,9 +162,9 @@ public class CardManager : MonoBehaviour
     /// </summary>
     async UniTask OpenTheBattleFieldCards(CardController myCard, CardController enemyCard)
     {
-        myCard.TurnTheCardFaceUp();
-        enemyCard.TurnTheCardFaceUp();
-        await UniTask.Yield();
+        UniTask opened1 = myCard.TurnTheCardFaceUp();
+        UniTask opened2 = enemyCard.TurnTheCardFaceUp();
+        await UniTask.WhenAll(opened1, opened2);
     }
     /// <summary>
     /// バトル場のカードを取得する

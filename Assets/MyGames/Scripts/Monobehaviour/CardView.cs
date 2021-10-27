@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -58,8 +59,8 @@ public class CardView : MonoBehaviour
     /// <summary>
     /// 引数で決められた角度までカードを回転する
     /// </summary>
-    /// <param name="targetAngle"></param>
-    /// <returns></returns>
+    /// <param name = "targetAngle" ></ param >
+    /// < returns ></ returns >
     async UniTask RotateTheCardTo(float targetAngle)
     {
         while (_cardInversionAngle < targetAngle)

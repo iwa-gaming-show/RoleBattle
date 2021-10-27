@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class CardController : MonoBehaviour
@@ -31,7 +32,7 @@ public class CardController : MonoBehaviour
     /// <summary>
     /// カードを表側にする
     /// </summary>
-    public async void TurnTheCardFaceUp()
+    public async UniTask TurnTheCardFaceUp()
     {
         await _cardView.OpenTheCard();
     }
