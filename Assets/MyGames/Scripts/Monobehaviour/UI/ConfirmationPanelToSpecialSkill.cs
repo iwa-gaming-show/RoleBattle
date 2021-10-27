@@ -24,10 +24,10 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     /// <summary>
     /// 必殺技発動の確認画面でYesを押した時
     /// </summary>
-    public void OnClickYes()
+    public async void OnClickYes()
     {
-        GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkillByUI(true);
         ToggleUI(false);
+        await GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkill(true);
     }
 
     /// <summary>

@@ -113,16 +113,6 @@ public class SpecialSkillUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// UIから必殺技を発動する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    public async void ActivateSpecialSkillByUI(bool isPlayer)
-    {
-        //UIが非アクティブになるとコルーチンが動作しなくなるので一度こちらのメソッドを経由します
-        await ActivateSpecialSkill(isPlayer);
-    }
-
-    /// <summary>
     /// 必殺技を発動する
     /// </summary>
     public async UniTask ActivateSpecialSkill(bool isPlayer)
