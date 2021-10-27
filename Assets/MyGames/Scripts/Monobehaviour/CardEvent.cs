@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
@@ -21,7 +23,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// クリックイベント
     /// </summary>
     /// <param name="eventData"></param>
-    public void OnPointerClick(PointerEventData eventData)
+    public async void OnPointerClick(PointerEventData eventData)
     {
         bool controllablePlayerCard = gameManager.TurnManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
         bool selectionPhase = (gameManager.BattlePhase == SELECTION);
@@ -31,7 +33,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
 
         if (controllable)
         {
-            StartCoroutine(TryToMoveToField());
+            await TryToMoveToField();
         }
     }
 
@@ -39,19 +41,19 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// フィールドへの移動を試みます
     /// </summary>
     /// <returns></returns>
-    IEnumerator TryToMoveToField()
+    async UniTask TryToMoveToField()
     {
         //すでに確認画面がでてるなら何もしない
-        if (gameManager.UIManager.ConfirmationPanelToField.gameObject.activeInHierarchy) yield break;
+        if (gameManager.UIManager.ConfirmationPanelToField.gameObject.activeInHierarchy) return;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
         gameManager.UIManager.SelectedToFieldCard(cardController);
-        yield return StartCoroutine(WaitFieldConfirmationButton());
+        await WaitFieldConfirmationButton();
 
         //yesを押した時
         if (gameManager.UIManager.ConfirmationPanelToField.CanMoveToField)
         {
-            yield return StartCoroutine(MoveToBattleField(gameManager.MyBattleFieldTransform));
+            await MoveToBattleField(gameManager.MyBattleFieldTransform);
         }
 
         gameManager.UIManager.ConfirmationPanelToField.SetCanMoveToField(false);
@@ -62,24 +64,24 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// フィールドへの確認画面の押下を待ちます
     /// </summary>
     /// <returns></returns>
-    IEnumerator WaitFieldConfirmationButton()
+    async UniTask WaitFieldConfirmationButton()
     {
-        yield return new WaitUntil(() => gameManager.UIManager.ConfirmationPanelToField.IsClickedConfirmationButton);
+        await UniTask.WaitUntil(() => gameManager.UIManager.ConfirmationPanelToField.IsClickedConfirmationButton);
     }
 
     /// <summary>
     /// フィールドへ移動する
     /// </summary>
-    public IEnumerator MoveToBattleField(Transform targetTransform)
+    public async UniTask MoveToBattleField(Transform targetTransform)
     {
-        if (gameManager.CardManager.IsBattleFieldPlaced) yield break;
+        if (gameManager.CardManager.IsBattleFieldPlaced) return;
 
         gameManager.ChangeBattlePhase(SELECTED);
         cardController.TurnTheCardOver();
         transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);//移動演出
         transform.SetParent(targetTransform);//フィールドへカードを移動
         gameManager.CardManager.SetBattleFieldPlaced(true);
-        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_TURN);
+        await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         gameManager.TurnManager.EndTurn();
     }
 }

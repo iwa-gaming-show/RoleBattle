@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static CardJudgement;
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
     PointManager _pointManager;//ポイントの管理
     PlayerData _player;
     PlayerData _enemy;
+    CancellationTokenSource _tokenSource;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -61,6 +65,7 @@ public class GameManager : MonoBehaviour
     public RoundManager RoundManager => _roundManager;
     public PointManager PointManager => _pointManager;
     public BattlePhase BattlePhase => _battlePhase;
+    public CancellationTokenSource TokenSource => _tokenSource;
     #endregion
 
     private void Awake()
@@ -83,10 +88,11 @@ public class GameManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
+        _tokenSource = new CancellationTokenSource();
         InitPlayerData();
-        StartCoroutine(StartGame(true));
+        await StartGame(true);
     }
 
     /// <summary>
@@ -98,7 +104,12 @@ public class GameManager : MonoBehaviour
         _enemy = new PlayerData(INITIAL_POINT);
     }
 
-    public IEnumerator StartGame(bool isFirstGame)
+    /// <summary>
+    /// ゲームを開始する
+    /// </summary>
+    /// <param name="isFirstGame"></param>
+    /// <returns></returns>
+    public async UniTask StartGame(bool isFirstGame)
     {
         //1ラウンド目に行う処理
         if (isFirstGame)
@@ -119,7 +130,7 @@ public class GameManager : MonoBehaviour
         ResetGameState();
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard();
-        yield return _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
+        await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards();
         _turnManager.ChangeTurn();
     }
@@ -165,6 +176,12 @@ public class GameManager : MonoBehaviour
         yield return targetCard.CardEvent.MoveToBattleField(targetTransform);
     }
 
+    public void Cancel()
+    {
+        _tokenSource.Cancel();
+        Debug.Log("cancel requested");
+    }
+
     /// <summary>
     /// 必殺技の演出中かフラグをセットする
     /// </summary>
@@ -185,10 +202,10 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームを再開する
     /// </summary>
-    public void RetryGame()
+    public async void RetryGame()
     {
         InitializeGameData();
-        StartCoroutine(StartGame(true));
+        await StartGame(true);
     }
 
     /// <summary>
@@ -238,7 +255,7 @@ public class GameManager : MonoBehaviour
     /// 結果を反映します
     /// </summary>
     /// <param name="result"></param>
-    public void ReflectTheResult(CardJudgement result)
+    public async void ReflectTheResult(CardJudgement result)
     {
         ChangeBattlePhase(RESULT);
 
@@ -252,7 +269,7 @@ public class GameManager : MonoBehaviour
         }
 
         //UIへの反映
-        StartCoroutine(_uiManager.DirectionUIManager.ShowJudgementResultText(result.ToString()));
+        await _uiManager.DirectionUIManager.ShowJudgementResultText(result.ToString());
         _uiManager.ShowPoint(_player.Point, _enemy.Point);
     }
 

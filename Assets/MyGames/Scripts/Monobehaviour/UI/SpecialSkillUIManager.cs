@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using static WaitTimes;
@@ -44,7 +45,7 @@ public class SpecialSkillUIManager : MonoBehaviour
     /// <summary>
     /// 必殺技発動の演出
     /// </summary>
-    IEnumerator ShowSpecialSkillDirection(bool isPlayer)
+    async UniTask ShowSpecialSkillDirection(bool isPlayer)
     {
         RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
         float screenEdgeX = GM._instance.UIManager.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
@@ -68,9 +69,9 @@ public class SpecialSkillUIManager : MonoBehaviour
         sequence.Append(GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, 0f, 0.25f));
         sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
 
-        yield return sequence
-            .Play()
-            .WaitForCompletion();
+        await sequence
+           .Play()
+           .AsyncWaitForCompletion();
     }
 
     /// <summary>
@@ -115,16 +116,16 @@ public class SpecialSkillUIManager : MonoBehaviour
     /// UIから必殺技を発動する
     /// </summary>
     /// <param name="isPlayer"></param>
-    public void ActivateSpecialSkillByUI(bool isPlayer)
+    public async void ActivateSpecialSkillByUI(bool isPlayer)
     {
         //UIが非アクティブになるとコルーチンが動作しなくなるので一度こちらのメソッドを経由します
-        StartCoroutine(ActivateSpecialSkill(isPlayer));
+        await ActivateSpecialSkill(isPlayer);
     }
 
     /// <summary>
     /// 必殺技を発動する
     /// </summary>
-    public IEnumerator ActivateSpecialSkill(bool isPlayer)
+    public async UniTask ActivateSpecialSkill(bool isPlayer)
     {
         //必殺技を使用済みにする
         UsedSpecialSkillButton(isPlayer);
@@ -132,7 +133,7 @@ public class SpecialSkillUIManager : MonoBehaviour
 
         //必殺技を演出、 演出中はカウントダウンが止まる
         GM._instance.SetIsDuringProductionOfSpecialSkill(true);
-        yield return ShowSpecialSkillDirection(isPlayer);
+        await ShowSpecialSkillDirection(isPlayer);
         //カウントダウン再開
         GM._instance.SetIsDuringProductionOfSpecialSkill(false);
     }

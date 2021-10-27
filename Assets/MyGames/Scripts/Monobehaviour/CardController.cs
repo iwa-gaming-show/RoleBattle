@@ -31,9 +31,9 @@ public class CardController : MonoBehaviour
     /// <summary>
     /// カードを表側にする
     /// </summary>
-    public void TurnTheCardFaceUp()
+    public async void TurnTheCardFaceUp()
     {
-        StartCoroutine(_cardView.OpenTheCard());
+        await _cardView.OpenTheCard();
     }
 
     /// <summary>

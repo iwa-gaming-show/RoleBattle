@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static BattlePhase;
@@ -58,7 +59,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// ターンを切り替える
     /// </summary>
-    public void ChangeTurn()
+    public async void ChangeTurn()
     {
         GM._instance.CardManager.SetBattleFieldPlaced(false);
         GM._instance.ChangeBattlePhase(SELECTION);
@@ -74,30 +75,30 @@ public class TurnManager : MonoBehaviour
         else if (_isEnemyTurnEnd == false)
         {
             StartCoroutine(GM._instance.CountDown());
-            StartCoroutine(EnemyTurn());
+            await EnemyTurn();
         }
         //カードの判定
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            StartCoroutine(GM._instance.CardManager.JudgeTheCard());
+            await GM._instance.CardManager.JudgeTheCard();
         }
     }
 
     /// <summary>
     /// 自分のターン
     /// </summary>
-    public void MyTurn()
+    public async void MyTurn()
     {
-        StartCoroutine(GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(true));
+        await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(true);
     }
 
     /// <summary>
     /// 相手のターン
     /// </summary>
-    public IEnumerator EnemyTurn()
+    public async UniTask EnemyTurn()
     {
-        yield return GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
+        await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
 
         //エネミーの手札を取得
         CardController[] cardControllers = GM._instance.CardManager.GetAllHandCardsFor(false);
@@ -108,11 +109,11 @@ public class TurnManager : MonoBehaviour
         bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _enemySpecialSkillTurn);
         if (GM._instance.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
-            yield return GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkill(false);
+            await GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkill(false);
         }
 
         //カードをフィールドに移動
-        yield return card.CardEvent.MoveToBattleField(GM._instance.EnemyBattleFieldTransform);
+        await card.CardEvent.MoveToBattleField(GM._instance.EnemyBattleFieldTransform);
     }
 
     /// <summary>

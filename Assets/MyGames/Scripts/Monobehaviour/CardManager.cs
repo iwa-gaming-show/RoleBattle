@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static WaitTimes;
 using static CardType;
@@ -32,7 +34,7 @@ public class CardManager : MonoBehaviour
     public CardController GetRandomCardFrom(bool isMyHand)
     {
         CardController[] handCards = GetAllHandCardsFor(isMyHand);
-        int randomCardIndex = Random.Range(0, handCards.Length);
+        int randomCardIndex = UnityEngine.Random.Range(0, handCards.Length);
         return handCards[randomCardIndex];
     }
 
@@ -50,7 +52,7 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// カードを判定する
     /// </summary>
-    public IEnumerator JudgeTheCard()
+    public async UniTask JudgeTheCard()
     {
         GM._instance.ChangeBattlePhase(JUDGEMENT);
         //バトル場のカードを取得
@@ -60,13 +62,13 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        yield return GM._instance.UIManager.DirectionUIManager.AnnounceToOpenTheCard();
+        await GM._instance.UIManager.DirectionUIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
-        yield return OpenTheBattleFieldCards(myCard, enemyCard);
+        await OpenTheBattleFieldCards(myCard, enemyCard);
         //結果を反映する
         GM._instance.ReflectTheResult(result);
 
-        yield return new WaitForSeconds(TIME_BEFORE_CHANGING_ROUND);
+        await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
         GM._instance.RoundManager.NextRound();
     }
 
@@ -121,7 +123,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < handCards.Length; i++)
         {
             int tempIndex = handCards[i].transform.GetSiblingIndex();
-            int randomIndex = Random.Range(0, handCards.Length);
+            int randomIndex = UnityEngine.Random.Range(0, handCards.Length);
             handCards[i].transform.SetSiblingIndex(randomIndex);
             handCards[randomIndex].transform.SetSiblingIndex(tempIndex);
         }
@@ -156,11 +158,11 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// バトル場のカードを表にします
     /// </summary>
-    IEnumerator OpenTheBattleFieldCards(CardController myCard, CardController enemyCard)
+    async UniTask OpenTheBattleFieldCards(CardController myCard, CardController enemyCard)
     {
         myCard.TurnTheCardFaceUp();
         enemyCard.TurnTheCardFaceUp();
-        yield return null;
+        await UniTask.Yield();
     }
     /// <summary>
     /// バトル場のカードを取得する

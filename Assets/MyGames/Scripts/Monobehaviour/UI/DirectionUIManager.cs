@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using GM = GameManager;
 using static UIStrings;
 using static WaitTimes;
-using DG.Tweening;
-using GM = GameManager;
 
 public class DirectionUIManager : MonoBehaviour
 {
@@ -44,25 +46,27 @@ public class DirectionUIManager : MonoBehaviour
     /// <summary>
     /// ラウンド数を表示する
     /// </summary>
+    /// <param name="roundCount"></param>
+    /// <param name="maxRoundCount"></param>
     /// <returns></returns>
-    public IEnumerator ShowRoundCountText(int roundCount, int maxRoundCount)
+    public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
     {
         ToggleRoundCountText(true);
         SetRoundCountText(roundCount, maxRoundCount);
 
-        yield return new WaitForSeconds(ROUND_COUNT_DISPLAY_TIME);
+        await UniTask.Delay(TimeSpan.FromSeconds(ROUND_COUNT_DISPLAY_TIME));
         ToggleRoundCountText(false);
     }
 
     /// <summary>
     /// ラウンドの勝敗の結果を表示
     /// </summary>
-    public IEnumerator ShowJudgementResultText(string result)
+    public async UniTask ShowJudgementResultText(string result)
     {
         ToggleJudgementResultText(true);
         _judgementResultText.text = result + JUDGEMENT_RESULT_SUFFIX;
 
-        yield return new WaitForSeconds(JUDGMENT_RESULT_DISPLAY_TIME);
+        await UniTask.Delay(TimeSpan.FromSeconds(JUDGMENT_RESULT_DISPLAY_TIME));
         ToggleJudgementResultText(false);
     }
 
@@ -70,7 +74,7 @@ public class DirectionUIManager : MonoBehaviour
     /// カードを開くことをアナウンスします
     /// </summary>
     /// <returns></returns>
-    public IEnumerator AnnounceToOpenTheCard()
+    public async UniTask AnnounceToOpenTheCard()
     {
         RectTransform textRectTransform = _openPhaseText.rectTransform;
         float screenEdgeX = GM._instance.UIManager.GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
@@ -85,9 +89,9 @@ public class DirectionUIManager : MonoBehaviour
         sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
             .OnComplete(() => ToggleOpenPhaseText(false)));
 
-        yield return sequence
+        await sequence
             .Play()
-            .WaitForCompletion();
+            .AsyncWaitForCompletion();
     }
 
     /// <summary>
@@ -95,10 +99,10 @@ public class DirectionUIManager : MonoBehaviour
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public IEnumerator ShowThePlayerTurnText(bool isPlayer)
+    public async UniTask ShowThePlayerTurnText(bool isPlayer)
     {
         ToggleAnnounceTurnFor(true, isPlayer);
-        yield return new WaitForSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT);
+        await UniTask.Delay(TimeSpan.FromSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT));
         ToggleAnnounceTurnFor(false, isPlayer);
     }
 

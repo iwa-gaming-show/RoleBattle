@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,19 +37,19 @@ public class CardView : MonoBehaviour
     /// カードを表側にする
     /// </summary>
     /// <returns></returns>
-    public IEnumerator OpenTheCard()
+    public async UniTask OpenTheCard()
     {
         //最初にカードを裏返した時の角度を設定する
         _cardInversionAngle *= -1;
 
         //-90度を越えるまで回転
-        yield return RotateTheCardTo(-90f);
+        await RotateTheCardTo(-90f);
 
         //90度あたりで裏面画像を非表示にする
         ToggleBackSide(false);
 
         //0度まで回転する
-        yield return RotateTheCardTo(0f);
+        await RotateTheCardTo(0f);
 
         //綺麗に0度にならないことがあるので明示的に0度に補正する
         transform.eulerAngles = new Vector3(0, 0, 0);
@@ -59,13 +60,13 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <param name="targetAngle"></param>
     /// <returns></returns>
-    IEnumerator RotateTheCardTo(float targetAngle)
+    async UniTask RotateTheCardTo(float targetAngle)
     {
         while (_cardInversionAngle < targetAngle)
         {
             _cardInversionAngle += _rotationalSpeed * Time.deltaTime;
             transform.eulerAngles = new Vector3(0, _cardInversionAngle, 0);
-            yield return null;
+            await UniTask.Yield();
         }
     }
 }

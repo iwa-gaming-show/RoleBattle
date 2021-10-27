@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using GM = GameManager;
@@ -55,11 +56,11 @@ public class RoundManager : MonoBehaviour
     /// <summary>
     /// 次のラウンドへ
     /// </summary>
-    public void NextRound()
+    public async void NextRound()
     {
         if (_roundCount != _maxRoundCount)
         {
-            StartCoroutine(GM._instance.StartGame(false));
+            await GM._instance.StartGame(false);
         }
         else
         {
