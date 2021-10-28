@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
         await _cardManager.ResetFieldCard();
         await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards();
-        _turnManager.ChangeTurn();
+        _turnManager.ChangeTurn().Forget();
     }
 
     /// <summary>

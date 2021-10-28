@@ -65,6 +65,7 @@ public class CardManager : MonoBehaviour
         await GM._instance.UIManager.DirectionUIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         await OpenTheBattleFieldCards(myCard, enemyCard);
+
         //結果を反映する
         GM._instance.ReflectTheResult(result);
 

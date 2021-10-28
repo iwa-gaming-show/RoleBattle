@@ -53,29 +53,29 @@ public class TurnManager : MonoBehaviour
             _isEnemyTurnEnd = true;
         }
 
-        ChangeTurn();
+        ChangeTurn().Forget();
     }
 
     /// <summary>
     /// ターンを切り替える
     /// </summary>
-    public async void ChangeTurn()
+    public async UniTaskVoid ChangeTurn()
     {
         GM._instance.CardManager.SetBattleFieldPlaced(false);
         GM._instance.ChangeBattlePhase(SELECTION);
-        StopAllCoroutines();//意図しない非同期処理が走っている可能性を排除する
+        StopAllCoroutines();//意図しないコルーチンが走っている可能性を排除する
 
         //自身のターン
         if (_isMyTurn && _isMyTurnEnd == false)
         {
             StartCoroutine(GM._instance.CountDown());
-            MyTurn();
+            MyTurn().Forget();
         }
         //敵のターン
         else if (_isEnemyTurnEnd == false)
         {
             StartCoroutine(GM._instance.CountDown());
-            await EnemyTurn();
+            EnemyTurn().Forget();
         }
         //カードの判定
         if (_isMyTurnEnd && _isEnemyTurnEnd)
@@ -88,7 +88,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 自分のターン
     /// </summary>
-    public async void MyTurn()
+    public async UniTaskVoid MyTurn()
     {
         await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(true);
     }
@@ -96,7 +96,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 相手のターン
     /// </summary>
-    public async UniTask EnemyTurn()
+    public async UniTaskVoid EnemyTurn()
     {
         await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
 

@@ -78,8 +78,10 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
 
         gameManager.ChangeBattlePhase(SELECTED);
         cardController.TurnTheCardOver();
-        transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);//移動演出
-        transform.SetParent(targetTransform);//フィールドへカードを移動
+        //移動演出
+        transform.DOMove(targetTransform.position, CARD_MOVEMENT_TIME);
+        //フィールドへカードを移動
+        transform.SetParent(targetTransform);
         gameManager.CardManager.SetBattleFieldPlaced(true);
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         gameManager.TurnManager.EndTurn();
