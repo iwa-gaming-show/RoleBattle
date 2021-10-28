@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     PointManager _pointManager;//ポイントの管理
     PlayerData _player;
     PlayerData _enemy;
-    CancellationTokenSource _tokenSource;
+    CancellationToken _token;
 
     #region プロパティ
     public Transform MyBattleFieldTransform => _myBattleFieldTransform;
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     public RoundManager RoundManager => _roundManager;
     public PointManager PointManager => _pointManager;
     public BattlePhase BattlePhase => _battlePhase;
-    public CancellationTokenSource TokenSource => _tokenSource;
+    public CancellationToken Token => _token;
     #endregion
 
     private void Awake()
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        _tokenSource = new CancellationTokenSource();
+        _token = this.GetCancellationTokenOnDestroy();
         InitPlayerData();
         await StartGame(true);
     }
@@ -171,15 +171,8 @@ public class GameManager : MonoBehaviour
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
         CardController targetCard = _cardManager.GetRandomCardFrom(_turnManager.IsMyTurn);
-        Transform targetTransform = GetTargetBattleFieldTransform(_turnManager.IsMyTurn);
 
-        yield return targetCard.CardEvent.MoveToBattleField(targetTransform).ToCoroutine();
-    }
-
-    public void Cancel()
-    {
-        _tokenSource.Cancel();
-        Debug.Log("cancel requested");
+        yield return targetCard.CardEvent.MoveToBattleField(_myBattleFieldTransform).ToCoroutine();
     }
 
     /// <summary>
