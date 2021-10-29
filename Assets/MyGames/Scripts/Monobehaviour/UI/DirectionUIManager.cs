@@ -7,29 +7,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using GM = GameManager;
 using static UIStrings;
+using TMPro;
 using static WaitTimes;
 
 public class DirectionUIManager : MonoBehaviour
 {
     [SerializeField]
     [Header("ラウンドの勝敗の結果表示のテキスト")]
-    Text _judgementResultText;
+    TextMeshProUGUI _judgementResultText;
 
     [SerializeField]
     [Header("ラウンド数表示テキスト")]
-    Text _roundCountText;
+    TextMeshProUGUI _roundCountText;
 
     [SerializeField]
     [Header("ゲームの勝敗の結果表示のテキスト")]
-    Text _gameResultText;
+    TextMeshProUGUI _gameResultText;
 
     [SerializeField]
     [Header("カードOPEN時のテキスト")]
-    Text _openPhaseText;
+    TextMeshProUGUI _openPhaseText;
 
     [SerializeField]
     [Header("カウントダウンのテキスト")]
-    Text _countDownText;
+    TextMeshProUGUI _countDownText;
 
     [SerializeField]
     [Header("自分のターンであることを知らせるUI")]

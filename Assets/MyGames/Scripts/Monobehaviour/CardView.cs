@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CardView : MonoBehaviour
 {
-    [SerializeField] [Header("カード名")] Text _nameText;
+    [SerializeField] [Header("カード名")] TextMeshProUGUI _nameText;
     [SerializeField] [Header("カードの画像")] Image _iconImage;
     [SerializeField] [Header("カードの裏側")] GameObject _backSide;
     [SerializeField] [Header("カードの回転速度")] float _rotationalSpeed = 300f;

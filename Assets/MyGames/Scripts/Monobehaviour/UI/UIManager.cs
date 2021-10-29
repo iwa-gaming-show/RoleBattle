@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
+using TMPro;
 using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
     [Header("自身の獲得ポイントUI")]
-    Text _myPointText;
+    TextMeshProUGUI _myPointText;
 
     [SerializeField]
     [Header("相手の獲得ポイントUI")]
-    Text _enemyPointText;
+    TextMeshProUGUI _enemyPointText;
 
     [SerializeField]
     [Header("バトル場への確認画面のテキスト")]
