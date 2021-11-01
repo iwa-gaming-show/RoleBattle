@@ -16,15 +16,9 @@ public class PointManager : MonoBehaviour
     /// ポイントの加算
     /// </summary>
     /// <param name="isPlayer"></param>
-    public void AddPointTo(bool isPlayer)
+    public void AddPointTo(PlayerData targetPlayer, bool isUsingSkillInRound)
     {
-        if (isPlayer)
-        {
-            GM._instance.Player.AddPoint(EarnPoint(GM._instance.RoundManager.IsUsingPlayerSkillInRound));
-            return;
-        }
-
-        GM._instance.Enemy.AddPoint(EarnPoint(GM._instance.RoundManager.IsUsingEnemySkillInRound));
+        targetPlayer.AddPoint(EarnPoint(isUsingSkillInRound));
     }
 
     /// <summary>

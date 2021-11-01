@@ -254,11 +254,11 @@ public class GameManager : MonoBehaviour
 
         if (result == WIN)
         {
-            _pointManager.AddPointTo(true);
+            _pointManager.AddPointTo(_player, _roundManager.IsUsingPlayerSkillInRound);
         }
         else if (result == LOSE)
         {
-            _pointManager.AddPointTo(false);
+            _pointManager.AddPointTo(_enemy, _roundManager.IsUsingEnemySkillInRound);
         }
 
         //UIへの反映
