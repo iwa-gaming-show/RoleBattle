@@ -121,12 +121,8 @@ public class GameManager : MonoBehaviour
             _turnManager.DecideTheTurn();
             _turnManager.DecideTheTurnOnEnemySp();
         }
-        //1ラウンド目以降に行う処理
-        else
-        {
-            _roundManager.AddRoundCount();
-        }
 
+        //1ラウンド目以降に行う処理
         ResetGameState();
         _uiManager.HideUIAtStart();
         await _cardManager.ResetFieldCard();

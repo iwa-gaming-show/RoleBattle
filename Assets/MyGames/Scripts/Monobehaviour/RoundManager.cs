@@ -56,10 +56,11 @@ public class RoundManager : MonoBehaviour
     /// <summary>
     /// 次のラウンドへ
     /// </summary>
-    public async void NextRound()
+    public async UniTask NextRound()
     {
         if (_roundCount != _maxRoundCount)
         {
+            AddRoundCount();
             await GM._instance.StartGame(false);
         }
         else
