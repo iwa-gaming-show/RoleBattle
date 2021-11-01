@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
     public PointManager PointManager => _pointManager;
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
+    public Transform[] BattleFieldTransforms => new Transform[] {_myBattleFieldTransform, _enemyBattleFieldTransform };
+    public Transform[] HandTransforms => new Transform[] { _myHandTransform, _enemyHandTransform };
     #endregion
 
     private void Awake()
@@ -119,15 +121,15 @@ public class GameManager : MonoBehaviour
             _uiManager.ShowPoint(_player.Point, _enemy.Point);
             _uiManager.InitUIData();
             _turnManager.DecideTheTurn();
-            _turnManager.DecideTheTurnOnEnemySp();
+            _turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
         }
 
         //1ラウンド目以降に行う処理
         ResetGameState();
         _uiManager.HideUIAtStart();
-        await _cardManager.ResetFieldCard();
+        _cardManager.ResetFieldCard(BattleFieldTransforms, HandTransforms);
         await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
-        _cardManager.DistributeCards();
+        _cardManager.DistributeCards(_myHandTransform, _enemyHandTransform);
         _turnManager.ChangeTurn().Forget();
     }
 
@@ -166,9 +168,22 @@ public class GameManager : MonoBehaviour
         _uiManager.CloseAllConfirmationPanels();
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
-        CardController targetCard = _cardManager.GetRandomCardFrom(_turnManager.IsMyTurn);
+        CardController targetCard = _cardManager.GetRandomCardFrom(GetHandTransformByTurn());
 
         yield return targetCard.CardEvent.MoveToBattleField(_myBattleFieldTransform).ToCoroutine();
+    }
+
+    /// <summary>
+    /// ターンになったプレイヤーの手札のTransformを取得する
+    /// </summary>
+    /// <returns></returns>
+    public Transform GetHandTransformByTurn()
+    {
+        if (_turnManager.IsMyTurn)
+        {
+            return _myHandTransform;
+        }
+        return _enemyHandTransform;
     }
 
     /// <summary>

@@ -32,9 +32,9 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// エネミーが必殺技を使用するターンを決めます
     /// </summary>
-    public void DecideTheTurnOnEnemySp()
+    public void DecideTheTurnOnEnemySp(int maxRoundCount)
     {
-        _enemySpecialSkillTurn = Random.Range(INITIAL_ROUND_COUNT, GM._instance.RoundManager.MaxRoundCount + INITIAL_ROUND_COUNT);
+        _enemySpecialSkillTurn = Random.Range(INITIAL_ROUND_COUNT, maxRoundCount + INITIAL_ROUND_COUNT);
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class TurnManager : MonoBehaviour
         if (_isMyTurnEnd && _isEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            await GM._instance.CardManager.JudgeTheCard();
+            await GM._instance.CardManager.JudgeTheCard(GM._instance.MyBattleFieldTransform, GM._instance.EnemyBattleFieldTransform);
         }
     }
 
@@ -101,7 +101,7 @@ public class TurnManager : MonoBehaviour
         await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
 
         //相手のランダムなカードを選択
-        CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.TurnManager.IsMyTurn);
+        CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.GetHandTransformByTurn());
 
         //必殺技の発動
         bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _enemySpecialSkillTurn);

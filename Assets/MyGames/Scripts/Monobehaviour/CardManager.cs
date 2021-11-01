@@ -31,33 +31,22 @@ public class CardManager : MonoBehaviour
     /// 手札からランダムなカードを取得します
     /// </summary>
     /// <returns></returns>
-    public CardController GetRandomCardFrom(bool isMyHand)
+    public CardController GetRandomCardFrom(Transform targetHandTransform)
     {
-        CardController[] handCards = GetAllHandCardsFor(isMyHand);
+        CardController[] handCards = GetAllHandCardsFor(targetHandTransform);
         int randomCardIndex = UnityEngine.Random.Range(0, handCards.Length);
         return handCards[randomCardIndex];
     }
 
     /// <summary>
-    /// 手札のカードを全て取得します
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public CardController[] GetAllHandCardsFor(bool isPlayer)
-    {
-        if (isPlayer) return GM._instance.MyHandTransform.GetComponentsInChildren<CardController>();
-        return GM._instance.EnemyHandTransform.GetComponentsInChildren<CardController>();
-    }
-
-    /// <summary>
     /// カードを判定する
     /// </summary>
-    public async UniTask JudgeTheCard()
+    public async UniTask JudgeTheCard(Transform myBattleFieldTransform, Transform enemyBattleFieldTransform)
     {
         GM._instance.ChangeBattlePhase(JUDGEMENT);
         //バトル場のカードを取得
-        CardController myCard = GetBattleFieldCardBy(true);
-        CardController enemyCard = GetBattleFieldCardBy(false);
+        CardController myCard = GetBattleFieldCardBy(myBattleFieldTransform);
+        CardController enemyCard = GetBattleFieldCardBy(enemyBattleFieldTransform);
         //じゃんけんする
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
@@ -71,57 +60,85 @@ public class CardManager : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
 
-        GM._instance.RoundManager.NextRound();
+        await GM._instance.RoundManager.NextRound();
     }
 
     /// <summary>
     /// 盤面をリセットします
     /// </summary>
-    public async UniTask ResetFieldCard()
+    public void ResetFieldCard(
+        Transform[] battleFieldTransforms,
+        Transform[] handTrandforms
+    )
     {
-        //バトル場のカードを削除します
-        Destroy(GetBattleFieldCardBy(true)?.gameObject);
-        Destroy(GetBattleFieldCardBy(false)?.gameObject);
+        //プレイヤーごとにバトル場のカードを削除します
+        foreach (Transform fieldTransform in battleFieldTransforms)
+        {
+            Destroy(GetBattleFieldCardBy(fieldTransform)?.gameObject);
+        }
 
-        //手札のカードを削除します
-        DestroyHandCard(true);
-        DestroyHandCard(false);
-        await UniTask.Yield();
+        //プレイヤーごとに手札のカードを削除します
+        foreach (Transform handTransform in handTrandforms)
+        {
+            DestroyHandCard(handTransform);
+        }
+
+        //await UniTask.Yield();
+    }
+
+    /// <summary>
+    /// バトル場のカードを取得する
+    /// </summary>
+    /// <param name="targetBattleFieldTransform"></param>
+    /// <returns></returns>
+    CardController GetBattleFieldCardBy(Transform targetBattleFieldTransform)
+    {
+        return targetBattleFieldTransform.GetComponentInChildren<CardController>();
     }
 
     /// <summary>
     /// 手札のカードを破壊します
     /// </summary>
-    void DestroyHandCard(bool isPlayer)
+    void DestroyHandCard(Transform targetHandTransform)
     {
-        foreach (CardController target in GetAllHandCardsFor(isPlayer))
+        foreach (CardController target in GetAllHandCardsFor(targetHandTransform))
         {
             Destroy(target.gameObject);
         }
     }
 
     /// <summary>
+    /// 手札のカードを全て取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public CardController[] GetAllHandCardsFor(Transform targetHandTransform)
+    {
+        return targetHandTransform.GetComponentsInChildren<CardController>();
+    }
+
+    /// <summary>
     /// カードを配ります
     /// </summary>
-    public void DistributeCards()
+    public void DistributeCards(Transform myHandTransform, Transform enemyHandTransform)
     {
         //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
         for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
         {
-            AddingCardToHand(GM._instance.MyHandTransform, i, true);
-            AddingCardToHand(GM._instance.EnemyHandTransform, i, false);
+            AddingCardToHand(myHandTransform, i, true);
+            AddingCardToHand(enemyHandTransform, i, false);
         }
         //お互いのカードをシャッフルする
-        ShuffleHandCard(true);
-        ShuffleHandCard(false);
+        ShuffleHandCard(myHandTransform);
+        ShuffleHandCard(enemyHandTransform);
     }
 
     /// <summary>
     /// 手札のカードをシャッフルする
     /// </summary>
-    void ShuffleHandCard(bool isPlayer)
+    void ShuffleHandCard(Transform targetTransform)
     {
-        CardController[] handCards = GetAllHandCardsFor(isPlayer);
+        CardController[] handCards = GetAllHandCardsFor(targetTransform);
 
         for (int i = 0; i < handCards.Length; i++)
         {
@@ -166,15 +183,6 @@ public class CardManager : MonoBehaviour
         UniTask opened1 = myCard.TurnTheCardFaceUp();
         UniTask opened2 = enemyCard.TurnTheCardFaceUp();
         await UniTask.WhenAll(opened1, opened2);
-    }
-    /// <summary>
-    /// バトル場のカードを取得する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    CardController GetBattleFieldCardBy(bool isPlayer)
-    {
-        return GM._instance.GetTargetBattleFieldTransform(isPlayer).GetComponentInChildren<CardController>();
     }
 
     /// <summary>
