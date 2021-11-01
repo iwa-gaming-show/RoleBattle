@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
-using GM = GameManager;
 
 public class PointManager : MonoBehaviour
 {
@@ -25,7 +24,7 @@ public class PointManager : MonoBehaviour
     /// 獲得ポイント
     /// </summary>
     /// <returns></returns>
-    int EarnPoint(bool isUsingSkillInRound)
+    public int EarnPoint(bool isUsingSkillInRound)
     {
         //このラウンドの間必殺技を使用していた場合
         if (isUsingSkillInRound)
