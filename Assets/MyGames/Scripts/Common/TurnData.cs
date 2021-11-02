@@ -49,4 +49,30 @@ public class TurnData
     {
         _isEnemyTurnEnd = isEnd;
     }
+
+    /// <summary>
+    /// ターンの終了をリセットする
+    /// </summary>
+    public void ResetTurn()
+    {
+        SetIsMyTurnEnd(false);
+        SetIsEnemyTurnEnd(false);
+    }
+
+    /// <summary>
+    /// ターンの設定を切り替えます
+    /// </summary>
+    public void ChangeTurnSettings()
+    {
+        if (_isMyTurn)
+        {
+            SetIsMyTurn(false);
+            SetIsMyTurnEnd(true);
+        }
+        else
+        {
+            SetIsMyTurn(true);
+            SetIsEnemyTurnEnd(true);
+        }
+    }
 }

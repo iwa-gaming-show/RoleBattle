@@ -14,9 +14,19 @@ public class TurnManager : MonoBehaviour
     public bool IsMyTurn => _turnData.IsMyTurn;
     #endregion
 
+    public TurnData TurnData => _turnData;
+
     void Awake()
     {
         _turnData = new TurnData();
+    }
+
+    /// <summary>
+    /// ターンの終了をリセットする
+    /// </summary>
+    public void ResetTurn()
+    {
+        _turnData.ResetTurn();
     }
 
     /// <summary>
@@ -45,17 +55,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void EndTurn()
     {
-        if (_turnData.IsMyTurn)
-        {
-            _turnData.SetIsMyTurn(false);
-            _turnData.SetIsMyTurnEnd(true);
-        }
-        else
-        {
-            _turnData.SetIsMyTurn(true);
-            _turnData.SetIsEnemyTurnEnd(true);
-        }
-
+        _turnData.ChangeTurnSettings();
         ChangeTurn().Forget();
     }
 
@@ -115,14 +115,5 @@ public class TurnManager : MonoBehaviour
 
         //カードをフィールドに移動
         await targetCard.CardEvent.MoveToBattleField(GM._instance.EnemyBattleFieldTransform);
-    }
-
-    /// <summary>
-    /// ターンの終了をリセットする
-    /// </summary>
-    public void ResetTurn()
-    {
-        _turnData.SetIsMyTurnEnd(false);
-        _turnData.SetIsEnemyTurnEnd(false);
     }
 }
