@@ -9,7 +9,7 @@ using static UIStrings;
 using TMPro;
 using static WaitTimes;
 
-public class DirectionUIManager : MonoBehaviour
+public class DirectionUIManager : MonoBehaviour, IHideableUIsAtStart
 {
     [SerializeField]
     [Header("ラウンドの勝敗の結果表示のテキスト")]
@@ -42,6 +42,19 @@ public class DirectionUIManager : MonoBehaviour
     [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
+
+    /// <summary>
+    /// 開始時にUIを非表示にする
+    /// </summary>
+    public void HideUIsAtStart()
+    {
+        ToggleGameResultUI(false);
+        ToggleJudgementResultText(false);
+        ToggleRoundCountText(false);
+        ToggleAnnounceTurnFor(false, true);
+        ToggleAnnounceTurnFor(false, false);
+        ToggleOpenPhaseText(false);
+    }
 
     /// <summary>
     /// ラウンド数を表示する
@@ -145,7 +158,7 @@ public class DirectionUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleOpenPhaseText(bool isActive)
     {
-        GM._instance.UIManager.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
     }
 
     /// <summary>
@@ -165,7 +178,7 @@ public class DirectionUIManager : MonoBehaviour
             AnnounceThePlayerTurnGameObject = _announceTheEnemyTurn.gameObject;
         }
 
-        GM._instance.UIManager.ToggleUIGameObject(AnnounceThePlayerTurnGameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurnGameObject, isActive, transform);
     }
 
     /// <summary>
@@ -174,7 +187,7 @@ public class DirectionUIManager : MonoBehaviour
     /// <param name="isAcitve"></param>
     public void ToggleGameResultUI(bool isActive)
     {
-        GM._instance.UIManager.ToggleUIGameObject(_gameResultUI, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_gameResultUI, isActive, transform);
     }
 
     /// <summary>
@@ -183,7 +196,7 @@ public class DirectionUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleJudgementResultText(bool isActive)
     {
-        GM._instance.UIManager.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
     }
 
     /// <summary>
@@ -192,6 +205,6 @@ public class DirectionUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleRoundCountText(bool isActive)
     {
-        GM._instance.UIManager.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
     }
 }

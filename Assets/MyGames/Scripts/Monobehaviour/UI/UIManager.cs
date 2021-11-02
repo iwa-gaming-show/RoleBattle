@@ -40,29 +40,29 @@ public class UIManager : MonoBehaviour
     [Header("オブジェクトプールに使用する非表示にしたUIを格納するCanvasを設定")]
     GameObject CanvasForObjectPool;
 
+    IHideableUIsAtStart _hideableUIsAtStartByDir;
+    IHideableUIsAtStart _hideableUIsAtStartBySP;
+
     #region//プロパティ
     public ConfirmationPanelToField ConfirmationPanelToField => _confirmationPanelToField;
     public SpecialSkillUIManager SpecialSkillUIManager => _specialSkillUIManager;
     public DirectionUIManager DirectionUIManager => _directionUIManager;
     #endregion
 
+    void Awake()
+    {
+        _hideableUIsAtStartByDir = _directionUIManager.GetComponent<IHideableUIsAtStart>();
+        _hideableUIsAtStartBySP = _specialSkillUIManager.GetComponent<IHideableUIsAtStart>();
+    }
+
     /// <summary>
     /// 開始時に非表示にするUI
     /// </summary>
     public void HideUIAtStart()
     {
-        _directionUIManager.ToggleGameResultUI(false);
-        _directionUIManager.ToggleJudgementResultText(false);
-        _directionUIManager.ToggleRoundCountText(false);
-        _directionUIManager.ToggleAnnounceTurnFor(false, true);
-        _directionUIManager.ToggleAnnounceTurnFor(false, true);
-        _directionUIManager.ToggleOpenPhaseText(false);
-
+        _hideableUIsAtStartByDir.HideUIsAtStart();
+        _hideableUIsAtStartBySP.HideUIsAtStart();
         _confirmationPanelToField.ToggleUI(false);
-
-        _specialSkillUIManager.ConfirmationPanel.ToggleUI(false);
-        _specialSkillUIManager.ToggleProductionToSpecialSkill(false, true);
-        _specialSkillUIManager.ToggleProductionToSpecialSkill(false, false);
     }
 
     /// <summary>
@@ -124,28 +124,5 @@ public class UIManager : MonoBehaviour
     {
         _specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
-    }
-
-    /// <summary>
-    /// UIオブジェクトの表示の切り替え
-    /// </summary>
-    public void ToggleUIGameObject(GameObject targetGameObject, bool isActive, Transform settingCanvasTransform = null)
-    {
-        //パフォーマンスの観点から使わなくなったUIは非表示にしてからCanvasを移動させます
-        if (isActive)
-        {
-            //表示する時にはsettingCanvasが必要
-            if (settingCanvasTransform == null) return;
-
-            //ObjectPoolCanvasからsettingCanvasに移動してから表示
-            targetGameObject?.transform.SetParent(settingCanvasTransform);
-            targetGameObject?.SetActive(isActive);
-        }
-        else
-        {
-            //非表示にしてからObjectPoolCanvasに移動
-            targetGameObject?.SetActive(isActive);
-            targetGameObject?.transform.SetParent(CanvasForObjectPool.transform);
-        }
     }
 }

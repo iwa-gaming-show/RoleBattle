@@ -11,14 +11,17 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     IYesButtonAction,
     INoButtonAction
 {
+    [SerializeField]
+    [Header("CanvasForSpecialSkillを設定")]
+    Transform SpecialSkillUIManagerTransform;
+
     /// <summary>
     /// UIの表示の切り替え
     /// </summary>
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        UIManager UIManager = GM._instance.UIManager;
-        UIManager.ToggleUIGameObject(gameObject, isActive, UIManager.SpecialSkillUIManager.transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, SpecialSkillUIManagerTransform);
     }
 
     /// <summary>

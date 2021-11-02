@@ -8,7 +8,7 @@ using static BattlePhase;
 using GM = GameManager;
 using DG.Tweening;
 
-public class SpecialSkillUIManager : MonoBehaviour
+public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
 {
     [SerializeField]
     [Header("必殺技発動の確認UI")]
@@ -41,6 +41,16 @@ public class SpecialSkillUIManager : MonoBehaviour
     #region//プロパティ
     public ConfirmationPanelToSpecialSkill ConfirmationPanel => _confirmationPanel;
     #endregion
+
+    /// <summary>
+    /// 開始時にUIを非表示にする
+    /// </summary>
+    public void HideUIsAtStart()
+    {
+        ConfirmationPanel.ToggleUI(false);
+        ToggleProductionToSpecialSkill(false, true);
+        ToggleProductionToSpecialSkill(false, false);
+    }
 
     /// <summary>
     /// 必殺技発動の演出
@@ -80,8 +90,7 @@ public class SpecialSkillUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
     {
-        UIManager UIManager = GM._instance.UIManager;
-        UIManager.ToggleUIGameObject(GetProductionToSpecialSkillBy(isPlayer), isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(GetProductionToSpecialSkillBy(isPlayer), isActive, transform);
     }
 
     /// <summary>

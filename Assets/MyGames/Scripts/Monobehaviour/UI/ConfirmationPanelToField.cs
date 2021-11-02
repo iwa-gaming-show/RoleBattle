@@ -11,6 +11,10 @@ public class ConfirmationPanelToField : MonoBehaviour,
     IYesButtonAction,
     INoButtonAction
 {
+    [SerializeField]
+    [Header("CanvasForDirectionを設定")]
+    Transform directionUIManagerTransform;
+
     bool _isClickedConfirmationButton;//確認ボタンをクリックしたか
     bool _canMoveToField;//カードの移動ができる
 
@@ -25,8 +29,7 @@ public class ConfirmationPanelToField : MonoBehaviour,
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        UIManager UIManager = GM._instance.UIManager;
-        UIManager.ToggleUIGameObject(gameObject, isActive, UIManager.DirectionUIManager.transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, directionUIManagerTransform);
     }
 
     /// <summary>
