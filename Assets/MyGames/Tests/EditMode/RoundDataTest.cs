@@ -59,4 +59,38 @@ public class RoundDataTest
         roundData.AddRoundCount();
         Assert.That(roundData.RoundCount, Is.EqualTo(expected2));
     }
+
+    [Test, Description("ラウンドの状態が正しくリセットされているか")]
+    public void ResetRoundStateTest()
+    {
+        roundData.ResetRoundState();
+        Assert.That(roundData.IsUsingPlayerSkillInRound, Is.False);
+        Assert.That(roundData.IsUsingEnemySkillInRound, Is.False);
+    }
+
+    [Test, Description("プレイヤーが必殺技を使用したラウンドかどうか正しく設定されているか")]
+    [TestCase(true, true, true)]
+    [TestCase(true, false, false)]
+    public void SetUsingSkillRoundByPlayerTest(bool isPlayer, bool isUsingSkill, bool expected)
+    {
+        roundData.SetUsingSkillRound(isPlayer, isUsingSkill);
+
+        //プレイヤーの場合
+        Assert.That(roundData.IsUsingPlayerSkillInRound, Is.EqualTo(expected));
+        //エネミーは常にfalseになる
+        Assert.That(roundData.IsUsingEnemySkillInRound, Is.False);
+    }
+
+    [Test, Description("エネミーが必殺技を使用したラウンドかどうか正しく設定されているか")]
+    [TestCase(false, true, true)]
+    [TestCase(false, false, false)]
+    public void SetUsingSkillRoundByEnemyTest(bool isPlayer, bool isUsingSkill, bool expected)
+    {
+        roundData.SetUsingSkillRound(isPlayer, isUsingSkill);
+
+        //エネミーの場合
+        Assert.That(roundData.IsUsingEnemySkillInRound, Is.EqualTo(expected));
+        //プレイヤーは常にfalseになる
+        Assert.That(roundData.IsUsingPlayerSkillInRound, Is.False);
+    }
 }
