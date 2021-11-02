@@ -28,16 +28,6 @@ public class RoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ラウンドの状態をリセットする
-    /// </summary>
-    public void ResetRoundState()
-    {
-        //スキルの発動状態をリセット
-        _roundData.SetIsUsingPlayerSkillInRound(false);
-        _roundData.SetIsUsingEnemySkillInRound(false);
-    }
-
-    /// <summary>
     /// 次のラウンドへ
     /// </summary>
     public async UniTask NextRound()
@@ -53,19 +43,4 @@ public class RoundManager : MonoBehaviour
             GM._instance.EndGame();
         }
     }
-
-    /// <summary>
-    /// 必殺技を使用したラウンドかどうかの設定
-    /// </summary>
-    public void SetUsingSkillRound(bool isPlayer, bool isUsingSkill)
-    {
-        if (isPlayer)
-        {
-            _roundData.SetIsUsingPlayerSkillInRound(isUsingSkill);
-            return;
-        }
-
-        _roundData.SetIsUsingEnemySkillInRound(isUsingSkill);
-    }
 }
-

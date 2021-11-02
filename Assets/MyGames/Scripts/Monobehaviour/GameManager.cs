@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
     public void ResetGameState()
     {
         _turnManager.ResetTurn();
-        _roundManager.ResetRoundState();
+        _roundManager.RoundData.ResetRoundState();
     }
 
     /// <summary>
@@ -285,11 +285,11 @@ public class GameManager : MonoBehaviour
         if (isPlayer)
         {
             _player.SetCanUseSpecialSkill(false);
-            _roundManager.SetUsingSkillRound(isPlayer, true);
+            _roundManager.RoundData.SetUsingSkillRound(isPlayer, true);
             return;
         }
 
         _enemy.SetCanUseSpecialSkill(false);
-        _roundManager.SetUsingSkillRound(isPlayer, true);
+        _roundManager.RoundData.SetUsingSkillRound(isPlayer, true);
     }
 }

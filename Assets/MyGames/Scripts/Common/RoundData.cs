@@ -66,5 +66,29 @@ public class RoundData
     {
         _roundCount++;
     }
+
+    /// <summary>
+    /// ラウンドの状態をリセットする
+    /// </summary>
+    public void ResetRoundState()
+    {
+        //スキルの発動状態をリセット
+        SetIsUsingPlayerSkillInRound(false);
+        SetIsUsingEnemySkillInRound(false);
+    }
+
+    /// <summary>
+    /// 必殺技を使用したラウンドかどうかの設定
+    /// </summary>
+    public void SetUsingSkillRound(bool isPlayer, bool isUsingSkill)
+    {
+        if (isPlayer)
+        {
+            SetIsUsingPlayerSkillInRound(isUsingSkill);
+            return;
+        }
+
+        SetIsUsingEnemySkillInRound(isUsingSkill);
+    }
 }
 
