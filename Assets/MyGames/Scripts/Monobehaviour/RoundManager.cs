@@ -19,12 +19,35 @@ public class RoundManager : MonoBehaviour
     public int MaxRoundCount => _maxRoundCount;
     public bool IsUsingPlayerSkillInRound => _roundData.IsUsingPlayerSkillInRound;
     public bool IsUsingEnemySkillInRound => _roundData.IsUsingEnemySkillInRound;
-    public RoundData RoundData => _roundData;
     #endregion
 
     void Awake()
     {
         _roundData = new RoundData(_maxRoundCount);
+    }
+
+    /// <summary>
+    /// ラウンドの状態をリセットする
+    /// </summary>
+    public void ResetRoundState()
+    {
+        _roundData.ResetRoundState();
+    }
+
+    /// <summary>
+    /// ラウンドの設定
+    /// </summary>
+    public void SetRoundCount(int count)
+    {
+        _roundData.SetRoundCount(count);
+    }
+
+    /// <summary>
+    /// 必殺技を使用したラウンドかどうかの設定
+    /// </summary>
+    public void SetUsingSkillRound(bool isPlayer, bool isUsingSkill)
+    {
+        _roundData.SetUsingSkillRound(isPlayer, isUsingSkill);
     }
 
     /// <summary>

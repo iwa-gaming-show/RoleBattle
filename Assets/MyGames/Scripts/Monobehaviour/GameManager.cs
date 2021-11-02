@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
     public void ResetGameState()
     {
         _turnManager.ResetTurn();
-        _roundManager.RoundData.ResetRoundState();
+        _roundManager.ResetRoundState();
     }
 
     /// <summary>
@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void InitializeGameData()
     {
-        _roundManager.RoundData.SetRoundCount(INITIAL_ROUND_COUNT);
+        _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
         _player.SetPoint(INITIAL_POINT);
         _enemy.SetPoint(INITIAL_POINT);
     }
@@ -285,11 +285,11 @@ public class GameManager : MonoBehaviour
         if (isPlayer)
         {
             _player.SetCanUseSpecialSkill(false);
-            _roundManager.RoundData.SetUsingSkillRound(isPlayer, true);
+            _roundManager.SetUsingSkillRound(isPlayer, true);
             return;
         }
 
         _enemy.SetCanUseSpecialSkill(false);
-        _roundManager.RoundData.SetUsingSkillRound(isPlayer, true);
+        _roundManager.SetUsingSkillRound(isPlayer, true);
     }
 }
