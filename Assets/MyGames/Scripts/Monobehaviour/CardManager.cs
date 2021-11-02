@@ -82,8 +82,6 @@ public class CardManager : MonoBehaviour
         {
             DestroyHandCard(handTransform);
         }
-
-        //await UniTask.Yield();
     }
 
     /// <summary>

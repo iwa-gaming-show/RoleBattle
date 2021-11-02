@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using static InitializationData;
 using GM = GameManager;
 
 public class RoundManager : MonoBehaviour
@@ -11,21 +10,22 @@ public class RoundManager : MonoBehaviour
     [SerializeField]
     [Header("最大ラウンド数")]
     int _maxRoundCount = 3;
-
-    [SerializeField]
-    [Header("ラウンド数")]
-    int _roundCount = INITIAL_ROUND_COUNT;
     #endregion
 
-    bool _isUsingPlayerSkillInRound;//必殺技を使用したラウンドか
-    bool _isUsingEnemySkillInRound;
+    RoundData _roundData;
 
     #region プロパティ
-    public int RoundCount => _roundCount;
+    public int RoundCount => _roundData.RoundCount;
     public int MaxRoundCount => _maxRoundCount;
-    public bool IsUsingPlayerSkillInRound => _isUsingPlayerSkillInRound;
-    public bool IsUsingEnemySkillInRound => _isUsingEnemySkillInRound;
+    public bool IsUsingPlayerSkillInRound => _roundData.IsUsingPlayerSkillInRound;
+    public bool IsUsingEnemySkillInRound => _roundData.IsUsingEnemySkillInRound;
+    public RoundData RoundData => _roundData;
     #endregion
+
+    void Awake()
+    {
+        _roundData = new RoundData(_maxRoundCount);
+    }
 
     /// <summary>
     /// ラウンドの状態をリセットする
@@ -33,24 +33,8 @@ public class RoundManager : MonoBehaviour
     public void ResetRoundState()
     {
         //スキルの発動状態をリセット
-        _isUsingPlayerSkillInRound = false;
-        _isUsingEnemySkillInRound = false;
-    }
-
-    /// <summary>
-    /// ラウンドの設定
-    /// </summary>
-    public void SetRoundCount(int count)
-    {
-        _roundCount = count;
-    }
-
-    /// <summary>
-    /// ラウンドの加算
-    /// </summary>
-    public void AddRoundCount()
-    {
-        _roundCount++;
+        _roundData.SetIsUsingPlayerSkillInRound(false);
+        _roundData.SetIsUsingEnemySkillInRound(false);
     }
 
     /// <summary>
@@ -58,9 +42,9 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     public async UniTask NextRound()
     {
-        if (_roundCount != _maxRoundCount)
+        if (_roundData.RoundCount != _maxRoundCount)
         {
-            AddRoundCount();
+            _roundData.AddRoundCount();
             await GM._instance.StartGame(false);
         }
         else
@@ -77,11 +61,11 @@ public class RoundManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            _isUsingPlayerSkillInRound = isUsingSkill;
+            _roundData.SetIsUsingPlayerSkillInRound(isUsingSkill);
             return;
         }
 
-        _isUsingEnemySkillInRound = isUsingSkill;
+        _roundData.SetIsUsingEnemySkillInRound(isUsingSkill);
     }
 }
 

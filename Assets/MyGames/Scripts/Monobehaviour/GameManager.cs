@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void InitializeGameData()
     {
-        _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
+        _roundManager.RoundData.SetRoundCount(INITIAL_ROUND_COUNT);
         _player.SetPoint(INITIAL_POINT);
         _enemy.SetPoint(INITIAL_POINT);
     }
