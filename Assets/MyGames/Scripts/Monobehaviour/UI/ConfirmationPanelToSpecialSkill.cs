@@ -30,7 +30,7 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     public async void OnClickYes()
     {
         ToggleUI(false);
-        await GM._instance.UIManager.SpecialSkillUIManager.ActivateSpecialSkill(true);
+        await GM._instance.UIManager.ActivateSpecialSkill(true);
     }
 
     /// <summary>

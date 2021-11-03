@@ -190,4 +190,12 @@ public class UIManager : MonoBehaviour
     {
         await _directionUIManager.ShowThePlayerTurnText(isPlayer);
     }
+
+    /// <summary>
+    /// 必殺技を発動する
+    /// </summary>
+    public async UniTask ActivateSpecialSkill(bool isPlayer)
+    {
+        await _specialSkillUIManager.ActivateSpecialSkill(isPlayer);
+    }
 }
