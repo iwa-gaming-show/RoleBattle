@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -20,22 +19,6 @@ public class GameManager : MonoBehaviour
     UIManager _uiManager;
 
     [SerializeField]
-    [Header("自身の手札")]
-    Transform _myHandTransform;
-
-    [SerializeField]
-    [Header("相手の手札")]
-    Transform _enemyHandTransform;
-
-    [SerializeField]
-    [Header("自身のバトルフィールド")]
-    Transform _myBattleFieldTransform;
-
-    [SerializeField]
-    [Header("相手のバトルフィールド")]
-    Transform _enemyBattleFieldTransform;
-
-    [SerializeField]
     [Header("カウントダウンの秒数を設定")]
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
     #endregion
@@ -48,15 +31,12 @@ public class GameManager : MonoBehaviour
     CardManager _cardManager;//カードの管理
     RoundManager _roundManager;//ラウンドの管理
     PointManager _pointManager;//ポイントの管理
+    FieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
     PlayerData _player;
     PlayerData _enemy;
     CancellationToken _token;
 
     #region プロパティ
-    public Transform MyBattleFieldTransform => _myBattleFieldTransform;
-    public Transform EnemyBattleFieldTransform => _enemyBattleFieldTransform;
-    public Transform MyHandTransform => _myHandTransform;
-    public Transform EnemyHandTransform => _enemyHandTransform;
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
     public UIManager UIManager => _uiManager;
@@ -64,10 +44,9 @@ public class GameManager : MonoBehaviour
     public CardManager CardManager => _cardManager;
     public RoundManager RoundManager => _roundManager;
     public PointManager PointManager => _pointManager;
+    public FieldTransformManager FieldTransformManager => _fieldTransformManager;
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
-    public Transform[] BattleFieldTransforms => new Transform[] {_myBattleFieldTransform, _enemyBattleFieldTransform };
-    public Transform[] HandTransforms => new Transform[] { _myHandTransform, _enemyHandTransform };
     #endregion
 
     private void Awake()
@@ -87,6 +66,7 @@ public class GameManager : MonoBehaviour
         _turnManager = GetComponent<TurnManager>();
         _cardManager = GetComponent<CardManager>();
         _pointManager = GetComponent<PointManager>();
+        _fieldTransformManager = GetComponent<FieldTransformManager>();
     }
 
     // Start is called before the first frame update
@@ -127,9 +107,9 @@ public class GameManager : MonoBehaviour
         //1ラウンド目以降に行う処理
         ResetGameState();
         _uiManager.HideUIAtStart();
-        _cardManager.ResetFieldCard(BattleFieldTransforms, HandTransforms);
+        _cardManager.ResetFieldCard(_fieldTransformManager.BattleFieldTransforms, _fieldTransformManager.HandTransforms);
         await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
-        _cardManager.DistributeCards(_myHandTransform, _enemyHandTransform);
+        _cardManager.DistributeCards(_fieldTransformManager.MyHandTransform, _fieldTransformManager.EnemyHandTransform);
         _turnManager.ChangeTurn().Forget();
     }
 
@@ -168,22 +148,10 @@ public class GameManager : MonoBehaviour
         _uiManager.CloseAllConfirmationPanels();
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
-        CardController targetCard = _cardManager.GetRandomCardFrom(GetHandTransformByTurn());
+        Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
+        CardController targetCard = _cardManager.GetRandomCardFrom(handTransform);
 
-        yield return targetCard.CardEvent.MoveToBattleField(_myBattleFieldTransform).ToCoroutine();
-    }
-
-    /// <summary>
-    /// ターンになったプレイヤーの手札のTransformを取得する
-    /// </summary>
-    /// <returns></returns>
-    public Transform GetHandTransformByTurn()
-    {
-        if (_turnManager.IsMyTurn)
-        {
-            return _myHandTransform;
-        }
-        return _enemyHandTransform;
+        yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
     }
 
     /// <summary>
@@ -220,17 +188,6 @@ public class GameManager : MonoBehaviour
         _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
         _player.SetPoint(INITIAL_POINT);
         _enemy.SetPoint(INITIAL_POINT);
-    }
-
-    /// <summary>
-    /// 対象のバトル場のカードのTransformを取得する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public Transform GetTargetBattleFieldTransform(bool isPlayer)
-    {
-        if (isPlayer) return _myBattleFieldTransform;
-        return _enemyBattleFieldTransform;
     }
 
     /// <summary>

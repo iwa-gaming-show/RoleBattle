@@ -53,7 +53,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
         //yesを押した時
         if (gameManager.UIManager.ConfirmationPanelToField.CanMoveToField)
         {
-            await MoveToBattleField(gameManager.MyBattleFieldTransform);
+            await MoveToBattleField(gameManager.FieldTransformManager.MyBattleFieldTransform);
         }
 
         gameManager.UIManager.ConfirmationPanelToField.SetCanMoveToField(false);

@@ -84,7 +84,7 @@ public class TurnManager : MonoBehaviour
         if (_turnData.IsMyTurnEnd && _turnData.IsEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            await GM._instance.CardManager.JudgeTheCard(GM._instance.MyBattleFieldTransform, GM._instance.EnemyBattleFieldTransform);
+            await GM._instance.CardManager.JudgeTheCard(GM._instance.FieldTransformManager.MyBattleFieldTransform, GM._instance.FieldTransformManager.EnemyBattleFieldTransform);
         }
     }
 
@@ -104,7 +104,7 @@ public class TurnManager : MonoBehaviour
         await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
 
         //相手のランダムなカードを選択
-        CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.GetHandTransformByTurn());
+        CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.FieldTransformManager.GetHandTransformByTurn(IsMyTurn));
 
         //必殺技の発動
         bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _turnData.EnemySpecialSkillTurn);
@@ -114,6 +114,6 @@ public class TurnManager : MonoBehaviour
         }
 
         //カードをフィールドに移動
-        await targetCard.CardEvent.MoveToBattleField(GM._instance.EnemyBattleFieldTransform);
+        await targetCard.CardEvent.MoveToBattleField(GM._instance.FieldTransformManager.EnemyBattleFieldTransform);
     }
 }
