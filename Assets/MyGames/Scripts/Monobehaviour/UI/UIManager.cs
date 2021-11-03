@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using static UIStrings;
 using TMPro;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 public class UIManager : MonoBehaviour
 {
@@ -124,5 +125,69 @@ public class UIManager : MonoBehaviour
     {
         _specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
+    }
+
+    /// <summary>
+    /// カードを開くことをアナウンスします
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask AnnounceToOpenTheCard()
+    {
+        await _directionUIManager.AnnounceToOpenTheCard();
+    }
+
+    /// <summary>
+    /// ラウンド数を表示する
+    /// </summary>
+    /// <param name="roundCount"></param>
+    /// <param name="maxRoundCount"></param>
+    /// <returns></returns>
+    public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
+    {
+        await _directionUIManager.ShowRoundCountText(roundCount, maxRoundCount);
+    }
+
+    /// <summary>
+    /// カウントダウンを表示
+    /// </summary>
+    public void ShowCountDownText(int countDownTime)
+    {
+        _directionUIManager.ShowCountDownText(countDownTime);
+    }
+
+    /// <summary>
+    /// ゲーム結果の表示の切り替え
+    /// </summary>
+    /// <param name="isAcitve"></param>
+    public void ToggleGameResultUI(bool isActive)
+    {
+        _directionUIManager.ToggleGameResultUI(isActive);
+    }
+
+    /// <summary>
+    /// ゲームの勝敗のテキストを表示する
+    /// </summary>
+    /// <returns></returns>
+    public void SetGameResultText(string text)
+    {
+        _directionUIManager.SetGameResultText(text);
+    }
+
+    /// <summary>
+    /// ラウンドの勝敗の結果を表示
+    /// </summary>
+    public async UniTask ShowJudgementResultText(string result)
+    {
+        await _directionUIManager.ShowJudgementResultText(result);
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時にテキストを表示する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public async UniTask ShowThePlayerTurnText(bool isPlayer)
+    {
+        await _directionUIManager.ShowThePlayerTurnText(isPlayer);
     }
 }

@@ -51,7 +51,7 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        await GM._instance.UIManager.DirectionUIManager.AnnounceToOpenTheCard();
+        await GM._instance.UIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         await OpenTheBattleFieldCards(myCard, enemyCard);
 

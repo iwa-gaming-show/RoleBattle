@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         ResetGameState();
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard(_fieldTransformManager.BattleFieldTransforms, _fieldTransformManager.HandTransforms);
-        await _uiManager.DirectionUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
+        await _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards(_fieldTransformManager.MyHandTransform, _fieldTransformManager.EnemyHandTransform);
         _turnManager.ChangeTurn().Forget();
     }
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
                 //1秒毎に減らしていきます
                 yield return new WaitForSeconds(1f);
                 _countDownTime--;
-                _uiManager.DirectionUIManager.ShowCountDownText(_countDownTime);
+                _uiManager.ShowCountDownText(_countDownTime);
             }
 
             yield return null;
@@ -198,8 +198,8 @@ public class GameManager : MonoBehaviour
         //ゲーム結果を判定
         _gameResult = JudgeGameResult();
         //勝敗の表示
-        _uiManager.DirectionUIManager.ToggleGameResultUI(true);
-        _uiManager.DirectionUIManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        _uiManager.ToggleGameResultUI(true);
+        _uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public class GameManager : MonoBehaviour
         }
 
         //UIへの反映
-        await _uiManager.DirectionUIManager.ShowJudgementResultText(result.ToString());
+        await _uiManager.ShowJudgementResultText(result.ToString());
         _uiManager.ShowPoint(_player.Point, _enemy.Point);
     }
 

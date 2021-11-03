@@ -93,7 +93,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public async UniTaskVoid MyTurn()
     {
-        await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(true);
+        await GM._instance.UIManager.ShowThePlayerTurnText(true);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public async UniTaskVoid EnemyTurn()
     {
-        await GM._instance.UIManager.DirectionUIManager.ShowThePlayerTurnText(false);
+        await GM._instance.UIManager.ShowThePlayerTurnText(false);
 
         //相手のランダムなカードを選択
         CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.FieldTransformManager.GetHandTransformByTurn(IsMyTurn));
