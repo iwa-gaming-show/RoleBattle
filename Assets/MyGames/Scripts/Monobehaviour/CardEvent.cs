@@ -23,7 +23,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
     /// クリックイベント
     /// </summary>
     /// <param name="eventData"></param>
-    public async void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         bool controllablePlayerCard = gameManager.TurnManager.IsMyTurn && cardController.CardModel.IsPlayerCard;
         bool selectionPhase = (gameManager.BattlePhase == SELECTION);
@@ -33,7 +33,7 @@ public class CardEvent : MonoBehaviour, IPointerClickHandler
 
         if (controllable)
         {
-            await TryToMoveToField();
+            TryToMoveToField().Forget();
         }
     }
 
