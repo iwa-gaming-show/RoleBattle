@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -14,6 +13,9 @@ public class CardView : MonoBehaviour
     [SerializeField] [Header("カードの回転速度")] float _rotationalSpeed = 300f;
 
     float _cardInversionAngle = 180f;//カードが反転する角度
+
+    public float CardInversionAngle => _cardInversionAngle;
+    public GameObject BackSide => _backSide;
 
     /// <summary>
     /// カードを描画する
@@ -62,7 +64,7 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <param name = "targetAngle" ></ param >
     /// < returns ></ returns >
-    async UniTask RotateTheCardTo(float targetAngle)
+    public async UniTask RotateTheCardTo(float targetAngle)
     {
         while (_cardInversionAngle < targetAngle)
         {
@@ -71,4 +73,33 @@ public class CardView : MonoBehaviour
             await UniTask.Yield();
         }
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// テスト用:カードの回転速度を設定します
+    /// </summary>
+    /// <param name="speed"></param>
+    public void SetRotationalSpeedTestData(float speed)
+    {
+        _rotationalSpeed = speed;
+    }
+
+    /// <summary>
+    /// テスト用:カードの回転する角度を設定します
+    /// </summary>
+    /// <param name="speed"></param>
+    public void SetCardInversionAngleTestData(float angle)
+    {
+        _cardInversionAngle = angle;
+    }
+
+    /// <summary>
+    /// テスト用:カードの裏面を作成します
+    /// </summary>
+    /// <param name="speed"></param>
+    public void CreateBackSideTestData()
+    {
+        _backSide = new GameObject();
+    }
+#endif
 }
