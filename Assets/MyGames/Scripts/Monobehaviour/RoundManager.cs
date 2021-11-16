@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using GM = GameManager;
 
-public class RoundManager : MonoBehaviour
+public class RoundManager : MonoBehaviour, IGameDataResetable
 {
     #region インスペクターから設定
     [SerializeField]
@@ -29,7 +29,7 @@ public class RoundManager : MonoBehaviour
     /// <summary>
     /// ラウンドの状態をリセットする
     /// </summary>
-    public void ResetRoundState()
+    public void ResetData()
     {
         _roundData.ResetRoundState();
     }

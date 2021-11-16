@@ -56,7 +56,7 @@ public class CardManager : MonoBehaviour
         await OpenTheBattleFieldCards(myCard, enemyCard);
 
         //結果を反映する
-        GM._instance.ReflectTheResult(result);
+        await GM._instance.ReflectTheResult(result);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
 

@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     public FieldTransformManager FieldTransformManager => _fieldTransformManager;
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
+    public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
     #endregion
 
     private void Awake()
@@ -70,17 +71,17 @@ public class GameManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         _token = this.GetCancellationTokenOnDestroy();
         InitPlayerData();
-        await StartGame(true);
+        StartGame(true).Forget();
     }
 
     /// <summary>
     /// プレイヤーデータの初期化
     /// </summary>
-    void InitPlayerData()
+    public void InitPlayerData()
     {
         _player = new PlayerData(INITIAL_POINT);
         _enemy = new PlayerData(INITIAL_POINT);
@@ -105,7 +106,7 @@ public class GameManager : MonoBehaviour
         }
 
         //1ラウンド目以降に行う処理
-        ResetGameState();
+        ResetGameState(_turnManager, _roundManager);
         _uiManager.HideUIAtStart();
         _cardManager.ResetFieldCard(_fieldTransformManager.BattleFieldTransforms, _fieldTransformManager.HandTransforms);
         await _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
@@ -165,19 +166,21 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームの状態をリセットする
     /// </summary>
-    public void ResetGameState()
+    public void ResetGameState(params IGameDataResetable[] targetManagerList)
     {
-        _turnManager.ResetTurn();
-        _roundManager.ResetRoundState();
+        foreach (IGameDataResetable targetManager in targetManagerList)
+        {
+            targetManager.ResetData();
+        }
     }
 
     /// <summary>
     /// ゲームを再開する
     /// </summary>
-    public async void RetryGame()
+    public void RetryGame()
     {
         InitializeGameData();
-        await StartGame(true);
+        StartGame(true).Forget();
     }
 
     /// <summary>
@@ -205,7 +208,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲーム結果を取得する
     /// </summary>
-    GameResult JudgeGameResult()
+    public GameResult JudgeGameResult()
     {
         if (_player.Point > _enemy.Point) return GAME_WIN;
         if (_player.Point == _enemy.Point) return GAME_DRAW;
@@ -216,7 +219,7 @@ public class GameManager : MonoBehaviour
     /// 結果を反映します
     /// </summary>
     /// <param name="result"></param>
-    public async void ReflectTheResult(CardJudgement result)
+    public async UniTask ReflectTheResult(CardJudgement result)
     {
         ChangeBattlePhase(RESULT);
 

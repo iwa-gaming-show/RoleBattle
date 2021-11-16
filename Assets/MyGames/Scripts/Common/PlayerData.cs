@@ -12,7 +12,6 @@ public class PlayerData
 
     public PlayerData(int point)
     {
-        //todo ここでデータをセット
         _point = point;
     }
 

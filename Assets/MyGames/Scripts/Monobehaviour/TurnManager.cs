@@ -6,7 +6,7 @@ using static InitializationData;
 using static BattlePhase;
 using GM = GameManager;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager : MonoBehaviour, IGameDataResetable
 {
     TurnData _turnData;
 
@@ -24,7 +24,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// ターンの終了をリセットする
     /// </summary>
-    public void ResetTurn()
+    public void ResetData()
     {
         _turnData.ResetTurn();
     }
