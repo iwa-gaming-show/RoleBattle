@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GM = GameManager;
 
 /// <summary>
 /// 必殺技発動の確認UI
@@ -14,6 +13,13 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     [SerializeField]
     [Header("CanvasForSpecialSkillを設定")]
     Transform SpecialSkillUIManagerTransform;
+
+    BattleManager _battleManager;
+
+    private void Awake()
+    {
+        _battleManager = BattleManager._instance;
+    }
 
     /// <summary>
     /// UIの表示の切り替え
@@ -30,7 +36,7 @@ public class ConfirmationPanelToSpecialSkill : MonoBehaviour,
     public async void OnClickYes()
     {
         ToggleUI(false);
-        await GM._instance.UIManager.ActivateSpecialSkill(true);
+        await _battleManager.UIManager.ActivateSpecialSkill(true);
     }
 
     /// <summary>

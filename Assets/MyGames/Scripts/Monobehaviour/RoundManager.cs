@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using GM = GameManager;
 
 public class RoundManager : MonoBehaviour, IGameDataResetable
 {
@@ -12,6 +11,7 @@ public class RoundManager : MonoBehaviour, IGameDataResetable
     int _maxRoundCount = 3;
     #endregion
 
+    BattleManager _battleManager;
     RoundData _roundData;
 
     #region プロパティ
@@ -24,6 +24,7 @@ public class RoundManager : MonoBehaviour, IGameDataResetable
     void Awake()
     {
         _roundData = new RoundData(_maxRoundCount);
+        _battleManager = GetComponent<BattleManager>();
     }
 
     /// <summary>
@@ -58,12 +59,12 @@ public class RoundManager : MonoBehaviour, IGameDataResetable
         if (_roundData.RoundCount != _maxRoundCount)
         {
             _roundData.AddRoundCount();
-            await GM._instance.StartGame(false);
+            await _battleManager.StartGame(false);
         }
         else
         {
             //最終ラウンドならゲーム終了
-            GM._instance.EndGame();
+            _battleManager.EndGame();
         }
     }
 }

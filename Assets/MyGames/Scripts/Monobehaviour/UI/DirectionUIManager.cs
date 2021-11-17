@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using GM = GameManager;
 using static UIStrings;
 using TMPro;
 using static WaitTimes;
@@ -42,6 +41,13 @@ public class DirectionUIManager : MonoBehaviour, IHideableUIsAtStart
     [SerializeField]
     [Header("ゲームの勝敗の結果表示用UI")]
     GameObject _gameResultUI;
+
+    BattleManager _battleManager;
+
+    void Start()
+    {
+        _battleManager = BattleManager._instance;
+    }
 
     /// <summary>
     /// 開始時にUIを非表示にする
@@ -90,16 +96,16 @@ public class DirectionUIManager : MonoBehaviour, IHideableUIsAtStart
     public async UniTask AnnounceToOpenTheCard()
     {
         RectTransform textRectTransform = _openPhaseText.rectTransform;
-        float screenEdgeX = GM._instance.UIManager.GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
+        float screenEdgeX = _battleManager.UIManager.GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
 
         //右端→真ん中→左端へ移動する
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, screenEdgeX, 0)
+        sequence.Append(_battleManager.UIManager.MoveAnchorPosX(textRectTransform, screenEdgeX, 0)
             .OnStart(() => ToggleOpenPhaseText(true)));
 
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, 0f, 0.25f));
+        sequence.Append(_battleManager.UIManager.MoveAnchorPosX(textRectTransform, 0f, 0.25f));
 
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
+        sequence.Append(_battleManager.UIManager.MoveAnchorPosX(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
             .OnComplete(() => ToggleOpenPhaseText(false)));
 
         await sequence

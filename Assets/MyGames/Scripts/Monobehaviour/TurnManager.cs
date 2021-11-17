@@ -4,11 +4,11 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static BattlePhase;
-using GM = GameManager;
 
 public class TurnManager : MonoBehaviour, IGameDataResetable
 {
     TurnData _turnData;
+    BattleManager _battleManager;
 
     #region プロパティ
     public bool IsMyTurn => _turnData.IsMyTurn;
@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour, IGameDataResetable
     void Awake()
     {
         _turnData = new TurnData();
+        _battleManager = GetComponent<BattleManager>();
     }
 
     /// <summary>
@@ -64,27 +65,27 @@ public class TurnManager : MonoBehaviour, IGameDataResetable
     /// </summary>
     public async UniTaskVoid ChangeTurn()
     {
-        GM._instance.CardManager.SetBattleFieldPlaced(false);
-        GM._instance.ChangeBattlePhase(SELECTION);
+        _battleManager.CardManager.SetBattleFieldPlaced(false);
+        _battleManager.ChangeBattlePhase(SELECTION);
         StopAllCoroutines();//意図しないコルーチンが走っている可能性を排除する
 
         //自身のターン
         if (_turnData.IsMyTurn && _turnData.IsMyTurnEnd == false)
         {
-            StartCoroutine(GM._instance.CountDown());
+            StartCoroutine(_battleManager.CountDown());
             MyTurn().Forget();
         }
         //敵のターン
         else if (_turnData.IsEnemyTurnEnd == false)
         {
-            StartCoroutine(GM._instance.CountDown());
+            StartCoroutine(_battleManager.CountDown());
             EnemyTurn().Forget();
         }
         //カードの判定
         if (_turnData.IsMyTurnEnd && _turnData.IsEnemyTurnEnd)
         {
             //自身と相手のターンが終了した時、判定処理が走る
-            await GM._instance.CardManager.JudgeTheCard(GM._instance.FieldTransformManager.MyBattleFieldTransform, GM._instance.FieldTransformManager.EnemyBattleFieldTransform);
+            await _battleManager.CardManager.JudgeTheCard(_battleManager.FieldTransformManager.MyBattleFieldTransform, _battleManager.FieldTransformManager.EnemyBattleFieldTransform);
         }
     }
 
@@ -93,7 +94,7 @@ public class TurnManager : MonoBehaviour, IGameDataResetable
     /// </summary>
     public async UniTaskVoid MyTurn()
     {
-        await GM._instance.UIManager.ShowThePlayerTurnText(true);
+        await _battleManager.UIManager.ShowThePlayerTurnText(true);
     }
 
     /// <summary>
@@ -101,19 +102,19 @@ public class TurnManager : MonoBehaviour, IGameDataResetable
     /// </summary>
     public async UniTaskVoid EnemyTurn()
     {
-        await GM._instance.UIManager.ShowThePlayerTurnText(false);
+        await _battleManager.UIManager.ShowThePlayerTurnText(false);
 
         //相手のランダムなカードを選択
-        CardController targetCard = GM._instance.CardManager.GetRandomCardFrom(GM._instance.FieldTransformManager.GetHandTransformByTurn(IsMyTurn));
+        CardController targetCard = _battleManager.CardManager.GetRandomCardFrom(_battleManager.FieldTransformManager.GetHandTransformByTurn(IsMyTurn));
 
         //必殺技の発動
-        bool useSpecialSkill = (GM._instance.RoundManager.RoundCount == _turnData.EnemySpecialSkillTurn);
-        if (GM._instance.Enemy.CanUseSpecialSkill && useSpecialSkill)
+        bool useSpecialSkill = (_battleManager.RoundManager.RoundCount == _turnData.EnemySpecialSkillTurn);
+        if (_battleManager.Enemy.CanUseSpecialSkill && useSpecialSkill)
         {
-            await GM._instance.UIManager.ActivateSpecialSkill(false);
+            await _battleManager.UIManager.ActivateSpecialSkill(false);
         }
 
         //カードをフィールドに移動
-        await targetCard.CardEvent.MoveToBattleField(GM._instance.FieldTransformManager.EnemyBattleFieldTransform);
+        await targetCard.CardEvent.MoveToBattleField(_battleManager.FieldTransformManager.EnemyBattleFieldTransform);
     }
 }

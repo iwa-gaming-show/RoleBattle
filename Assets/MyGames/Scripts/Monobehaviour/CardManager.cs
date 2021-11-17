@@ -7,7 +7,6 @@ using static WaitTimes;
 using static CardType;
 using static CardJudgement;
 using static BattlePhase;
-using GM = GameManager;
 
 public class CardManager : MonoBehaviour
 {
@@ -21,11 +20,17 @@ public class CardManager : MonoBehaviour
     CardController _cardPrefab;
     #endregion
 
+    BattleManager _battleManager;
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
 
     #region プロパティ
     public bool IsBattleFieldPlaced => _isBattleFieldPlaced;
     #endregion
+
+    void Awake()
+    {
+        _battleManager = GetComponent<BattleManager>();
+    }
 
     /// <summary>
     /// 手札からランダムなカードを取得します
@@ -43,7 +48,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public async UniTask JudgeTheCard(Transform myBattleFieldTransform, Transform enemyBattleFieldTransform)
     {
-        GM._instance.ChangeBattlePhase(JUDGEMENT);
+        _battleManager.ChangeBattlePhase(JUDGEMENT);
         //バトル場のカードを取得
         CardController myCard = GetBattleFieldCardBy(myBattleFieldTransform);
         CardController enemyCard = GetBattleFieldCardBy(enemyBattleFieldTransform);
@@ -51,16 +56,16 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        await GM._instance.UIManager.AnnounceToOpenTheCard();
+        await _battleManager.UIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         await OpenTheBattleFieldCards(myCard, enemyCard);
 
         //結果を反映する
-        await GM._instance.ReflectTheResult(result);
+        await _battleManager.ReflectTheResult(result);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
 
-        await GM._instance.RoundManager.NextRound();
+        await _battleManager.RoundManager.NextRound();
     }
 
     /// <summary>

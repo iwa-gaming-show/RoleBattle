@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using static WaitTimes;
 using static BattlePhase;
-using GM = GameManager;
 using DG.Tweening;
 
 public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
@@ -38,9 +37,16 @@ public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     [Header("必殺技の説明用のテキストを設定")]
     string _specialSkillDescription;
 
+    BattleManager _battleManager;
+
     #region//プロパティ
     public ConfirmationPanelToSpecialSkill ConfirmationPanel => _confirmationPanel;
     #endregion
+
+    void Awake()
+    {
+        _battleManager = BattleManager._instance;
+    }
 
     /// <summary>
     /// 開始時にUIを非表示にする
@@ -58,7 +64,7 @@ public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     async UniTask ShowSpecialSkillDirection(bool isPlayer)
     {
         RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
-        float screenEdgeX = GM._instance.UIManager.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
+        float screenEdgeX = _battleManager.UIManager.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
         Sequence sequence = DOTween.Sequence();
         Tween firstMove;
         Tween lastMove;
@@ -66,17 +72,17 @@ public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
         //プレイヤーなら右から左へ移動, エネミーなら左から右へ移動する
         if (isPlayer)
         {
-            firstMove = GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0);
-            lastMove = GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0.4f);
+            firstMove = _battleManager.UIManager.MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0);
+            lastMove = _battleManager.UIManager.MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0.4f);
         }
         else
         {
-            firstMove = GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0f);
-            lastMove = GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0.4f);
+            firstMove = _battleManager.UIManager.MoveAnchorPosX(targetUIRectTranform, -screenEdgeX, 0f);
+            lastMove = _battleManager.UIManager.MoveAnchorPosX(targetUIRectTranform, screenEdgeX, 0.4f);
         }
 
         sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true, isPlayer)));
-        sequence.Append(GM._instance.UIManager.MoveAnchorPosX(targetUIRectTranform, 0f, 0.25f));
+        sequence.Append(_battleManager.UIManager.MoveAnchorPosX(targetUIRectTranform, 0f, 0.25f));
         sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
 
         await sequence
@@ -112,11 +118,11 @@ public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     public void OnClickSpecialSkillButton()
     {
         //自分のターンのみ押せる
-        if (GM._instance.TurnManager.IsMyTurn == false) return;
+        if (_battleManager.TurnManager.IsMyTurn == false) return;
         //一度使用したら押せない
-        if (GM._instance.Player.CanUseSpecialSkill == false) return;
+        if (_battleManager.Player.CanUseSpecialSkill == false) return;
         //選択フェイズでなければ押せない
-        if (GM._instance.BattlePhase != SELECTION) return;
+        if (_battleManager.BattlePhase != SELECTION) return;
 
         _confirmationPanel.ToggleUI(true);
     }
@@ -128,13 +134,13 @@ public class SpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     {
         //必殺技を使用済みにする
         UsedSpecialSkillButton(isPlayer);
-        GM._instance.UsedSpecialSkill(isPlayer);
+        _battleManager.UsedSpecialSkill(isPlayer);
 
         //必殺技を演出、 演出中はカウントダウンが止まる
-        GM._instance.SetIsDuringProductionOfSpecialSkill(true);
+        _battleManager.SetIsDuringProductionOfSpecialSkill(true);
         await ShowSpecialSkillDirection(isPlayer);
         //カウントダウン再開
-        GM._instance.SetIsDuringProductionOfSpecialSkill(false);
+        _battleManager.SetIsDuringProductionOfSpecialSkill(false);
     }
 
     /// <summary>
