@@ -8,7 +8,7 @@ using static CardType;
 using static CardJudgement;
 using static BattlePhase;
 
-public class CardManager : MonoBehaviour
+public class CardManager : MonoBehaviour, ICardManager
 {
     #region インスペクターから設定
     [SerializeField]
@@ -20,7 +20,10 @@ public class CardManager : MonoBehaviour
     CardController _cardPrefab;
     #endregion
 
-    BattleManager _battleManager;
+    IBattleManager _battleManager;
+    IBattleUIManager _battleUIManager;
+    IRoundManager _roundManager;
+
     bool _isBattleFieldPlaced;//フィールドにカードが配置されたか
 
     #region プロパティ
@@ -29,7 +32,19 @@ public class CardManager : MonoBehaviour
 
     void Awake()
     {
-        _battleManager = GetComponent<BattleManager>();
+        ServiceLocator.Register<ICardManager>(this);
+    }
+
+    private void Start()
+    {
+        _battleManager = ServiceLocator.Resolve<IBattleManager>();
+        _battleUIManager = ServiceLocator.Resolve<IBattleUIManager>();
+        _roundManager = ServiceLocator.Resolve<IRoundManager>();
+    }
+
+    void OnDestroy()
+    {
+        ServiceLocator.UnRegister<ICardManager>(this);
     }
 
     /// <summary>
@@ -56,7 +71,7 @@ public class CardManager : MonoBehaviour
         CardJudgement result = JudgeCardResult(myCard, enemyCard);
 
         //OPENのメッセージを出す
-        await _battleManager.UIManager.AnnounceToOpenTheCard();
+        await _battleUIManager.AnnounceToOpenTheCard();
         //カードを裏から表にする
         await OpenTheBattleFieldCards(myCard, enemyCard);
 
@@ -65,7 +80,7 @@ public class CardManager : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
 
-        await _battleManager.RoundManager.NextRound();
+        await _roundManager.NextRound();
     }
 
     /// <summary>

@@ -9,16 +9,12 @@ using static GameResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : MonoBehaviour, IBattleManager
 {
     [HideInInspector]
     public static BattleManager _instance;
 
-    #region インスペクターから設定
-    [SerializeField]
-    [Header("UI管理スクリプトを設定")]
-    UIManager _uiManager;
-
+    #region
     [SerializeField]
     [Header("カウントダウンの秒数を設定")]
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
@@ -28,51 +24,47 @@ public class BattleManager : MonoBehaviour
     int _countDownTime;
     GameResult _gameResult;
     BattlePhase _battlePhase;
-    TurnManager _turnManager;//プレイヤーのターン管理
-    CardManager _cardManager;//カードの管理
-    RoundManager _roundManager;//ラウンドの管理
-    PointManager _pointManager;//ポイントの管理
-    FieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
     PlayerData _player;
     PlayerData _enemy;
     CancellationToken _token;
+    IBattleUIManager _battleUIManager;
+    ITurnManager _turnManager;//プレイヤーのターン管理
+    ICardManager _cardManager;//カードの管理
+    IRoundManager _roundManager;//ラウンドの管理
+    IFieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
+    IPointManager _pointManager;//ポイントの管理
+
 
     #region プロパティ
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
-    public UIManager UIManager => _uiManager;
-    public TurnManager TurnManager => _turnManager;
-    public CardManager CardManager => _cardManager;
-    public RoundManager RoundManager => _roundManager;
-    public PointManager PointManager => _pointManager;
-    public FieldTransformManager FieldTransformManager => _fieldTransformManager;
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
     public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
     #endregion
 
+
     private void Awake()
     {
-        //シングルトン化する
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        _roundManager = GetComponent<RoundManager>();
-        _turnManager = GetComponent<TurnManager>();
-        _cardManager = GetComponent<CardManager>();
-        _pointManager = GetComponent<PointManager>();
-        _fieldTransformManager = GetComponent<FieldTransformManager>();
+        ServiceLocator.Register<IBattleManager>(this);
+    }
+
+    void OnDestroy()
+    {
+        ServiceLocator.UnRegister<IBattleManager>(this);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _token = this.GetCancellationTokenOnDestroy();
+        _roundManager = ServiceLocator.Resolve<IRoundManager>();
+        _turnManager = ServiceLocator.Resolve<ITurnManager>();
+        _cardManager = ServiceLocator.Resolve<ICardManager>();
+        _pointManager = ServiceLocator.Resolve<IPointManager>();
+        _fieldTransformManager = ServiceLocator.Resolve<IFieldTransformManager>();
+        _battleUIManager = ServiceLocator.Resolve<IBattleUIManager>();
+
         StartGame(true).Forget();
     }
 
@@ -90,17 +82,17 @@ public class BattleManager : MonoBehaviour
             _player.SetCanUseSpecialSkill(true);//必殺技を使用可能に
             _enemy.SetCanUseSpecialSkill(true);
             _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
-            _uiManager.ShowPoint(_player.Point, _enemy.Point);
-            _uiManager.InitUIData();
+            _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
+            _battleUIManager.InitUIData();
             _turnManager.DecideTheTurn();
             _turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
         }
 
         //1ラウンド目以降に行う処理
         ResetGameState(_turnManager, _roundManager);
-        _uiManager.HideUIAtStart();
+        _battleUIManager.HideUIAtStart();
         _cardManager.ResetFieldCard(_fieldTransformManager.BattleFieldTransforms, _fieldTransformManager.HandTransforms);
-        await _uiManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
+        await _battleUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
         _cardManager.DistributeCards(_fieldTransformManager.MyHandTransform, _fieldTransformManager.EnemyHandTransform);
         _turnManager.ChangeTurn().Forget();
     }
@@ -126,7 +118,6 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// カウントダウン
     /// </summary>
-    /// <returns></returns>
     public IEnumerator CountDown()
     {
         _countDownTime = _defaultCountDownTime;
@@ -139,14 +130,14 @@ public class BattleManager : MonoBehaviour
                 //1秒毎に減らしていきます
                 yield return new WaitForSeconds(1f);
                 _countDownTime--;
-                _uiManager.ShowCountDownText(_countDownTime);
+                _battleUIManager.ShowCountDownText(_countDownTime);
             }
 
             yield return null;
         }
 
         //確認画面を全て閉じる
-        _uiManager.CloseAllConfirmationPanels();
+        _battleUIManager.CloseAllConfirmationPanels();
 
         //0になったらカードをランダムにフィールドへ移動しターンエンドする
         Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
@@ -198,8 +189,8 @@ public class BattleManager : MonoBehaviour
         //ゲーム結果を判定
         _gameResult = JudgeGameResult();
         //勝敗の表示
-        _uiManager.ToggleGameResultUI(true);
-        _uiManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        _battleUIManager.ToggleGameResultUI(true);
+        _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
     }
 
     /// <summary>
@@ -230,8 +221,8 @@ public class BattleManager : MonoBehaviour
         }
 
         //UIへの反映
-        await _uiManager.ShowJudgementResultText(result.ToString());
-        _uiManager.ShowPoint(_player.Point, _enemy.Point);
+        await _battleUIManager.ShowJudgementResultText(result.ToString());
+        _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
     }
 
     /// <summary>
