@@ -9,7 +9,7 @@ using static GameResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
 
-public class BattleManager : MonoBehaviour, IBattleManager
+public class MultiBattleManager : MonoBehaviour, IBattleManager
 {
     #region
     [SerializeField]
@@ -34,11 +34,11 @@ public class BattleManager : MonoBehaviour, IBattleManager
 
 
     #region プロパティ
-    public bool IsOnline => _isOnline;
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
+    public bool IsOnline => _isOnline;
     public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
     #endregion
 
@@ -63,8 +63,7 @@ public class BattleManager : MonoBehaviour, IBattleManager
         _pointManager = ServiceLocator.Resolve<IPointManager>();
         _fieldTransformManager = ServiceLocator.Resolve<IFieldTransformManager>();
         _battleUIManager = ServiceLocator.Resolve<IBattleUIManager>();
-
-        StartGame(true).Forget();
+        _isOnline = true;
     }
 
     /// <summary>
@@ -84,7 +83,9 @@ public class BattleManager : MonoBehaviour, IBattleManager
             _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
             _battleUIManager.InitUIData();
             _turnManager.DecideTheTurn();
-            _turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
+
+            //if (_isOnline) return;
+            //_turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
         }
 
         //1ラウンド目以降に行う処理

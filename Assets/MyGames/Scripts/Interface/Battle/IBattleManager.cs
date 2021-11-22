@@ -17,6 +17,11 @@ public interface IBattleManager
         get;
     }
 
+    bool IsOnline
+    {
+        get;
+    }
+
     /// <summary>
     /// ゲームを開始する
     /// </summary>

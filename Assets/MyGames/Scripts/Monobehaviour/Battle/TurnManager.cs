@@ -122,6 +122,8 @@ public class TurnManager : MonoBehaviour, ITurnManager
     {
         await _battleUIManager.ShowThePlayerTurnText(false);
 
+        if (_battleManager.IsOnline) return;
+
         //相手のランダムなカードを選択
         CardController targetCard = _cardManager.GetRandomCardFrom(_fieldTransformManager.GetHandTransformByTurn(IsMyTurn));
 
@@ -134,5 +136,6 @@ public class TurnManager : MonoBehaviour, ITurnManager
 
         //カードをフィールドに移動
         await targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.EnemyBattleFieldTransform);
+
     }
 }
