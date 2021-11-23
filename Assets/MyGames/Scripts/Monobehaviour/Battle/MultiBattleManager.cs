@@ -8,6 +8,7 @@ using static CardJudgement;
 using static GameResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
+using Photon.Realtime;
 
 public class MultiBattleManager : MonoBehaviour, IBattleManager
 {
@@ -32,14 +33,20 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     IFieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
     IPointManager _pointManager;//ポイントの管理
 
+    Player _playerM;
+    Player _enemyM;
+
 
     #region プロパティ
     public PlayerData Player => _player;
-    public PlayerData Enemy => _enemy;
+    public PlayerData Enemy => _enemy; 
     public BattlePhase BattlePhase => _battlePhase;
     public CancellationToken Token => _token;
     public bool IsOnline => _isOnline;
     public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
+
+    public Player PlayerM => _playerM;
+    public Player EnemyM => _enemyM;
     #endregion
 
 
@@ -76,16 +83,10 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
         //1ラウンド目に行う処理
         if (isFirstGame)
         {
-            InitPlayerData();
-            _player.SetCanUseSpecialSkill(true);//必殺技を使用可能に
-            _enemy.SetCanUseSpecialSkill(true);
             _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
-            _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
+            _battleUIManager.ShowPoint(_playerM.GetPoint(), _enemyM.GetPoint());
             _battleUIManager.InitUIData();
             _turnManager.DecideTheTurn();
-
-            //if (_isOnline) return;
-            //_turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
         }
 
         //1ラウンド目以降に行う処理
@@ -98,12 +99,12 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     }
 
     /// <summary>
-    /// プレイヤーデータの初期化
+    /// オンライン対戦データを設定する
     /// </summary>
-    public void InitPlayerData()
+    public void SetPlayer(Player data, bool isPlayer)
     {
-        _player = new PlayerData(INITIAL_POINT);
-        _enemy = new PlayerData(INITIAL_POINT);
+        if (isPlayer) _playerM = data;
+        else _enemyM = data;
     }
 
     /// <summary>

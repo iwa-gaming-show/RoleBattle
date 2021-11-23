@@ -4,6 +4,9 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Cysharp.Threading.Tasks;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using static InitializationData;
+using static PlayerPropertiesExtensions;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks
 {
@@ -11,14 +14,26 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     MultiBattleManager _multiBattleManager;
 
     [SerializeField]
-    byte maxPlayers = 2;
+    byte _maxPlayers = 2;
 
-    // Start is called before the first frame update
+    bool _canStartBattle;
+    //Player _player;
+    //Player _enemy;
+
+
     void Start()
     {
-        //初期化処理及び、接続
-
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    void Update()
+    {
+        if (_multiBattleManager.EnemyM == null) return;
+        if (_canStartBattle) return;
+
+        _multiBattleManager.StartGame(true).Forget();
+        _canStartBattle = true;
+        Debug.Log("バトル開始!");
     }
 
     /// <summary>
@@ -26,16 +41,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnConnectedToMaster()
     {
-        Debug.Log("接続したお");
-        PhotonNetwork.JoinRandomOrCreateRoom(null, maxPlayers);
-    }
-
-    /// <summary>
-    /// 自クライアントのロビー入室時
-    /// </summary>
-    public override void OnJoinedLobby()
-    {
-        
+        PhotonNetwork.JoinRandomOrCreateRoom(null, _maxPlayers);
     }
 
     /// <summary>
@@ -43,7 +49,40 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnJoinedRoom()
     {
-        Debug.Log("ランダムに入室");
+        Debug.Log("Joined Room");
+        PhotonNetwork.LocalPlayer.SetPoint(INITIAL_POINT);
+        PhotonNetwork.LocalPlayer.SetCanUseSpecialSkill(true);
+
+        //対戦相手が既に入室している場合
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (PhotonNetwork.LocalPlayer.UserId != player.UserId)
+            {
+                _multiBattleManager.SetPlayer(player, false);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// カスタムプロパティが呼び出された時
+    /// </summary>
+    /// <param name="targetPlayer"></param>
+    /// <param name="changedProps"></param>
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
+    {
+        //自身と相手のデータへそれぞれ紐付けする
+        bool isPlayer = false;
+
+        if (PhotonNetwork.LocalPlayer.UserId == targetPlayer.UserId)
+        {
+            isPlayer = true;
+        }
+        
+        _multiBattleManager.SetPlayer(targetPlayer, isPlayer);
+
+        //todo 検証用後で消す
+        //_multiBattleManager.SetPlayer(targetPlayer, false);
     }
 
     /// <summary>
@@ -60,7 +99,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        
+        _multiBattleManager.SetPlayer(newPlayer, false);
     }
 
     /// <summary>
