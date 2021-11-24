@@ -39,6 +39,11 @@ public static class PlayerPropertiesExtensions
         return (player.CustomProperties[CanUseSpSkillKey] is bool canUseSpSkill) ? canUseSpSkill : false;
     }
 
+    /// <summary>
+    /// プレイヤーの必殺技発動可能フラグを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="canUseSpSkill"></param>
     public static void SetCanUseSpSkill(this Player player, bool canUseSpSkill)
     {
         propsToSet[CanUseSpSkillKey] = canUseSpSkill;
