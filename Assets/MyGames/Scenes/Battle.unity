@@ -128,6 +128,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4068332567728174285, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
   m_PrefabInstance: {fileID: 4068332567733235133}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &398579866 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3308241187093129414, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
+  m_PrefabInstance: {fileID: 4068332567733235133}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &506575867
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +383,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4068332566888164340, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
+      propertyPath: _myPointText
+      value: 
+      objectReference: {fileID: 398579866}
     - target: {fileID: 4068332566888164340, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
       propertyPath: CanvasForObjectPool
       value: 
