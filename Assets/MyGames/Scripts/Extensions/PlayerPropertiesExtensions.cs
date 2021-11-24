@@ -5,7 +5,7 @@ public static class PlayerPropertiesExtensions
 {
     static readonly Hashtable propsToSet = new Hashtable();
     static readonly string PointKey = "Point";
-    static readonly string CanUseSpecialSkillKey = "CanUseSpecialSkill";
+    static readonly string CanUseSpSkillKey = "CanUseSpSkill";
 
     /// <summary>
     /// プレイヤーのポイントを取得する
@@ -34,14 +34,14 @@ public static class PlayerPropertiesExtensions
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    public static bool GetCanUseSpecialSkill(this Player player)
+    public static bool GetCanUseSpSkill(this Player player)
     {
-        return (player.CustomProperties[CanUseSpecialSkillKey] is bool canUseSpecialSkill) ? canUseSpecialSkill : false;
+        return (player.CustomProperties[CanUseSpSkillKey] is bool canUseSpSkill) ? canUseSpSkill : false;
     }
 
-    public static void SetCanUseSpecialSkill(this Player player, bool canUseSpecialSkill)
+    public static void SetCanUseSpSkill(this Player player, bool canUseSpSkill)
     {
-        propsToSet[CanUseSpecialSkillKey] = canUseSpecialSkill;
+        propsToSet[CanUseSpSkillKey] = canUseSpSkill;
         player.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }
