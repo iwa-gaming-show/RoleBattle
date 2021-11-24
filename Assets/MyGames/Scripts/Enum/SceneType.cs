@@ -6,5 +6,7 @@ public enum SceneType
     [StringValue("GameTitle")]
     GameTitle,
     [StringValue("Battle")]
-    Battle
+    Battle,
+    [StringValue("MultiBattle")]
+    MultiBattle
 }
