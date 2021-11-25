@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5773307611191149022}
   - component: {fileID: 5773307611191149021}
-  - component: {fileID: 5773307611191148995}
-  - component: {fileID: 5773307611191148994}
-  - component: {fileID: 5773307611191148993}
-  - component: {fileID: 5773307611191148992}
+  - component: {fileID: 6654263782683540390}
+  - component: {fileID: 8074180359022874659}
+  - component: {fileID: 3279337641771415615}
+  - component: {fileID: 4835938061709960234}
   - component: {fileID: 5773307611191149023}
   m_Layer: 0
   m_Name: BattleManager
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultCountDownTime: 15
---- !u!114 &5773307611191148995
+--- !u!114 &6654263782683540390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,53 +58,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 5773307611191149020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a3651045fddb4d7db93d5e77db0bdd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d60e2067c7574f8ab6451e112827976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _earnedPoint: 1
+--- !u!114 &8074180359022874659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5773307611191149020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0095362abb89849659cbf1c4a38f2925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxRoundCount: 3
+--- !u!114 &3279337641771415615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5773307611191149020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcabbd0be9edd4a3baea6936c051ea6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardEntityList: {fileID: 0}
+  _cardPrefab: {fileID: 0}
+--- !u!114 &4835938061709960234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5773307611191149020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340650047d73e4d3cabd3e41d116b435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _myHandTransform: {fileID: 0}
   _enemyHandTransform: {fileID: 0}
   _myBattleFieldTransform: {fileID: 0}
   _enemyBattleFieldTransform: {fileID: 0}
---- !u!114 &5773307611191148994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3ed273389e204b49868c829c85f5b2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _earnedPoint: 1
---- !u!114 &5773307611191148993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a4e26569be7743b795f3fc9650509f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxRoundCount: 3
---- !u!114 &5773307611191148992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2ffb35ec534e4d89bbfb40f242f98f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
-  _cardPrefab: {fileID: 253313022774580221, guid: 2d2aebec91da447d7964d811b2ea2488, type: 3}
 --- !u!114 &5773307611191149023
 MonoBehaviour:
   m_ObjectHideFlags: 0
