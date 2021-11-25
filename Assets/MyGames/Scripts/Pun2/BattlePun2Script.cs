@@ -14,11 +14,28 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     MultiBattleManager _multiBattleManager;
 
     [SerializeField]
+    [Header("カードリストを設定する(ScriptableObjectを参照)")]
+    CardEntityList _cardEntityList;
+
+    [SerializeField]
+    [Header("自身の手札")]
+    Transform _handTransform;
+
+    [SerializeField]
     byte _maxPlayers = 2;
 
+    [SerializeField]
+    [Header("ゲーム盤のCanvasを設定する")]
+    GameObject _multiBattleCanvas;
+
+    [SerializeField]
+    MultiBattleUIManager _multiBattleUIManager;
+
     bool _canStartBattle;
-    //Player _player;
-    //Player _enemy;
+    bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
+    GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
+    Player _player;
+    Player _enemy;
 
 
     void Start()
@@ -28,10 +45,10 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (_multiBattleManager.EnemyM == null) return;
+        if (_enemy == null) return;
         if (_canStartBattle) return;
-
-        _multiBattleManager.StartGame(true).Forget();
+        //_multiBattleManager.StartGame(true).Forget();
+        //_multiBattleManager.PhotonView.RPC("StartGame", RpcTarget.All, true);
         _canStartBattle = true;
         Debug.Log("バトル開始!");
     }
@@ -41,7 +58,20 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.JoinRandomOrCreateRoom(null, _maxPlayers);
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    /// <summary>
+    /// 入室失敗時
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        RoomOptions opt = new RoomOptions();
+        opt.MaxPlayers = _maxPlayers;
+        opt.PublishUserId = true;//お互いにuserIdを見えるようにする
+        PhotonNetwork.CreateRoom(null, opt);
     }
 
     /// <summary>
@@ -50,18 +80,35 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined Room");
-        PhotonNetwork.LocalPlayer.SetPoint(INITIAL_POINT);
-        PhotonNetwork.LocalPlayer.SetCanUseSpecialSkill(true);
+        _playerIcon = PhotonNetwork.Instantiate("PlayerIcon", Vector3.zero, Quaternion.identity);
+        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
+
+        InitPlayer();
+
 
         //対戦相手が既に入室している場合
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (PhotonNetwork.LocalPlayer.UserId != player.UserId)
+            if (_player.UserId != player.UserId)
             {
-                _multiBattleManager.SetPlayer(player, false);
+                _multiBattleUIManager.ShowPointBy(false, player.GetPoint());
+                _multiBattleUIManager.SetSpButtonImageBy(false, player.GetCanUseSpSkill());
+                //_multiBattleUIManager.SetPlayerIconBy(false, player.GetPlayerIcon());
+                _enemy = player;
+                Debug.Log("他クライアントを見つけました");
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// プレイヤーのデータの初期化
+    /// </summary>
+    void InitPlayer()
+    {
+        _player = PhotonNetwork.LocalPlayer;
+        _player.SetPoint(INITIAL_POINT);
+        _player.SetCanUseSpSkill(true);
     }
 
     /// <summary>
@@ -74,15 +121,30 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
         //自身と相手のデータへそれぞれ紐付けする
         bool isPlayer = false;
 
-        if (PhotonNetwork.LocalPlayer.UserId == targetPlayer.UserId)
-        {
+        if (_player.UserId == targetPlayer.UserId)
             isPlayer = true;
-        }
-        
-        _multiBattleManager.SetPlayer(targetPlayer, isPlayer);
 
-        //todo 検証用後で消す
-        //_multiBattleManager.SetPlayer(targetPlayer, false);
+        //ポイントをUIへ反映する
+        _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
+        _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
+        CheckEnemyIcon();
+    }
+
+    /// <summary>
+    /// エネミーのアイコンを調べます
+    /// </summary>
+    void CheckEnemyIcon()
+    {
+        if (_isEnemyIconPlaced) return;
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIcon"))
+        {
+            if (go != _playerIcon)
+            {
+                _multiBattleUIManager.PlacePlayerIconBy(false, go);
+                _isEnemyIconPlaced = true;
+            }
+        }
     }
 
     /// <summary>
@@ -90,7 +152,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnLeftRoom()
     {
-        
+
     }
 
     /// <summary>
@@ -99,7 +161,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        _multiBattleManager.SetPlayer(newPlayer, false);
+        _enemy = newPlayer;
     }
 
     /// <summary>
@@ -108,6 +170,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     /// <param name="otherPlayer"></param>
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        
+
     }
 }
