@@ -25,6 +25,11 @@ public interface IBattleUIManager
     void ShowPoint(int myPoint, int enemyPoint);
 
     /// <summary>
+    /// ポイントの表示
+    /// </summary>
+    void ShowPointBy(int point, bool isPlayer);
+
+    /// <summary>
     /// UIデータの初期設定
     /// </summary>
     void InitUIData();
