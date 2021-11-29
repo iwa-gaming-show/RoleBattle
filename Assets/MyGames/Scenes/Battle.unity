@@ -383,6 +383,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2466603058832659014, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3443280955727182628, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4068332566888164340, guid: 7bae7868186e04b358772bdca7dee041, type: 3}
       propertyPath: _myPointText
       value: 
@@ -496,6 +504,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3279337641771415615, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+      propertyPath: _cardPrefab
+      value: 
+      objectReference: {fileID: 253313022774580221, guid: 3442b8d0bdac94287bc8735e334d3fde, type: 3}
     - target: {fileID: 5773307611191148995, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: _myHandTransform
       value: 
