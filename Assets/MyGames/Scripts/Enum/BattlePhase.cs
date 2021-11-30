@@ -4,9 +4,9 @@ using System;
 /// </summary>
 public enum BattlePhase
 {
-    NONE,//初期値
-    SELECTION,//選択
-    SELECTED,//選択済み
-    JUDGEMENT,//判定
-    RESULT//判定終了
+    NONE = 0,//初期値
+    SELECTION = 1,//選択
+    SELECTED = 2,//選択済み
+    JUDGEMENT = 3,//判定
+    RESULT = 4//判定終了
 }
