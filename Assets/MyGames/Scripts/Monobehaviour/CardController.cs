@@ -11,6 +11,7 @@ public class CardController : MonoBehaviour
 
     public CardModel CardModel => _cardModel;
     public CardEvent CardEvent => _cardEvent;
+    public bool IsPlayerCard => _cardModel.IsPlayerCard;
 
     void Awake()
     {
