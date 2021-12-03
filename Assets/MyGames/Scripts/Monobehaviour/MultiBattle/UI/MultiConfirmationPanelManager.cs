@@ -36,22 +36,16 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     /// <returns></returns>
     public async UniTask ConfirmToMoveToField(CardController selectedCard)
     {
-        //todo メソッド化する
-        bool myTurn = PhotonNetwork.LocalPlayer.GetIsMyTurn();
-        bool myCard = selectedCard.IsPlayerCard;
-        bool selectionPhase = (PhotonNetwork.CurrentRoom.GetBattlePhase() == (int)SELECTION);
-        bool placeable = PhotonNetwork.LocalPlayer.GetCanPlaceCardToField();
         //選択フェイズで自身のカードが配置可能な場合操作可能
-        bool controllable = myTurn && myCard && selectionPhase && placeable;
-
+        bool myCard = selectedCard.IsPlayerCard;
+        bool controllable = myCard && MySelectionTurn();
         if (controllable == false) return;
-
 
         //すでに確認画面が表示されているなら何もしない
         if (_confirmationPanelToField.gameObject.activeInHierarchy) return;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
-        SelectedToFieldCard(selectedCard);
+        ViewConfirmationPanelFor(selectedCard);
         await WaitFieldConfirmationButton();
 
         //yesを押した時、フィールドへ移動するカードとして保持
@@ -65,9 +59,22 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// フィールドへ移動するカードを選択したとき
+    /// 自身の選択ターンかどうかを返します
     /// </summary>
-    public void SelectedToFieldCard(CardController selectedCard)
+    /// <returns></returns>
+    public bool MySelectionTurn()
+    {
+        bool myTurn = PhotonNetwork.LocalPlayer.GetIsMyTurn();
+        bool selectionPhase = (PhotonNetwork.CurrentRoom.GetIntBattlePhase() == (int)SELECTION);
+        bool placeable = PhotonNetwork.LocalPlayer.GetCanPlaceCardToField();
+        return myTurn && selectionPhase && placeable;
+    }
+
+
+    /// <summary>
+    /// 選択したカードの確認画面を表示する
+    /// </summary>
+    public void ViewConfirmationPanelFor(CardController selectedCard)
     {
         _confirmationPanelToField.ToggleUI(true);//確認画面を表示
         _confirmationPanelToField.SetFieldConfirmationText(selectedCard);

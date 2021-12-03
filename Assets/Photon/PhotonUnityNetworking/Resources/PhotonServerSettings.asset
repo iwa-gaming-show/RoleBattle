@@ -45,6 +45,12 @@ MonoBehaviour:
   - RpcStartBattle
   - StartTurn
   - DecideTheTurn
+  - RpcDecideTheTurn
+  - RpcInitRoundData
+  - RpcMoveEnemyUI
+  - RpcSendCardTypeToEnemy
+  - RpcMoveEnemyCard
+  - RpcMoveEnemyCardToField
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

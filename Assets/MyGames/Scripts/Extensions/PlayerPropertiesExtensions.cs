@@ -10,7 +10,8 @@ public static class PlayerPropertiesExtensions
     static readonly string IsMyTurnKey = "IsMyTurn";
     static readonly string IsMyTurnEndKey = "IsMyTurnEnd";
     static readonly string IsUsingSpInRoundKey = "IsUsingSpInRound";
-    
+    static readonly string BattleCardTypeKey = "BattleCardType";
+
 
     /// <summary>
     /// プレイヤーのポイントを取得する
@@ -140,6 +141,28 @@ public static class PlayerPropertiesExtensions
     public static void SetCanPlaceCardToField(this Player player, bool canPlaceCardToField)
     {
         propsToSet[CanPlaceCardToFieldKey] = canPlaceCardToField;
+        player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// バトル場へのカードのタイプを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static int GetIntBattleCardType(this Player player)
+    {
+        return (player.CustomProperties[BattleCardTypeKey] is int cardType) ? cardType : 0;
+    }
+
+    /// <summary>
+    /// バトル場へのカードのタイプを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="point"></param>
+    public static void SetIntBattleCardType(this Player player, CardType cardType)
+    {
+        propsToSet[BattleCardTypeKey] = (int)cardType;
         player.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }
