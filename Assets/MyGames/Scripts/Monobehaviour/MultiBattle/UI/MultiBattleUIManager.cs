@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ using TMPro;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
+using Photon.Realtime;
+using static WaitTimes;
+using static BattlePhase;
 
 public class MultiBattleUIManager : MonoBehaviour
     //, IBattleUIManager
@@ -24,12 +28,37 @@ public class MultiBattleUIManager : MonoBehaviour
     Sprite[] _spButtonIcons;
 
     [SerializeField]
-    [Header("バトル場への確認画面のテキスト")]
-    Text _fieldConfirmationText;
+    [Header("ラウンド数表示テキスト")]
+    TextMeshProUGUI _roundCountText;
 
     [SerializeField]
-    [Header("バトル場へ送るカードの確認UI")]
-    ConfirmationPanelToField _confirmationPanelToField;
+    [Header("カードリストを設定する(ScriptableObjectを参照)")]
+    CardEntityList _cardEntityList;
+
+    [SerializeField]
+    [Header("カードプレハブ")]
+    CardController _cardPrefab;
+
+    [SerializeField]
+    [Header("自分のターンであることを知らせるUI")]
+    GameObject _announceThePlayerTurn;
+
+    [SerializeField]
+    [Header("相手のターンであることを知らせるUI")]
+    GameObject _announceTheEnemyTurn;
+
+    [SerializeField]
+    [Header("カウントダウンのテキスト")]
+    TextMeshProUGUI _countDownText;
+
+    [SerializeField]
+    [Header("開始時に非表示にするUIを設定します")]
+    GameObject[] _hideUIs;
+
+
+
+
+    //下は保留の値
 
     [SerializeField]
     [Header("ゲームの進行に関するUIマネージャーを設定")]
@@ -43,15 +72,18 @@ public class MultiBattleUIManager : MonoBehaviour
     [Header("バトル中に使用する確認画面のUIを格納する")]
     GameObject[] BattleConfirmationPanels;
 
-    [SerializeField]
-    [Header("オブジェクトプールに使用する非表示にしたUIを格納するCanvasを設定")]
-    GameObject CanvasForObjectPool;
+    //[SerializeField]
+    //[Header("オブジェクトプールに使用する非表示にしたUIを格納するCanvasを設定")]
+    //GameObject CanvasForObjectPool;
 
-    IHideableUIsAtStart _hideableUIsAtStartByDir;
-    IHideableUIsAtStart _hideableUIsAtStartBySP;
+    //IHideableUIsAtStart _hideableUIsAtStartByDir;
+    //IHideableUIsAtStart _hideableUIsAtStartBySP;
+
+    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    PhotonView _photonView;
+
 
     #region//プロパティ
-    public ConfirmationPanelToField ConfirmationPanelToField => _confirmationPanelToField;
     public SpecialSkillUIManager SpecialSkillUIManager => _specialSkillUIManager;
     public DirectionUIManager DirectionUIManager => _directionUIManager;
     #endregion
@@ -61,6 +93,7 @@ public class MultiBattleUIManager : MonoBehaviour
         //ServiceLocator.Register<IBattleUIManager>(this);
         //_hideableUIsAtStartByDir = _directionUIManager.GetComponent<IHideableUIsAtStart>();
         //_hideableUIsAtStartBySP = _specialSkillUIManager.GetComponent<IHideableUIsAtStart>();
+        _photonView = GetComponent<PhotonView>();
     }
 
     void OnDestroy()
@@ -68,14 +101,14 @@ public class MultiBattleUIManager : MonoBehaviour
         //ServiceLocator.UnRegister<IBattleUIManager>(this);
     }
 
-    /// <summary>
-    /// 開始時に非表示にするUI
-    /// </summary>
-    public void HideUIAtStart()
+    void Start()
     {
-        _hideableUIsAtStartByDir.HideUIsAtStart();
-        _hideableUIsAtStartBySP.HideUIsAtStart();
-        _confirmationPanelToField.ToggleUI(false);
+        _multiConfirmationPanelManager = ServiceLocator.Resolve<IMultiConfirmationPanelManager>();
+    }
+
+    void Update()
+    {
+        TryToMoveToField(_multiConfirmationPanelManager.MovingFieldCard);
     }
 
     /// <summary>
@@ -118,17 +151,223 @@ public class MultiBattleUIManager : MonoBehaviour
         GetPlayerUI(isPlayer).PlacePlayerIcon(targetGo);
     }
 
+    /// <summary>
+    /// ラウンド数を表示する
+    /// </summary>
+    /// <param name="roundCount"></param>
+    /// <returns></returns>
+    public async UniTask ShowRoundCountText(int roundCount)
+    {
+        //public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
+        ToggleRoundCountText(true);
+        SetRoundCountText(roundCount);
 
+        await UniTask.Delay(TimeSpan.FromSeconds(ROUND_COUNT_DISPLAY_TIME));
+        ToggleRoundCountText(false);
+    }
 
     /// <summary>
-    /// フィールドへ移動するカードを選択したとき
+    /// ラウンド表示用のテキストを設定する
     /// </summary>
-    public void SelectedToFieldCard(CardController selectedCard)
+    void SetRoundCountText(int roundCount)
     {
-        //確認画面のメッセージを、選択したカード名にする
-        _fieldConfirmationText.text = selectedCard.CardModel.Name + FIELD_CONFIRMATION_TEXT_SUFFIX;
-        _confirmationPanelToField.ToggleUI(true);
+        _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
+        //if (roundCount == maxRoundCount)
+        //{
+        //    //最終ラウンド
+        //    _roundCountText.text = FINAL_ROUND;
+        //}
+        //else
+        //{
+        //    _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
+        //}
     }
+
+    /// <summary>
+    /// ラウンド数表示用テキストの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleRoundCountText(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
+    }
+
+    /// <summary>
+    /// カードを配ります
+    /// </summary>
+    public void DistributeCards()
+    {
+        //プレイヤーとエネミーにそれぞれ三種類のカードを作成する
+        for (int i = 0; i < _cardEntityList.GetCardEntityList.Count; i++)
+        {
+            AddingCardToHand(i, true);
+            AddingCardToHand(i, false);
+        }
+        //お互いのカードをシャッフルする
+        //※実際には手札は同期されていないので不要な処理だが
+        //相手に手の内がバレているのはないかといった不安を与えないよう演出させる
+        ShuffleHandCard(true);
+        ShuffleHandCard(false);
+    }
+
+    /// <summary>
+    /// カードを手札に加えます
+    /// </summary>
+    /// <param name="cardIndex"></param>
+    void AddingCardToHand(int cardIndex, bool isPlayer)
+    {
+        CardController card = CreateCard(cardIndex, isPlayer);
+        GetPlayerUI(isPlayer).AddingCardToHand(card);
+    }
+
+    /// <summary>
+    /// カードを生成する
+    /// </summary>
+    CardController CreateCard(int cardIndex, bool isPlayer)
+    {
+        CardController card = Instantiate(_cardPrefab, Vector3.zero, Quaternion.identity);
+        card.Init(cardIndex, isPlayer);
+        return card;
+    }
+
+    /// <summary>
+    /// 手札のカードをシャッフルする
+    /// </summary>
+    void ShuffleHandCard(bool isPlayer)
+    {
+        CardController[] handCards = GetPlayerUI(isPlayer).GetAllHandCards();
+
+        for (int i = 0; i < handCards.Length; i++)
+        {
+            int tempIndex = handCards[i].transform.GetSiblingIndex();
+            int randomIndex = UnityEngine.Random.Range(0, handCards.Length);
+            handCards[i].transform.SetSiblingIndex(randomIndex);
+            handCards[randomIndex].transform.SetSiblingIndex(tempIndex);
+        }
+    }
+
+    /// <summary>
+    /// 盤面をリセットします
+    /// </summary>
+    public void ResetFieldCards()
+    {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Card"))
+        {
+            Destroy(go);
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時にテキストを表示する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public async UniTask ShowThePlayerTurnText(bool isPlayer)
+    {
+        ToggleAnnounceTurnFor(true, isPlayer);
+        await UniTask.Delay(TimeSpan.FromSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT));
+        ToggleAnnounceTurnFor(false, isPlayer);
+    }
+
+    /// <summary>
+    /// プレイヤーのターン時に表示するUIの切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
+    {
+        GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, transform);
+    }
+
+    /// <summary>
+    /// プレイヤーのターンのアナウンス用のゲームオブジェクトを取得する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    GameObject GetAnnounceThePlayerTurnBy(bool isPlayer)
+    {
+        if (isPlayer) return _announceThePlayerTurn;
+        return _announceTheEnemyTurn;
+    }
+
+    /// <summary>
+    /// カウントダウンを表示
+    /// </summary>
+    public void ShowCountDownText(int countDownTime)
+    {
+        _countDownText.text = countDownTime.ToString();
+    }
+
+    /// <summary>
+    /// フィールドへの移動を試みます
+    /// </summary>
+    /// <returns></returns>
+    void TryToMoveToField(CardController movingCard)
+    {
+        if (movingCard == null) return;
+        _multiConfirmationPanelManager.DestroyMovingBattleCard();
+
+        //すでにバトル場にカードが置かれているなら何もしない
+        if (PhotonNetwork.LocalPlayer.GetCanPlaceCardToField() == false) return;
+        MoveToBattleField(movingCard).Forget();
+    }
+
+    /// <summary>
+    /// カードを移動する
+    /// </summary>
+    async UniTask MoveToBattleField(CardController movingCard)
+    {
+        RegisterCardType(movingCard.CardType);
+        //カードを配置済みにする
+        PhotonNetwork.LocalPlayer.SetCanPlaceCardToField(false);
+        PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
+
+        //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
+        await _playerUI.MoveToBattleField(movingCard);
+        _photonView.RPC("RpcMoveEnemyCardToField", RpcTarget.Others);
+
+        await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
+        //ターンを終了する
+        PhotonNetwork.LocalPlayer.SetIsMyTurnEnd(true);
+    }
+
+    /// <summary>
+    /// カードタイプを登録します
+    /// </summary>
+    void RegisterCardType(CardType cardType)
+    {
+        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
+    }
+
+    /// <summary>
+    /// エネミーのカードをフィールドに移動します
+    /// </summary>
+    [PunRPC]
+    void RpcMoveEnemyCardToField()
+    {
+        //演出用にランダムなカードを選び移動させる。
+        //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
+        CardController randomFieldCard = _enemyUI.GetRandomHandCard();
+        _enemyUI.MoveToBattleField(randomFieldCard).Forget();
+    }
+
+    /// <summary>
+    /// 開始時にUIを非表示にします
+    /// </summary>
+    public void HideUIAtStart()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+    //下記は保留
 
     /// <summary>
     /// 確認画面UIを全てを非表示にする
@@ -171,14 +410,6 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// カウントダウンを表示
-    /// </summary>
-    public void ShowCountDownText(int countDownTime)
-    {
-        _directionUIManager.ShowCountDownText(countDownTime);
-    }
-
-    /// <summary>
     /// ゲーム結果の表示の切り替え
     /// </summary>
     /// <param name="isAcitve"></param>
@@ -202,16 +433,6 @@ public class MultiBattleUIManager : MonoBehaviour
     public async UniTask ShowJudgementResultText(string result)
     {
         await _directionUIManager.ShowJudgementResultText(result);
-    }
-
-    /// <summary>
-    /// プレイヤーのターン時にテキストを表示する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public async UniTask ShowThePlayerTurnText(bool isPlayer)
-    {
-        await _directionUIManager.ShowThePlayerTurnText(isPlayer);
     }
 
     /// <summary>
