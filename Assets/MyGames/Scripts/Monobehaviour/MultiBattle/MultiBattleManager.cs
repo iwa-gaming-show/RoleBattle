@@ -8,7 +8,6 @@ using static CardJudgement;
 using static GameResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
-using Photon.Realtime;
 using Photon.Pun;
 
 public class MultiBattleManager : MonoBehaviour, IBattleManager
@@ -78,7 +77,6 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     /// </summary>
     /// <param name="isFirstGame"></param>
     /// <returns></returns>
-    [PunRPC]
     public async UniTask StartGame(bool isFirstGame)
     {
         //1ラウンド目に行う処理
