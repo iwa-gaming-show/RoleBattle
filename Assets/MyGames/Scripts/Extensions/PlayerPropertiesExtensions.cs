@@ -6,12 +6,11 @@ public static class PlayerPropertiesExtensions
     static readonly Hashtable propsToSet = new Hashtable();
     static readonly string PointKey = "Point";
     static readonly string CanUseSpSkillKey = "CanUseSpSkill";
-    static readonly string CanPlaceCardToFieldKey = "CanPlaceCardToField";
     static readonly string IsMyTurnKey = "IsMyTurn";
     static readonly string IsMyTurnEndKey = "IsMyTurnEnd";
     static readonly string IsUsingSpInRoundKey = "IsUsingSpInRound";
+    static readonly string IsFieldCardPlacedKey = "IsFieldCardPlaced";
     static readonly string BattleCardTypeKey = "BattleCardType";
-
 
     /// <summary>
     /// プレイヤーのポイントを取得する
@@ -124,28 +123,6 @@ public static class PlayerPropertiesExtensions
     }
 
     /// <summary>
-    /// カードをフィールドに置くことができるかどうかを取得する
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns></returns>
-    public static bool GetCanPlaceCardToField(this Player player)
-    {
-        return (player.CustomProperties[CanPlaceCardToFieldKey] is bool canPlaceCardToField) ? canPlaceCardToField : false;
-    }
-
-    /// <summary>
-    /// カードをフィールドに置くことができるかどうかを設定する
-    /// </summary>
-    /// <param name="player"></param>
-    /// <param name="isMyTurn"></param>
-    public static void SetCanPlaceCardToField(this Player player, bool canPlaceCardToField)
-    {
-        propsToSet[CanPlaceCardToFieldKey] = canPlaceCardToField;
-        player.SetCustomProperties(propsToSet);
-        propsToSet.Clear();
-    }
-
-    /// <summary>
     /// バトル場へのカードのタイプを取得する
     /// </summary>
     /// <param name="player"></param>
@@ -163,6 +140,28 @@ public static class PlayerPropertiesExtensions
     public static void SetIntBattleCardType(this Player player, CardType cardType)
     {
         propsToSet[BattleCardTypeKey] = (int)cardType;
+        player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// カードをフィールドに配置したかどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static bool GetIsFieldCardPlaced(this Player player)
+    {
+        return (player.CustomProperties[IsFieldCardPlacedKey] is bool isFieldCardPlaced) ? isFieldCardPlaced : false;
+    }
+
+    /// <summary>
+    /// カードをフィールドに配置したかどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isMyTurn"></param>
+    public static void SetIsFieldCardPlaced(this Player player, bool isFieldCardPlaced)
+    {
+        propsToSet[IsFieldCardPlacedKey] = isFieldCardPlaced;
         player.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }

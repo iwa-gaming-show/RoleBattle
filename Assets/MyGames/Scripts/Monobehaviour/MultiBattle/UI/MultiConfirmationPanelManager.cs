@@ -66,7 +66,7 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     {
         bool myTurn = PhotonNetwork.LocalPlayer.GetIsMyTurn();
         bool selectionPhase = (PhotonNetwork.CurrentRoom.GetIntBattlePhase() == (int)SELECTION);
-        bool placeable = PhotonNetwork.LocalPlayer.GetCanPlaceCardToField();
+        bool placeable = PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced() == false;
         return myTurn && selectionPhase && placeable;
     }
 

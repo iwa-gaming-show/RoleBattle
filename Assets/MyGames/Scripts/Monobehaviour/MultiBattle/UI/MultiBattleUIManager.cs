@@ -308,7 +308,7 @@ public class MultiBattleUIManager : MonoBehaviour
         _multiConfirmationPanelManager.DestroyMovingBattleCard();
 
         //すでにバトル場にカードが置かれているなら何もしない
-        if (PhotonNetwork.LocalPlayer.GetCanPlaceCardToField() == false) return;
+        if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
         MoveToBattleField(movingCard).Forget();
     }
 
@@ -319,7 +319,7 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         RegisterCardType(movingCard.CardType);
         //カードを配置済みにする
-        PhotonNetwork.LocalPlayer.SetCanPlaceCardToField(false);
+        PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
         PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
 
         //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
