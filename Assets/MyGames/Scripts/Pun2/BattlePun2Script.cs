@@ -24,7 +24,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     [SerializeField]
     MultiBattleUIManager _multiBattleUIManager;
 
-    bool _canStartBattle;
     bool _decidedTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
@@ -47,12 +46,36 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    void Update()
+    [PunRPC]
+    void RpcStartBattle()
     {
-        if (_enemy == null) return;
-        if (_canStartBattle) return;
-        _canStartBattle = true;
+        SearchEnemy();
         StartBattle(true).Forget();
+    }
+
+    /// <summary>
+    /// 対戦相手を探します
+    /// </summary>
+    void SearchEnemy()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (_player.UserId != player.UserId)
+            {
+                SetEnemyInfo(player);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 対戦相手の情報を設定します
+    /// </summary>
+    void SetEnemyInfo(Player player)
+    {
+        _multiBattleUIManager.ShowPointBy(false, player.GetPoint());
+        _multiBattleUIManager.SetSpButtonImageBy(false, player.GetCanUseSpSkill());
+        _enemy = player;
     }
 
     /// <summary>
@@ -74,19 +97,49 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         _multiBattleUIManager.DistributeCards();
     }
 
+
+    /// <summary>
+    /// 自クライアントのルーム入室時
+    /// </summary>
+    public override void OnJoinedRoom()
+    {
+        InitPlayerIcon();
+        _player = PhotonNetwork.LocalPlayer;
+        _room = PhotonNetwork.CurrentRoom;
+        InitPlayerData();
+
+        if (PhotonNetwork.PlayerList.Length == _maxPlayers)
+        {
+            _photonView.RPC("RpcStartBattle", RpcTarget.All);
+        }
+    }
+
     /// <summary>
     /// ターンを開始します
     /// </summary>
     void StartTurn()
     {
-        if (_player == null || _enemy == null) return;
-        if (_decidedTurn) return;
-        _decidedTurn = true;
+        if (_decidedTurn == false) return;
+        _decidedTurn = false;
 
         if (PhotonNetwork.IsMasterClient)
         {
             _punTurnManager.BeginTurn();
         }
+    }
+
+    /// <summary>
+    /// 先攻、後攻のターンを決めます
+    /// </summary>
+    public void DecideTheTurn()
+    {
+        if (_player.IsMasterClient == false) return;
+
+        //trueならmasterClientを先攻にする
+        if (RandomBool()) PhotonNetwork.MasterClient.SetIsMyTurn(true);
+        else PhotonNetwork.PlayerListOthers[0].SetIsMyTurn(true);
+
+        _decidedTurn = true;
     }
 
     /// <summary>
@@ -141,8 +194,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void CheckPlayerTurnEnd(Player player)
     {
         if (player.GetIsMyTurnEnd() == false) return;
-
-        Debug.Log(player.GetCanPlaceCardToField());
         _punTurnManager.SendMove(null, true);
     }
 
@@ -153,18 +204,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         _player.SetIsMyTurnEnd(false);
         _player.SetIsUsingSpInRound(false);
-    }
-
-    /// <summary>
-    /// 先攻、後攻のターンを決めます
-    /// </summary>
-    public void DecideTheTurn()
-    {
-        if (_player.IsMasterClient == false) return;
-
-        //trueならmasterClientを先攻にする
-        if (RandomBool()) PhotonNetwork.MasterClient.SetIsMyTurn(true);
-        else PhotonNetwork.PlayerListOthers[0].SetIsMyTurn(true);
+        _player.SetIsFieldCardPlaced(false);
     }
 
     /// <summary>
@@ -183,10 +223,22 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         _player.SetIsMyTurnEnd(false);
 
-        //各プレイヤーのターンのフラグを逆にする
-        _player.SetIsMyTurn(!_player.GetIsMyTurn());
-        _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
-        _decidedTurn = false;
+        //お互いにカードをフィールドに配置していたらバトルをします。
+        bool isBattle = (_player.GetIsFieldCardPlaced() || _enemy.GetIsFieldCardPlaced()) ;
+
+        if (isBattle)
+        {
+            Debug.Log("バトルです");
+            Debug.Log("playerはカードを置いた" + _player.GetIsFieldCardPlaced());
+            Debug.Log("enemyはカードを置いた:" + _enemy.GetIsFieldCardPlaced());
+        }
+        else
+        {
+            //各プレイヤーのターンのフラグを逆にする
+            _player.SetIsMyTurn(!_player.GetIsMyTurn());
+            _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
+            _decidedTurn = true;
+        }
     }
 
     /// <summary>
@@ -195,7 +247,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="turn"></param>
     void IPunTurnManagerCallbacks.OnTurnBegins(int turn)
     {
-        _player.SetCanPlaceCardToField(true);//バトル場へのカード配置フラグ
         _room.SetIntBattlePhase(SELECTION);//カード選択フェイズへ
         PlayerTurn(_player.GetIsMyTurn()).Forget();
     }
@@ -241,23 +292,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void IPunTurnManagerCallbacks.OnTurnCompleted(int turn)
     {
         Debug.Log("ターン完了");
-        bool placedCardEachPlayer =
-            (_player.GetCanPlaceCardToField() == false
-            && _enemy.GetCanPlaceCardToField() == false);
-
-        Debug.Log("お互いにカードを置いたか" + placedCardEachPlayer);
         ChangeTurn();
-
-
-        //各プレイヤーがカードをフィールドに配置した場合
-        //if (placedCardEachPlayer)
-        //{
-        //    //お互いのプレイヤーがカードを場に出しているならターンを切り替えずバトルする
-        //}
-        //else
-        //{
-        //    ChangeTurn();
-        //}
     }
 
     /// <summary>
@@ -314,29 +349,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// 自クライアントのルーム入室時
-    /// </summary>
-    public override void OnJoinedRoom()
-    {
-        InitPlayerIcon();
-        _player = PhotonNetwork.LocalPlayer;
-        _room = PhotonNetwork.CurrentRoom;
-        InitPlayerData();
-
-        //対戦相手が既に入室している場合
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (_player.UserId != player.UserId)
-            {
-                _multiBattleUIManager.ShowPointBy(false, player.GetPoint());
-                _multiBattleUIManager.SetSpButtonImageBy(false, player.GetCanUseSpSkill());
-                _enemy = player;
-                break;
-            }
-        }
-    }
-
-    /// <summary>
     /// プレイヤーアイコンの初期設定
     /// </summary>
     void InitPlayerIcon()
@@ -352,7 +364,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         _player.SetPoint(INITIAL_POINT);
         _player.SetCanUseSpSkill(true);
-        _player.SetCanPlaceCardToField(false);
     }
 
     /// <summary>
