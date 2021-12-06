@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ using Cysharp.Threading.Tasks;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using static InitializationData;
 using static BattlePhase;
+using static CardJudgement;
+using static CardType;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallbacks
 {
@@ -25,6 +28,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     MultiBattleUIManager _multiBattleUIManager;
 
     bool _decidedTurn;
+    bool _switchedTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
     Player _player;
@@ -33,6 +37,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     PunTurnManager _punTurnManager;
     PhotonView _photonView;
     BattlePhase _battlePhase;
+
 
     void Awake()
     {
@@ -97,7 +102,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         _multiBattleUIManager.DistributeCards();
     }
 
-
     /// <summary>
     /// 自クライアントのルーム入室時
     /// </summary>
@@ -111,20 +115,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         if (PhotonNetwork.PlayerList.Length == _maxPlayers)
         {
             _photonView.RPC("RpcStartBattle", RpcTarget.All);
-        }
-    }
-
-    /// <summary>
-    /// ターンを開始します
-    /// </summary>
-    void StartTurn()
-    {
-        if (_decidedTurn == false) return;
-        _decidedTurn = false;
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            _punTurnManager.BeginTurn();
         }
     }
 
@@ -143,6 +133,52 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
+    /// ターンを開始します
+    /// </summary>
+    void StartTurn()
+    {
+        if (_decidedTurn == false) return;
+        _decidedTurn = false;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _punTurnManager.BeginTurn();
+        }
+    }
+
+    /// <summary>
+    /// ターン開始時に呼ばれます
+    /// </summary>
+    /// <param name="turn"></param>
+    void IPunTurnManagerCallbacks.OnTurnBegins(int turn)
+    {
+        PlayerTurn().Forget();
+    }
+
+    /// <summary>
+    /// プレイヤーのターンを開始します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    async UniTask PlayerTurn()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _room.SetIntBattlePhase(SELECTION);//カード選択フェイズへ
+        }
+
+        await _multiBattleUIManager.ShowThePlayerTurnText(_player.GetIsMyTurn());
+        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
+        StartCoroutine(CountDown());
+    }
+
+    [PunRPC]
+    void RpcPlayerTurn()
+    {
+        PlayerTurn().Forget();
+    }
+
+    /// <summary>
     /// プレイヤーのカスタムプロパティが呼び出された時
     /// </summary>
     /// <param name="targetPlayer"></param>
@@ -155,9 +191,32 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
         _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
         CheckEnemyIcon();
-        CheckPlayerTurnEnd(targetPlayer);
-
+        CheckPlayerTurnEnd();
         StartTurn();
+        ChangeTurn();
+    }
+
+    /// <summary>
+    /// ターンを切り替えます
+    /// </summary>
+    void ChangeTurn()
+    {
+        if (_switchedTurn == false) return;
+        _switchedTurn = false;
+
+        _photonView.RPC("RpcPlayerTurn", RpcTarget.AllViaServer);
+    }
+
+    // <summary>
+    /// プレイヤーのターンのフラグを切り替えます
+    /// </summary>
+    void SwitchPlayerTurnFlg()
+    {
+        if (PhotonNetwork.IsMasterClient == false) return;
+         
+        _switchedTurn = true;
+        _player.SetIsMyTurn(!_player.GetIsMyTurn());
+        _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
     }
 
     /// <summary>
@@ -191,9 +250,10 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// プレイヤーのターンの終了を確認します
     /// </summary>
     /// <param name="player"></param>
-    void CheckPlayerTurnEnd(Player player)
+    void CheckPlayerTurnEnd()
     {
-        if (player.GetIsMyTurnEnd() == false) return;
+        if (_player.GetIsMyTurnEnd() == false) return;
+        _player.SetIsMyTurnEnd(false);
         _punTurnManager.SendMove(null, true);
     }
 
@@ -213,54 +273,61 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <returns></returns>
     bool RandomBool()
     {
-        return Random.Range(0, 2) == 0;
+        return UnityEngine.Random.Range(0, 2) == 0;
     }
 
-    // <summary>
-    /// ターンを切り替える
+    /// <summary>
+    /// プレイヤーの進行状況を判断します
     /// </summary>
-    void ChangeTurn()
+    void JudgePlayerProgress()
     {
         _player.SetIsMyTurnEnd(false);
 
         //お互いにカードをフィールドに配置していたらバトルをします。
-        bool isBattle = (_player.GetIsFieldCardPlaced() || _enemy.GetIsFieldCardPlaced()) ;
+        bool isBattle = (_player.GetIsFieldCardPlaced()
+            && _enemy.GetIsFieldCardPlaced());
 
-        if (isBattle)
-        {
-            Debug.Log("バトルです");
-            Debug.Log("playerはカードを置いた" + _player.GetIsFieldCardPlaced());
-            Debug.Log("enemyはカードを置いた:" + _enemy.GetIsFieldCardPlaced());
-        }
-        else
-        {
-            //各プレイヤーのターンのフラグを逆にする
-            _player.SetIsMyTurn(!_player.GetIsMyTurn());
-            _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
-            _decidedTurn = true;
-        }
+        if (isBattle) JudgeTheCard().Forget();
+        else ChangeTurn();
     }
 
     /// <summary>
-    /// ターン開始時に呼ばれます
+    /// カードを判定する
     /// </summary>
-    /// <param name="turn"></param>
-    void IPunTurnManagerCallbacks.OnTurnBegins(int turn)
+    async UniTask JudgeTheCard()
     {
-        _room.SetIntBattlePhase(SELECTION);//カード選択フェイズへ
-        PlayerTurn(_player.GetIsMyTurn()).Forget();
+        _room.SetIntBattlePhase(JUDGEMENT);
+
+        CardType playerCardType = (CardType)_player.GetIntBattleCardType();
+        CardType enemyCardType = (CardType)_enemy.GetIntBattleCardType();
+        //じゃんけんする
+        CardJudgement result = JudgeCardResult(playerCardType, enemyCardType);
+
+        //OPENのメッセージを出す
+        await _multiBattleUIManager.AnnounceToOpenTheCard();
+
+        //お互いのplayerのBattleCardTypeからバトルの判定をする
+        //自身の結果によってUIの表示を変える
+        //customPropertiesへpointを加算
+        //カードを裏返す時に相手のカードをすり替える
+
+        //次のラウンドへ masterのみ
     }
 
     /// <summary>
-    /// プレイヤーのターンを開始します
+    /// カードの勝敗結果を取得する
     /// </summary>
-    /// <param name="isPlayer"></param>
+    /// <param name="myCard"></param>
+    /// <param name="enemyCard"></param>
     /// <returns></returns>
-    async UniTask PlayerTurn(bool isPlayer)
+    CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
     {
-        await _multiBattleUIManager.ShowThePlayerTurnText(isPlayer);
-        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
-        StartCoroutine(CountDown());
+        //じゃんけんによる勝敗の判定
+        if (playerCardType == enemyCardType) return DRAW;
+        if (playerCardType == PRINCESS && enemyCardType == BRAVE) return WIN;
+        if (playerCardType == BRAVE && enemyCardType == DEVIL) return WIN;
+        if (playerCardType == DEVIL && enemyCardType == PRINCESS) return WIN;
+        return LOSE;
     }
 
     /// <summary>
@@ -286,13 +353,13 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// ターン完了時に呼ばれます
+    /// お互いのプレイヤーのターンが終了した時に呼ばれます
     /// </summary>
     /// <param name="turn"></param>
     void IPunTurnManagerCallbacks.OnTurnCompleted(int turn)
     {
         Debug.Log("ターン完了");
-        ChangeTurn();
+        //JudgePlayerProgress();
     }
 
     /// <summary>
@@ -315,6 +382,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void IPunTurnManagerCallbacks.OnPlayerFinished(Player player, int turn, object move)
     {
         Debug.Log("ターン終了");
+        SwitchPlayerTurnFlg();
     }
 
     /// <summary>
@@ -324,7 +392,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void IPunTurnManagerCallbacks.OnTurnTimeEnds(int turn)
     {
         Debug.Log("カウント終了!");
-        //ChangeTurn();
     }
 
     /// <summary>
@@ -373,7 +440,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         if (_player.IsMasterClient == false) return;
         _room.SetRoundCount(INITIAL_ROUND_COUNT);
-        _room.SetIntBattlePhase(NONE);
+        _room.SetIntBattlePhase(BattlePhase.NONE);
     }
 
     /// <summary>
