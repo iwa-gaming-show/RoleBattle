@@ -28,7 +28,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     MultiBattleUIManager _multiBattleUIManager;
 
     bool _decidedTurn;
-    bool _switchedTurn;
+    bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
     Player _player;
@@ -201,8 +201,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     void ChangeTurn()
     {
-        if (_switchedTurn == false) return;
-        _switchedTurn = false;
+        if (_canChangeTurn == false) return;
+        _canChangeTurn = false;
 
         _photonView.RPC("RpcPlayerTurn", RpcTarget.AllViaServer);
     }
@@ -213,10 +213,22 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void SwitchPlayerTurnFlg()
     {
         if (PhotonNetwork.IsMasterClient == false) return;
-         
-        _switchedTurn = true;
+
+        //どちらかのプレイヤーがまだバトル場にカードを出していない時のみターンを切り替えます
+        if (IsEachPlayerFieldCardPlaced() == false)
+            _canChangeTurn = true;
+
         _player.SetIsMyTurn(!_player.GetIsMyTurn());
         _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
+    }
+
+    /// <summary>
+    /// お互いのプレイヤーがバトル場にカードを出しているか
+    /// </summary>
+    /// <returns></returns>
+    bool IsEachPlayerFieldCardPlaced()
+    {
+        return _player.GetIsFieldCardPlaced() && _enemy.GetIsFieldCardPlaced();
     }
 
     /// <summary>
