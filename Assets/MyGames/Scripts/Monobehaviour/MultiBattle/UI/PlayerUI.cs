@@ -127,4 +127,29 @@ public class PlayerUI : MonoBehaviour
         int randomCardIndex = Random.Range(0, handCards.Length);
         return handCards[randomCardIndex];
     }
+
+    /// <summary>
+    /// バトル場のカードを取得します
+    /// </summary>
+    /// <returns></returns>
+    public CardController GetFieldCard()
+    {
+        return _battleField.GetComponentInChildren<CardController>();
+    }
+
+    /// <summary>
+    /// バトル場のカードを破棄します
+    /// </summary>
+    public void DestroyFieldCard()
+    {
+        Destroy(GetFieldCard().gameObject);
+    }
+
+    /// <summary>
+    /// バトル場へカードをセットします
+    /// </summary>
+    public void SetFieldCard(CardController cardController)
+    {
+        cardController.transform.SetParent(_battleField, false);
+    }
 }

@@ -11,6 +11,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using static WaitTimes;
 using static BattlePhase;
+using System.Linq;
 
 public class MultiBattleUIManager : MonoBehaviour
     //, IBattleUIManager
@@ -54,6 +55,10 @@ public class MultiBattleUIManager : MonoBehaviour
     [SerializeField]
     [Header("開始時に非表示にするUIを設定します")]
     GameObject[] _hideUIs;
+
+    [SerializeField]
+    [Header("カードOPEN時のテキスト")]
+    TextMeshProUGUI _openPhaseText;
 
 
 
@@ -221,6 +226,35 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 相手のフィールドのカードを置き換えます
+    /// </summary>
+    /// <param name="cardType"></param>
+    public void ReplaceEnemyFieldCard(CardType cardType)
+    {
+        CardController replacingCard = CreateCardFor(cardType, false);
+        //元々フィールドに配置したカードは削除します
+        _enemyUI.DestroyFieldCard();
+        _enemyUI.SetFieldCard(replacingCard);
+    }
+
+    /// <summary>
+    /// カードの種類に対応したカードを作成します
+    /// </summary>
+    /// <param name="cardType"></param>
+    /// <returns></returns>
+    CardController CreateCardFor(CardType cardType, bool isPlayer)
+    {
+        //cardTypeに対応したカードのindex番号を取得します
+        var cardEntities = _cardEntityList.GetCardEntityList
+            .Select((ce, i) => new { CardType = ce.CardType, Index = i });
+
+        int cardIndex = (cardEntities.Where(ce => ce.CardType == cardType)
+            .First().Index is int index) ? index: 0;
+
+        return CreateCard(cardIndex, isPlayer);
+    }
+
+    /// <summary>
     /// カードを生成する
     /// </summary>
     CardController CreateCard(int cardIndex, bool isPlayer)
@@ -352,6 +386,39 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// カードを開くことをアナウンスします
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask AnnounceToOpenTheCard()
+    {
+        RectTransform textRectTransform = _openPhaseText.rectTransform;
+        float screenEdgeX = UIUtil.GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
+
+        //右端→真ん中→左端へ移動する
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, screenEdgeX, 0)
+            .OnStart(() => ToggleOpenPhaseText(true)));
+
+        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, 0f, 0.25f));
+
+        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
+            .OnComplete(() => ToggleOpenPhaseText(false)));
+
+        await sequence
+            .Play()
+            .AsyncWaitForCompletion();
+    }
+
+    /// <summary>
+    /// カードOPEN時のテキストの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleOpenPhaseText(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
+    }
+
+    /// <summary>
     /// 開始時にUIを非表示にします
     /// </summary>
     public void HideUIAtStart()
@@ -387,15 +454,6 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         //_specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
-    }
-
-    /// <summary>
-    /// カードを開くことをアナウンスします
-    /// </summary>
-    /// <returns></returns>
-    public async UniTask AnnounceToOpenTheCard()
-    {
-        await _directionUIManager.AnnounceToOpenTheCard();
     }
 
     /// <summary>

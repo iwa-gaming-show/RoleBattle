@@ -281,14 +281,12 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     void JudgePlayerProgress()
     {
-        _player.SetIsMyTurnEnd(false);
-
         //お互いにカードをフィールドに配置していたらバトルをします。
         bool isBattle = (_player.GetIsFieldCardPlaced()
             && _enemy.GetIsFieldCardPlaced());
 
         if (isBattle) JudgeTheCard().Forget();
-        else ChangeTurn();
+        else Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
     }
 
     /// <summary>
@@ -296,8 +294,10 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     async UniTask JudgeTheCard()
     {
-        _room.SetIntBattlePhase(JUDGEMENT);
-
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _room.SetIntBattlePhase(JUDGEMENT);
+        }
         CardType playerCardType = (CardType)_player.GetIntBattleCardType();
         CardType enemyCardType = (CardType)_enemy.GetIntBattleCardType();
         //じゃんけんする
@@ -305,13 +305,13 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
         //OPENのメッセージを出す
         await _multiBattleUIManager.AnnounceToOpenTheCard();
+        //相手のカードをenemyCardTypeに対応したカードにすり替える
+        _multiBattleUIManager.ReplaceEnemyFieldCard(enemyCardType);
 
-        //お互いのplayerのBattleCardTypeからバトルの判定をする
-        //自身の結果によってUIの表示を変える
-        //customPropertiesへpointを加算
-        //カードを裏返す時に相手のカードをすり替える
 
-        //次のラウンドへ masterのみ
+        //カードを表にする
+        //結果の反映//自身の結果によってUIの表示を変える//customPropertiesへpointを加算
+        //次のラウンドへ
     }
 
     /// <summary>
@@ -359,7 +359,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void IPunTurnManagerCallbacks.OnTurnCompleted(int turn)
     {
         Debug.Log("ターン完了");
-        //JudgePlayerProgress();
+        JudgePlayerProgress();
     }
 
     /// <summary>

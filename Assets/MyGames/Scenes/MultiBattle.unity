@@ -267,6 +267,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4238336879348561731, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_PrefabInstance: {fileID: 1346771253206073628}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1075363521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4238336880304575297, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1502668386
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +627,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1048937891}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _openPhaseText
+      value: 
+      objectReference: {fileID: 1075363521}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _hideUIs.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -764,6 +779,10 @@ PrefabInstance:
       value: MultiConfirmationPanelToField, App
       objectReference: {fileID: 0}
     - target: {fileID: 4238336879744854307, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336880304575299, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
