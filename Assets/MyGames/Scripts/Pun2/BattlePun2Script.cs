@@ -11,6 +11,7 @@ using static InitializationData;
 using static BattlePhase;
 using static CardJudgement;
 using static CardType;
+using static WaitTimes;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallbacks
 {
@@ -27,7 +28,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     [SerializeField]
     MultiBattleUIManager _multiBattleUIManager;
 
-    bool _decidedTurn;
+    bool _canStartTurn;
     bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
@@ -89,16 +90,12 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     public async UniTask StartBattle(bool isFirstGame)
     {
         //1ラウンド目に行う処理
-        if (isFirstGame)
-        {
-            InitRoomData();
-            //_battleUIManager.InitUIData();//中身は必殺技のdescriptionsの文言を設定できる、一旦保留
-            DecideTheTurn();
-        }
+        if (isFirstGame) InitRoomData();
         ResetPlayerState();
         //_multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
         await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount());
+        if (isFirstGame) DecideTheTurn();
         _multiBattleUIManager.DistributeCards();
     }
 
@@ -129,7 +126,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         if (RandomBool()) PhotonNetwork.MasterClient.SetIsMyTurn(true);
         else PhotonNetwork.PlayerListOthers[0].SetIsMyTurn(true);
 
-        _decidedTurn = true;
+        _canStartTurn = true;
     }
 
     /// <summary>
@@ -137,8 +134,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     void StartTurn()
     {
-        if (_decidedTurn == false) return;
-        _decidedTurn = false;
+        if (_canStartTurn == false) return;
+        _canStartTurn = false;
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -242,7 +239,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// エネミーのアイコンを調べます
+    /// 対戦相手のアイコンを調べます
     /// </summary>
     void CheckEnemyIcon()
     {
@@ -250,6 +247,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIcon"))
         {
+            //相手のフィールドへアイコンを配置します
             if (go != _playerIcon)
             {
                 _multiBattleUIManager.PlacePlayerIconBy(false, go);
@@ -320,10 +318,19 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         //相手のカードをenemyCardTypeに対応したカードにすり替える
         _multiBattleUIManager.ReplaceEnemyFieldCard(enemyCardType);
 
+        //カードを表にする//uiに任せる
+        //await OpenTheBattleFieldCards(myCard, enemyCard);
 
-        //カードを表にする
         //結果の反映//自身の結果によってUIの表示を変える//customPropertiesへpointを加算
+        //await _battleManager.ReflectTheResult(result);
+
+        await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
+
+        //お互いがポイントの反映が終わったことを伝えるフラグをおろす
+        //フラグが降りたらupdateで次のラウンドへの処理を行う
+
         //次のラウンドへ
+        //await _roundManager.NextRound();
     }
 
     /// <summary>
