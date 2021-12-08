@@ -60,6 +60,10 @@ public class MultiBattleUIManager : MonoBehaviour
     [Header("カードOPEN時のテキスト")]
     TextMeshProUGUI _openPhaseText;
 
+    [SerializeField]
+    [Header("ラウンドの勝敗の結果表示のテキスト")]
+    TextMeshProUGUI _judgementResultText;
+
 
 
 
@@ -441,6 +445,31 @@ public class MultiBattleUIManager : MonoBehaviour
         await UniTask.WhenAll(opened1, opened2);
     }
 
+    /// <summary>
+    /// ラウンドの勝敗の結果を表示
+    /// </summary>
+    public async UniTask ShowJudgementResultText(string result)
+    {
+        ToggleJudgementResultText(true);
+        _judgementResultText.text = result + JUDGEMENT_RESULT_SUFFIX;
+
+        await UniTask.Delay(TimeSpan.FromSeconds(JUDGMENT_RESULT_DISPLAY_TIME));
+        ToggleJudgementResultText(false);
+    }
+
+    /// <summary>
+    /// ラウンドの勝敗の結果の表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleJudgementResultText(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
+    }
+
+
+
+
+
 
 
 
@@ -496,14 +525,6 @@ public class MultiBattleUIManager : MonoBehaviour
     public void SetGameResultText(string text)
     {
         _directionUIManager.SetGameResultText(text);
-    }
-
-    /// <summary>
-    /// ラウンドの勝敗の結果を表示
-    /// </summary>
-    public async UniTask ShowJudgementResultText(string result)
-    {
-        await _directionUIManager.ShowJudgementResultText(result);
     }
 
     /// <summary>

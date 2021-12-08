@@ -7,6 +7,7 @@ public static class RoomPropertiesExtensions
     static readonly Hashtable propsToSet = new Hashtable();
     static readonly string RoundCountKey = "RoundCount";
     static readonly string BattlePhaseKey = "BattlePhase";
+    static readonly string EarnedPointKey = "EarnedPoint";
 
     /// <summary>
     /// ルームのラウンド数を取得する
@@ -48,6 +49,28 @@ public static class RoomPropertiesExtensions
     public static void SetIntBattlePhase(this Room room, BattlePhase battlePhase)
     {
         propsToSet[BattlePhaseKey] = (int)battlePhase;
+        room.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// 獲得ポイントを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static int GetEarnedPoint(this Room room)
+    {
+        return (room.CustomProperties[EarnedPointKey] is int earnedPoint) ? earnedPoint : 1;
+    }
+
+    /// <summary>
+    /// 獲得ポイントを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="point"></param>
+    public static void SetEarnedPoint(this Room room, int earnedPoint)
+    {
+        propsToSet[EarnedPointKey] = earnedPoint;
         room.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }

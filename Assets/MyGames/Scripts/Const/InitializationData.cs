@@ -9,6 +9,11 @@ public static class InitializationData
     public static readonly int INITIAL_ROUND_COUNT = 1;
 
     /// <summary>
+    /// 獲得ポイント
+    /// </summary>
+    public static readonly int INITIAL_EARNED_POINT = 1;
+
+    /// <summary>
     /// 最初の取得ポイント数
     /// </summary>
     public static readonly int INITIAL_POINT = 0;

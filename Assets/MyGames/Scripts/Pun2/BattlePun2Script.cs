@@ -305,9 +305,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     async UniTask JudgeTheCard()
     {
         if (PhotonNetwork.IsMasterClient)
-        {
             _room.SetIntBattlePhase(JUDGEMENT);
-        }
+
         CardType playerCardType = (CardType)_player.GetIntBattleCardType();
         CardType enemyCardType = (CardType)_enemy.GetIntBattleCardType();
         //じゃんけんする
@@ -319,17 +318,54 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         await _multiBattleUIManager.ReplaceEnemyFieldCard(enemyCardType);
         //カードを表にする
         await _multiBattleUIManager.OpenTheBattleFieldCards();
-
-        //結果の反映//自身の結果によってUIの表示を変える//customPropertiesへpointを加算
-        //await _battleManager.ReflectTheResult(result);
-
+        //結果の反映
+        await ReflectTheResult(result);
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
 
         //お互いがポイントの反映が終わったことを伝えるフラグをおろす
         //フラグが降りたらupdateで次のラウンドへの処理を行う
-
         //次のラウンドへ
         //await _roundManager.NextRound();
+    }
+
+    /// <summary>
+    /// 結果を反映します
+    /// </summary>
+    /// <param name="result"></param>
+    public async UniTask ReflectTheResult(CardJudgement result)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _room.SetIntBattlePhase(RESULT);
+        }
+        
+        AddPointBy(result);
+        await _multiBattleUIManager.ShowJudgementResultText(result.ToString());
+    }
+
+    /// <summary>
+    /// 結果によるポイントを加算する
+    /// </summary>
+    void AddPointBy(CardJudgement result)
+    {
+        if (result != WIN) return;
+
+        int totalPoint = _player.GetPoint() + EarnPoint(_player.GetIsUsingSpInRound());
+        _player.SetPoint(totalPoint);
+    }
+
+    /// <summary>
+    /// 獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    public int EarnPoint(bool isUsingSkillInRound)
+    {
+        int earnPoint = _room.GetEarnedPoint();
+        //このラウンドの間必殺技を使用していた場合
+        if (isUsingSkillInRound)
+            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
+
+        return earnPoint;
     }
 
     /// <summary>
@@ -459,6 +495,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         if (_player.IsMasterClient == false) return;
         _room.SetRoundCount(INITIAL_ROUND_COUNT);
         _room.SetIntBattlePhase(BattlePhase.NONE);
+        _room.SetEarnedPoint(INITIAL_EARNED_POINT);
     }
 
     /// <summary>
