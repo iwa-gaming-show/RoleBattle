@@ -316,10 +316,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         //OPENのメッセージを出す
         await _multiBattleUIManager.AnnounceToOpenTheCard();
         //相手のカードをenemyCardTypeに対応したカードにすり替える
-        _multiBattleUIManager.ReplaceEnemyFieldCard(enemyCardType);
-
-        //カードを表にする//uiに任せる
-        //await OpenTheBattleFieldCards(myCard, enemyCard);
+        await _multiBattleUIManager.ReplaceEnemyFieldCard(enemyCardType);
+        //カードを表にする
+        await _multiBattleUIManager.OpenTheBattleFieldCards();
 
         //結果の反映//自身の結果によってUIの表示を変える//customPropertiesへpointを加算
         //await _battleManager.ReflectTheResult(result);

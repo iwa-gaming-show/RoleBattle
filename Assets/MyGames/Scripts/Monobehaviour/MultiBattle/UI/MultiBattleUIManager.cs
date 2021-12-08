@@ -229,12 +229,13 @@ public class MultiBattleUIManager : MonoBehaviour
     /// 相手のフィールドのカードを置き換えます
     /// </summary>
     /// <param name="cardType"></param>
-    public void ReplaceEnemyFieldCard(CardType cardType)
+    public async UniTask ReplaceEnemyFieldCard(CardType cardType)
     {
         CardController replacingCard = CreateCardFor(cardType, false);
         //元々フィールドに配置したカードは削除します
         _enemyUI.DestroyFieldCard();
         _enemyUI.SetFieldCard(replacingCard);
+        await UniTask.Yield();
     }
 
     /// <summary>
@@ -426,7 +427,19 @@ public class MultiBattleUIManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// バトル場のカードを表にします
+    /// </summary>
+    public async UniTask OpenTheBattleFieldCards()
+    {
+        CardController playerCard = _playerUI.GetFieldCard();
+        CardController enemyCard = _enemyUI.GetFieldCard();
 
+        UniTask opened1 = playerCard.TurnTheCardFaceUp();
+        UniTask opened2 = enemyCard.TurnTheCardFaceUp();
+
+        await UniTask.WhenAll(opened1, opened2);
+    }
 
 
 
