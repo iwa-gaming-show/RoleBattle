@@ -19,7 +19,12 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     MultiBattleManager _multiBattleManager;
 
     [SerializeField]
+    [Header("最大対戦プレイヤー数")]
     byte _maxPlayers = 2;
+
+    [SerializeField]
+    [Header("最大ラウンド数")]
+    int _maxRoundCount = 3;
 
     [SerializeField]
     [Header("ゲーム盤のCanvasを設定する")]
@@ -28,7 +33,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     [SerializeField]
     MultiBattleUIManager _multiBattleUIManager;
 
-    bool _canStartTurn;
     bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
@@ -52,11 +56,20 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    /// <summary>
+    /// バトルの準備をします
+    /// </summary>
     [PunRPC]
-    void RpcStartBattle()
+    void RpcPrepareBattle()
     {
         SearchEnemy();
-        StartBattle(true).Forget();
+        RpcStartBattle(true);
+    }
+
+    [PunRPC]
+    void RpcStartBattle(bool isFirstBattle)
+    {
+        StartBattle(isFirstBattle).Forget();
     }
 
     /// <summary>
@@ -87,16 +100,17 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <summary>
     /// バトルを開始する
     /// </summary>
-    public async UniTask StartBattle(bool isFirstGame)
+    public async UniTask StartBattle(bool isFirstBattle)
     {
         //1ラウンド目に行う処理
-        if (isFirstGame) InitRoomData();
+        if (isFirstBattle) InitRoomData();
         ResetPlayerState();
         //_multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
         await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount());
-        if (isFirstGame) DecideTheTurn();
+        if (isFirstBattle) DecideTheTurn();
         _multiBattleUIManager.DistributeCards();
+        StartTurn();
     }
 
     /// <summary>
@@ -111,7 +125,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
         if (PhotonNetwork.PlayerList.Length == _maxPlayers)
         {
-            _photonView.RPC("RpcStartBattle", RpcTarget.All);
+            _photonView.RPC("RpcPrepareBattle", RpcTarget.All);
         }
     }
 
@@ -125,8 +139,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         //trueならmasterClientを先攻にする
         if (RandomBool()) PhotonNetwork.MasterClient.SetIsMyTurn(true);
         else PhotonNetwork.PlayerListOthers[0].SetIsMyTurn(true);
-
-        _canStartTurn = true;
     }
 
     /// <summary>
@@ -134,9 +146,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     void StartTurn()
     {
-        if (_canStartTurn == false) return;
-        _canStartTurn = false;
-
         if (PhotonNetwork.IsMasterClient)
         {
             _punTurnManager.BeginTurn();
@@ -189,8 +198,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
         CheckEnemyIcon();
         CheckPlayerTurnEnd();
-        StartTurn();
         ChangeTurn();
+        CheckToNextRound();
     }
 
     /// <summary>
@@ -236,6 +245,47 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     bool IsUpdatePlayer(Player targetPlayer)
     {
         return (_player.UserId == targetPlayer.UserId);
+    }
+
+    /// <summary>
+    /// 次のラウンドへの確認をします
+    /// </summary>
+    void CheckToNextRound()
+    {
+        //お互いのカードの判定が終わったら次のラウンドへ
+        if (PhotonNetwork.IsMasterClient == false) return;
+        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
+        if (eachPlayerIsCardJudged == false) return;
+
+        _player.SetIsCardJudged(false);
+        _enemy.SetIsCardJudged(false);
+        NextRound();
+    }
+
+    /// <summary>
+    /// 次のラウンドへ進みます
+    /// </summary>
+    void NextRound()
+    {
+        if (_room.GetRoundCount() != _maxRoundCount)
+        {
+            AddRoundCount();
+            _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, false);
+        }
+        else
+        {
+            Debug.Log("ゲーム終了");
+        }
+    }
+
+    /// <summary>
+    /// ラウンドの増加
+    /// </summary>
+    void AddRoundCount()
+    {
+        int totalRoundCount = _room.GetRoundCount();
+        totalRoundCount++;
+        _room.SetRoundCount(totalRoundCount);
     }
 
     /// <summary>
@@ -320,12 +370,11 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         await _multiBattleUIManager.OpenTheBattleFieldCards();
         //結果の反映
         await ReflectTheResult(result);
+        //ポイントの追加
+        AddPointBy(result);
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
-
-        //お互いがポイントの反映が終わったことを伝えるフラグをおろす
-        //フラグが降りたらupdateで次のラウンドへの処理を行う
-        //次のラウンドへ
-        //await _roundManager.NextRound();
+        //判定終了フラグをオンにする
+        _player.SetIsCardJudged(true);
     }
 
     /// <summary>
@@ -338,8 +387,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         {
             _room.SetIntBattlePhase(RESULT);
         }
-        
-        AddPointBy(result);
         await _multiBattleUIManager.ShowJudgementResultText(result.ToString());
     }
 
@@ -521,7 +568,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        _enemy = newPlayer;
     }
 
     /// <summary>

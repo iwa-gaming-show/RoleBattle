@@ -10,6 +10,7 @@ public static class PlayerPropertiesExtensions
     static readonly string IsMyTurnEndKey = "IsMyTurnEnd";
     static readonly string IsUsingSpInRoundKey = "IsUsingSpInRound";
     static readonly string IsFieldCardPlacedKey = "IsFieldCardPlaced";
+    static readonly string IsCardJudgedKey = "IsCardJudged";
     static readonly string BattleCardTypeKey = "BattleCardType";
 
     /// <summary>
@@ -162,6 +163,28 @@ public static class PlayerPropertiesExtensions
     public static void SetIsFieldCardPlaced(this Player player, bool isFieldCardPlaced)
     {
         propsToSet[IsFieldCardPlacedKey] = isFieldCardPlaced;
+        player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// カードを判定したかどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static bool GetIsCardJudged(this Player player)
+    {
+        return (player.CustomProperties[IsCardJudgedKey] is bool isCardJudged) ? isCardJudged : false;
+    }
+
+    /// <summary>
+    /// カードの判定をしたかどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isMyTurn"></param>
+    public static void SetIsCardJudged(this Player player, bool isCardJudged)
+    {
+        propsToSet[IsCardJudgedKey] = isCardJudged;
         player.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }
