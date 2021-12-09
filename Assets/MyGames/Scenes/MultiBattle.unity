@@ -865,6 +865,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6963250446383944843, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250446383944951, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250446383944951, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250446575608123, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250446575608123, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250446575608135, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _confirmationPanelToSp
       value: 

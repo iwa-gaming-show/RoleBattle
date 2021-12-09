@@ -807,6 +807,9 @@ MonoBehaviour:
   _announceThePlayerTurn: {fileID: 4238336879744854307}
   _announceTheEnemyTurn: {fileID: 6917833062636073271}
   _countDownText: {fileID: 4238336880814779577}
+  _hideUIs: []
+  _openPhaseText: {fileID: 0}
+  _judgementResultText: {fileID: 0}
   _directionUIManager: {fileID: 0}
   _specialSkillUIManager: {fileID: 0}
   BattleConfirmationPanels: []
@@ -1786,7 +1789,7 @@ GameObject:
   - component: {fileID: 4238336880509999191}
   - component: {fileID: 4238336880509999189}
   - component: {fileID: 4238336880509999190}
-  - component: {fileID: 1346771253206073636}
+  - component: {fileID: 6897597758699130732}
   m_Layer: 5
   m_Name: ToSp
   m_TagString: Untagged
@@ -1855,7 +1858,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1346771253206073636
+--- !u!114 &6897597758699130732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3259,6 +3262,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3215479193668887265}
     m_Modifications:
+    - target: {fileID: 1573284862570020486, guid: dd4aa7ac04c1b4e7ebe598ca54eb3a88, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1573284862570020486, guid: dd4aa7ac04c1b4e7ebe598ca54eb3a88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
