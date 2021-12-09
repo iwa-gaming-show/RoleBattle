@@ -17,8 +17,10 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     MultiConfirmationPanelToSp _confirmationPanelToSp;
 
     CardController _movingFieldCard;//フィールドへ移動するカードを保存する
+    bool _isSpSkillActivating;//必殺技を発動するか
 
     public CardController MovingFieldCard => _movingFieldCard;
+    public bool IsSpSkillActivating => _isSpSkillActivating;
 
     void Awake()
     {
@@ -75,7 +77,7 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
 
         if (_confirmationPanelToSp.CanActivateSpSkill)
         {
-            Debug.Log("必殺技を発動する");
+            _isSpSkillActivating = true;
         }
 
         _confirmationPanelToSp.SetCanActivateSpSkill(false);
@@ -117,5 +119,14 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     public void DestroyMovingBattleCard()
     {
         _movingFieldCard = null;
+    }
+
+    /// <summary>
+    /// //必殺技発動フラグを設定する
+    /// </summary>
+    /// <param name="isActivating"></param>
+    public void SetIsSpSkillActivating(bool isActivating)
+    {
+        _isSpSkillActivating = isActivating;
     }
 }

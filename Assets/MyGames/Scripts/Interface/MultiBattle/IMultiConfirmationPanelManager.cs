@@ -8,6 +8,12 @@ public interface IMultiConfirmationPanelManager
     {
         get;
     }
+
+    bool IsSpSkillActivating
+    {
+        get;
+    }
+
     /// <summary>
     /// フィールドへの移動を確認します
     /// </summary>
@@ -23,4 +29,10 @@ public interface IMultiConfirmationPanelManager
     /// 必殺技発動の確認をします
     /// </summary>
     UniTask ConfirmToActivateSpSkill();
+
+    /// <summary>
+    /// //必殺技発動フラグを設定する
+    /// </summary>
+    /// <param name="isActivating"></param>
+    public void SetIsSpSkillActivating(bool isActivating);
 }

@@ -67,6 +67,7 @@ public class MultiBattleUIManager : MonoBehaviour
 
 
 
+
     //下は保留の値
 
     [SerializeField]
@@ -118,6 +119,7 @@ public class MultiBattleUIManager : MonoBehaviour
     void Update()
     {
         TryToMoveToField(_multiConfirmationPanelManager.MovingFieldCard);
+        TryToActivateSpSkill(_multiConfirmationPanelManager.IsSpSkillActivating);
     }
 
     /// <summary>
@@ -345,6 +347,17 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 必殺技発動を試みます
+    /// </summary>
+    void TryToActivateSpSkill(bool IsSpSkillActivating)
+    {
+        if (IsSpSkillActivating == false) return;
+        _multiConfirmationPanelManager.SetIsSpSkillActivating(false);
+
+        ActivateSpSkill().Forget();
+    }
+
+    /// <summary>
     /// カードを移動する
     /// </summary>
     async UniTask MoveToBattleField(CardController movingCard)
@@ -355,8 +368,8 @@ public class MultiBattleUIManager : MonoBehaviour
         PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
 
         //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
-        await _playerUI.MoveToBattleField(movingCard);
         _photonView.RPC("RpcMoveEnemyCardToField", RpcTarget.Others);
+        await _playerUI.MoveToBattleField(movingCard);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
@@ -364,15 +377,7 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// カードタイプを登録します
-    /// </summary>
-    void RegisterCardType(CardType cardType)
-    {
-        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
-    }
-
-    /// <summary>
-    /// エネミーのカードをフィールドに移動します
+    /// 相手のカードをフィールドに移動します
     /// </summary>
     [PunRPC]
     void RpcMoveEnemyCardToField()
@@ -381,6 +386,39 @@ public class MultiBattleUIManager : MonoBehaviour
         //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
         CardController randomFieldCard = _enemyUI.GetRandomHandCard();
         _enemyUI.MoveToBattleField(randomFieldCard).Forget();
+    }
+
+    /// <summary>
+    /// 必殺技を発動する
+    /// </summary>
+    /// <returns></returns>
+    async UniTask ActivateSpSkill()
+    {
+        PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
+        PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
+
+        //sp演出中はカウントダウンを止める
+        _photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
+        await _playerUI.ShowSpSkillDirection(true);
+        //カウントダウン再開
+        //_battleManager.SetIsDuringProductionOfSpecialSkill(false);
+    }
+
+    /// <summary>
+    /// 相手のカードをフィールドに移動します
+    /// </summary>
+    [PunRPC]
+    void RpcActivateEnemySpSkill()
+    {
+        _enemyUI.ShowSpSkillDirection(false).Forget();
+    }
+
+    /// <summary>
+    /// カードタイプを登録します
+    /// </summary>
+    void RegisterCardType(CardType cardType)
+    {
+        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
     }
 
     /// <summary>

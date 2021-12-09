@@ -52,94 +52,79 @@ public class MultiSpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     public void HideUIsAtStart()
     {
         ConfirmationPanel.ToggleUI(false);
-        ToggleProductionToSpecialSkill(false, true);
-        ToggleProductionToSpecialSkill(false, false);
+        //ToggleProductionToSpecialSkill(false, true);
+        //ToggleProductionToSpecialSkill(false, false);
     }
 
     /// <summary>
     /// 必殺技発動の演出
     /// </summary>
-    async UniTask ShowSpecialSkillDirection(bool isPlayer)
-    {
-        RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
-        float screenEdgeX = UIUtil.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
-        Sequence sequence = DOTween.Sequence();
-        Tween firstMove;
-        Tween lastMove;
+    //async UniTask ShowSpecialSkillDirection(bool isPlayer)
+    //{
+    //    RectTransform targetUIRectTranform = GetProductionToSpecialSkillBy(isPlayer).GetComponent<RectTransform>();
+    //    float screenEdgeX = UIUtil.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
+    //    Sequence sequence = DOTween.Sequence();
+    //    Tween firstMove;
+    //    Tween lastMove;
 
-        //プレイヤーなら右から左へ移動, エネミーなら左から右へ移動する
-        if (isPlayer)
-        {
-            firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, screenEdgeX, 0);
-            lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, -screenEdgeX, 0.4f);
-        }
-        else
-        {
-            firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, -screenEdgeX, 0f);
-            lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, screenEdgeX, 0.4f);
-        }
+    //    //プレイヤーなら右から左へ移動, エネミーなら左から右へ移動する
+    //    if (isPlayer)
+    //    {
+    //        firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, screenEdgeX, 0);
+    //        lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, -screenEdgeX, 0.4f);
+    //    }
+    //    else
+    //    {
+    //        firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, -screenEdgeX, 0f);
+    //        lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, screenEdgeX, 0.4f);
+    //    }
 
-        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true, isPlayer)));
-        sequence.Append(UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, 0f, 0.25f));
-        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
+    //    sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true, isPlayer)));
+    //    sequence.Append(UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, 0f, 0.25f));
+    //    sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false, isPlayer)));
 
-        await sequence
-           .Play()
-           .AsyncWaitForCompletion();
-    }
+    //    await sequence
+    //       .Play()
+    //       .AsyncWaitForCompletion();
+    //}
 
-    /// <summary>
-    /// 必殺技演出UIの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
-    {
-        CanvasForObjectPool._instance.ToggleUIGameObject(GetProductionToSpecialSkillBy(isPlayer), isActive, transform);
-    }
+    ///// <summary>
+    ///// 必殺技演出UIの表示の切り替え
+    ///// </summary>
+    ///// <param name="isActive"></param>
+    //public void ToggleProductionToSpecialSkill(bool isActive, bool isPlayer)
+    //{
+    //    CanvasForObjectPool._instance.ToggleUIGameObject(GetProductionToSpecialSkillBy(isPlayer), isActive, transform);
+    //}
 
     /// <summary>
     /// 必殺技演出UIを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
-    GameObject GetProductionToSpecialSkillBy(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            return _playerProductionToSpecialSkill;
-        }
-        return _enemyProductionToSpecialSkill;
-    }
-
-    /// <summary>
-    /// 必殺技ボタンを押した時
-    /// </summary>
-    public void OnClickSpecialSkillButton()
-    {
-        //自分のターンのみ押せる
-        if (_turnManager.IsMyTurn == false) return;
-        //一度使用したら押せない
-        if (_battleManager.Player.CanUseSpecialSkill == false) return;
-        //選択フェイズでなければ押せない
-        if (_battleManager.BattlePhase != SELECTION) return;
-
-        _confirmationPanel.ToggleUI(true);
-    }
+    //GameObject GetProductionToSpecialSkillBy(bool isPlayer)
+    //{
+    //    if (isPlayer)
+    //    {
+    //        return _playerProductionToSpecialSkill;
+    //    }
+    //    return _enemyProductionToSpecialSkill;
+    //}
 
     /// <summary>
     /// 必殺技を発動する
     /// </summary>
-    public async UniTask ActivateSpecialSkill(bool isPlayer)
-    {
-        //必殺技を使用済みにする
-        //UsedSpecialSkillButton(isPlayer);
-        _battleManager.UsedSpecialSkill(isPlayer);
+    //public async UniTask ActivateSpecialSkill(bool isPlayer)
+    //{
+    //    //必殺技を使用済みにする
+    //    //UsedSpecialSkillButton(isPlayer);
+    //    _battleManager.UsedSpecialSkill(isPlayer);
 
-        //必殺技を演出、 演出中はカウントダウンが止まる
-        _battleManager.SetIsDuringProductionOfSpecialSkill(true);
-        await ShowSpecialSkillDirection(isPlayer);
-        //カウントダウン再開
-        _battleManager.SetIsDuringProductionOfSpecialSkill(false);
-    }
+    //    //必殺技を演出、 演出中はカウントダウンが止まる
+    //    _battleManager.SetIsDuringProductionOfSpecialSkill(true);
+    //    await ShowSpecialSkillDirection(isPlayer);
+    //    //カウントダウン再開
+    //    _battleManager.SetIsDuringProductionOfSpecialSkill(false);
+    //}
 
     /// <summary>
     /// 必殺技の説明文の設定
@@ -151,6 +136,21 @@ public class MultiSpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
             description.text = _specialSkillDescription;
         }
     }
+
+    ///// <summary>
+    ///// 必殺技ボタンを押した時
+    ///// </summary>
+    //public void OnClickSpecialSkillButton()
+    //{
+    //    //自分のターンのみ押せる
+    //    if (_turnManager.IsMyTurn == false) return;
+    //    //一度使用したら押せない
+    //    if (_battleManager.Player.CanUseSpecialSkill == false) return;
+    //    //選択フェイズでなければ押せない
+    //    if (_battleManager.BattlePhase != SELECTION) return;
+
+    //    _confirmationPanel.ToggleUI(true);
+    //}
 
     /// <summary>
     /// 必殺技ボタンを使用済みにする

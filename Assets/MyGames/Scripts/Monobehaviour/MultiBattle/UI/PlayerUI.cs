@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using System;
 using Random = UnityEngine.Random;
 
 public class PlayerUI : MonoBehaviour
@@ -151,5 +150,52 @@ public class PlayerUI : MonoBehaviour
     public void SetFieldCard(CardController cardController)
     {
         cardController.transform.SetParent(_battleField, false);
+    }
+
+    /// <summary>
+    /// 必殺技を発動します
+    /// </summary>
+    public async UniTask ShowSpSkillDirection(bool isPlayer)
+    {
+        RectTransform targetUIRectTranform = _spProduction.GetComponent<RectTransform>();
+        float screenEdgeX = UIUtil.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);
+        Sequence sequence = DOTween.Sequence();
+        Tween firstMove;
+        Tween lastMove;
+
+        //自分なら右端から左端へ移動, 相手なら左から右へ移動する
+        firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, GetScreenEdgeXForPlayer(isPlayer, true, screenEdgeX), 0);
+        lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, GetScreenEdgeXForPlayer(isPlayer, false, screenEdgeX) , 0.4f);
+
+        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true)));
+        sequence.Append(UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, 0f, 0.25f));
+        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false)));
+
+        await sequence
+           .Play()
+           .AsyncWaitForCompletion();
+    }
+
+    /// <summary>
+    /// 必殺技演出UIの表示の切り替え
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleProductionToSpecialSkill(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_spProduction, isActive, transform);
+    }
+
+    /// <summary>
+    /// プレイヤーの演出のための画面の横幅を取得する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <param name="isFirstMove"></param>
+    /// <param name="screenEdgeX"></param>
+    /// <returns></returns>
+    public float GetScreenEdgeXForPlayer(bool isPlayer, bool isFirstMove, float screenEdgeX)
+    {
+        if (isPlayer && isFirstMove) return screenEdgeX;
+        if (isPlayer == false && isFirstMove == false) return screenEdgeX;
+        return -screenEdgeX;
     }
 }
