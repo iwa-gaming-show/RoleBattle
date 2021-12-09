@@ -8,18 +8,20 @@ using UnityEngine;
 public class MultiConfirmationPanelToSp : MonoBehaviour,
     IToggleable,
     IYesButtonAction,
-    INoButtonAction
+    INoButtonAction,
+    IRequiredConfirmation
 {
     [SerializeField]
-    [Header("CanvasForSpecialSkillを設定")]
-    Transform SpecialSkillUIManagerTransform;
+    [Header("CanvasForConfirmationPanelsを設定")]
+    Transform _canvasForConfirmationPanelsTransform;
 
-    IBattleUIManager _battleUIManager;
-    
-    void Start()
-    {
-        _battleUIManager = ServiceLocator.Resolve<IBattleUIManager>();
-    }
+    bool _canActivateSpSkill;//カードの移動ができる
+    bool _isConfirmed;
+
+    #region//プロパティ
+    public bool CanActivateSpSkill => _canActivateSpSkill;
+    public bool IsConfirmed => _isConfirmed;
+    #endregion
 
     /// <summary>
     /// UIの表示の切り替え
@@ -27,16 +29,17 @@ public class MultiConfirmationPanelToSp : MonoBehaviour,
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, SpecialSkillUIManagerTransform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, _canvasForConfirmationPanelsTransform);
     }
 
     /// <summary>
     /// 必殺技発動の確認画面でYesを押した時
     /// </summary>
-    public async void OnClickYes()
+    public void OnClickYes()
     {
         ToggleUI(false);
-        await _battleUIManager.ActivateSpecialSkill(true);
+        _isConfirmed = true;
+        _canActivateSpSkill = true;
     }
 
     /// <summary>
@@ -45,5 +48,24 @@ public class MultiConfirmationPanelToSp : MonoBehaviour,
     public void OnClickNo()
     {
         ToggleUI(false);
+        _isConfirmed = true;
+        _canActivateSpSkill = false;
+    }
+
+    /// <summary>
+    /// 必殺技発動の確認画面の押下フラグのセット
+    /// </summary>
+    /// <param name="isClicked"></param>
+    public void SetIsConfirmed(bool isConfirmed)
+    {
+        _isConfirmed = isConfirmed;
+    }
+
+    /// <summary>
+    /// 必殺技発動可能フラグのセット
+    /// </summary>
+    public void SetCanActivateSpSkill(bool can)
+    {
+        _canActivateSpSkill = can;
     }
 }

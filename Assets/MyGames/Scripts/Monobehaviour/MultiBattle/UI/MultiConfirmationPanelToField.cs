@@ -10,7 +10,8 @@ using static UIStrings;
 public class MultiConfirmationPanelToField : MonoBehaviour,
     IToggleable,
     IYesButtonAction,
-    INoButtonAction
+    INoButtonAction,
+    IRequiredConfirmation
 {
     [SerializeField]
     [Header("CanvasForConfirmationPanelsを設定")]
@@ -20,12 +21,12 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     [Header("バトル場への確認画面のテキスト")]
     Text _fieldConfirmationText;
 
-    bool _isClickedConfirmationButton;//確認ボタンをクリックしたか
     bool _canMoveToField;//カードの移動ができる
+    bool _isConfirmed;
 
     #region//プロパティ
     public bool CanMoveToField => _canMoveToField;
-    public bool IsClickedConfirmationButton => _isClickedConfirmationButton;
+    public bool IsConfirmed => _isConfirmed;
     #endregion
 
     /// <summary>
@@ -44,7 +45,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     public void OnClickYes()
     {
         ToggleUI(false);
-        _isClickedConfirmationButton = true;
+        _isConfirmed = true;
         _canMoveToField = true;
     }
 
@@ -54,7 +55,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     public void OnClickNo()
     {
         ToggleUI(false);
-        _isClickedConfirmationButton = true;
+        _isConfirmed = true;
         _canMoveToField = false;
     }
 
@@ -62,9 +63,9 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     /// バトル場への移動確認画面の押下フラグのセット
     /// </summary>
     /// <param name="isClicked"></param>
-    public void SetIsClickedConfirmationButton(bool isClicked)
+    public void SetIsConfirmed(bool isConfirmed)
     {
-        _isClickedConfirmationButton = isClicked;
+        _isConfirmed = isConfirmed;
     }
 
     /// <summary>
