@@ -344,7 +344,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1525997563}
   - component: {fileID: 1525997562}
-  - component: {fileID: 1525997564}
   - component: {fileID: 1525997565}
   m_Layer: 0
   m_Name: BattlePun2Object
@@ -368,6 +367,7 @@ MonoBehaviour:
   _multiBattleManager: {fileID: 984557160}
   _maxPlayers: 2
   _maxRoundCount: 3
+  _countDownTime: 15
   _multiBattleCanvas: {fileID: 2909652730713099851}
   _multiBattleUIManager: {fileID: 1346771253206073630}
 --- !u!4 &1525997563
@@ -384,19 +384,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1525997564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525997561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a1b3bda60e9e804f87fd1e5d20a885a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TurnDuration: 5
 --- !u!114 &1525997565
 MonoBehaviour:
   m_ObjectHideFlags: 0

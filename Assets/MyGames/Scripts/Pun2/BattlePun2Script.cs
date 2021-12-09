@@ -27,6 +27,10 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     int _maxRoundCount = 3;
 
     [SerializeField]
+    [Header("カウントダウンの秒数を指定")]
+    float _countDownTime = DEFAULT_COUNT_DOWN_TIME;
+
+    [SerializeField]
     [Header("ゲーム盤のCanvasを設定する")]
     GameObject _multiBattleCanvas;
 
@@ -46,8 +50,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
     void Awake()
     {
-        _punTurnManager = GetComponent<PunTurnManager>();
+        _punTurnManager = gameObject.AddComponent<PunTurnManager>();
         _punTurnManager.TurnManagerListener = this;
+        _punTurnManager.TurnDuration = _countDownTime;
         _photonView = GetComponent<PhotonView>();
     }
 
