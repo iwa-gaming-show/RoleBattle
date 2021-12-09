@@ -70,7 +70,6 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
         return myTurn && selectionPhase && placeable;
     }
 
-
     /// <summary>
     /// 選択したカードの確認画面を表示する
     /// </summary>

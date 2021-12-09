@@ -165,11 +165,10 @@ public class MultiBattleUIManager : MonoBehaviour
     /// </summary>
     /// <param name="roundCount"></param>
     /// <returns></returns>
-    public async UniTask ShowRoundCountText(int roundCount)
+    public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
     {
-        //public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
         ToggleRoundCountText(true);
-        SetRoundCountText(roundCount);
+        SetRoundCountText(roundCount, maxRoundCount);
 
         await UniTask.Delay(TimeSpan.FromSeconds(ROUND_COUNT_DISPLAY_TIME));
         ToggleRoundCountText(false);
@@ -178,18 +177,12 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <summary>
     /// ラウンド表示用のテキストを設定する
     /// </summary>
-    void SetRoundCountText(int roundCount)
+    void SetRoundCountText(int roundCount, int maxRoundCount)
     {
-        _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
-        //if (roundCount == maxRoundCount)
-        //{
-        //    //最終ラウンド
-        //    _roundCountText.text = FINAL_ROUND;
-        //}
-        //else
-        //{
-        //    _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
-        //}
+        if (roundCount == maxRoundCount)
+            _roundCountText.text = FINAL_ROUND;//最終ラウンド
+        else
+            _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
     }
 
     /// <summary>
@@ -496,17 +489,6 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         //_specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
-    }
-
-    /// <summary>
-    /// ラウンド数を表示する
-    /// </summary>
-    /// <param name="roundCount"></param>
-    /// <param name="maxRoundCount"></param>
-    /// <returns></returns>
-    public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
-    {
-        await _directionUIManager.ShowRoundCountText(roundCount, maxRoundCount);
     }
 
     /// <summary>

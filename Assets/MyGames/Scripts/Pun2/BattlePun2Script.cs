@@ -107,7 +107,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         ResetPlayerState();
         //_multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
-        await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount());
+        await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount(), _maxRoundCount);
         if (isFirstBattle) DecideTheTurn();
         _multiBattleUIManager.DistributeCards();
         StartTurn();
