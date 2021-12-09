@@ -31,22 +31,23 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// フィールドへの移動を試みます
+    /// フィールドへの移動を確認します
     /// </summary>
     /// <returns></returns>
     public async UniTask ConfirmToMoveToField(CardController selectedCard)
     {
         //選択フェイズで自身のカードが配置可能な場合操作可能
         bool myCard = selectedCard.IsPlayerCard;
-        bool controllable = myCard && MySelectionTurn();
-        if (controllable == false) return;
+        bool controlable = myCard && MySelectionTurn();
+        if (controlable == false) return;
 
         //すでに確認画面が表示されているなら何もしない
         if (_confirmationPanelToField.gameObject.activeInHierarchy) return;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
-        ViewConfirmationPanelFor(selectedCard);
-        await WaitFieldConfirmationButton();
+        ViewConfirmationPanelFor(_confirmationPanelToField);
+        _confirmationPanelToField.SetFieldConfirmationText(selectedCard);
+        await WaitFieldConfirmationButton(_confirmationPanelToField);
 
         //yesを押した時、フィールドへ移動するカードとして保持
         if (_confirmationPanelToField.CanMoveToField)
@@ -55,7 +56,30 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
         }
 
         _confirmationPanelToField.SetCanMoveToField(false);
-        _confirmationPanelToField.SetIsClickedConfirmationButton(false);
+        _confirmationPanelToField.SetIsConfirmed(false);
+    }
+
+    /// <summary>
+    /// 必殺技発動の確認をします
+    /// </summary>
+    public async UniTask ConfirmToActivateSpSkill()
+    {
+        bool canUseSpSkill = PhotonNetwork.LocalPlayer.GetCanUseSpSkill();
+        bool activatable = canUseSpSkill && MySelectionTurn();
+        if (activatable == false) return;
+        if (_confirmationPanelToSp.gameObject.activeInHierarchy) return;
+
+        //確認画面を表示しYesなら必殺技を発動します
+        ViewConfirmationPanelFor(_confirmationPanelToSp);
+        await WaitFieldConfirmationButton(_confirmationPanelToSp);
+
+        if (_confirmationPanelToSp.CanActivateSpSkill)
+        {
+            Debug.Log("必殺技を発動する");
+        }
+
+        _confirmationPanelToSp.SetCanActivateSpSkill(false);
+        _confirmationPanelToSp.SetCanActivateSpSkill(false);
     }
 
     /// <summary>
@@ -73,23 +97,22 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     /// <summary>
     /// 選択したカードの確認画面を表示する
     /// </summary>
-    public void ViewConfirmationPanelFor(CardController selectedCard)
+    public void ViewConfirmationPanelFor(IToggleable confirmationPanel)
     {
-        _confirmationPanelToField.ToggleUI(true);//確認画面を表示
-        _confirmationPanelToField.SetFieldConfirmationText(selectedCard);
+        confirmationPanel.ToggleUI(true);//確認画面を表示
     }
 
     /// <summary>
     /// フィールドへの確認画面の押下を待ちます
     /// </summary>
     /// <returns></returns>
-    async UniTask WaitFieldConfirmationButton()
+    async UniTask WaitFieldConfirmationButton(IRequiredConfirmation confirmationPanel)
     {
-        await UniTask.WaitUntil(() => _confirmationPanelToField.IsClickedConfirmationButton);
+        await UniTask.WaitUntil(() => confirmationPanel.IsConfirmed);
     }
 
     /// <summary>
-    /// バトル場へ移動するカードを削除します
+    /// バトル場へ移動するカードの保存情報を破棄する
     /// </summary>
     public void DestroyMovingBattleCard()
     {

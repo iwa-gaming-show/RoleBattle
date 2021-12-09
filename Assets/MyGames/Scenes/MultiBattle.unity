@@ -367,6 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _multiBattleManager: {fileID: 984557160}
   _maxPlayers: 2
+  _maxRoundCount: 3
   _multiBattleCanvas: {fileID: 2909652730713099851}
   _multiBattleUIManager: {fileID: 1346771253206073630}
 --- !u!4 &1525997563
@@ -531,6 +532,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4238336879444711784, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_PrefabInstance: {fileID: 1346771253206073628}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1979947476 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6897597758699130732, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05de3dffb206d4e73abbbd62839d400d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1995176566
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,10 +829,38 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5438969055338014442, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1979947476}
+    - target: {fileID: 5438969055338014442, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickYes
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438969055338014442, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MultiConfirmationPanelToSp, App
+      objectReference: {fileID: 0}
     - target: {fileID: 5822303380877769767, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_text
       value: 0P
       objectReference: {fileID: 0}
+    - target: {fileID: 5991402721958935436, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1979947476}
+    - target: {fileID: 5991402721958935436, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickNo
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991402721958935436, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MultiConfirmationPanelToSp, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 6897597758699130732, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _canvasForConfirmationPanelsTransform
+      value: 
+      objectReference: {fileID: 1056884823}
     - target: {fileID: 6917833062636073271, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -828,7 +868,7 @@ PrefabInstance:
     - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _confirmationPanelToSp
       value: 
-      objectReference: {fileID: 1346771253206073636}
+      objectReference: {fileID: 1979947476}
     - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _confirmationPanelToField
       value: 
@@ -837,7 +877,8 @@ PrefabInstance:
       propertyPath: _battleField
       value: 
       objectReference: {fileID: 1928885938}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1346771253206073636, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
 --- !u!114 &1346771253206073630 stripped
 MonoBehaviour:
@@ -848,17 +889,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c551b588439846739aededf2865a6d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1346771253206073636 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1346771253206073636, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
-  m_PrefabInstance: {fileID: 1346771253206073628}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05de3dffb206d4e73abbbd62839d400d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1346771253206073637 stripped

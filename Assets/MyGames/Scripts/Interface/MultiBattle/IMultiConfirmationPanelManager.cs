@@ -9,7 +9,7 @@ public interface IMultiConfirmationPanelManager
         get;
     }
     /// <summary>
-    /// フィールドへの移動を試みます
+    /// フィールドへの移動を確認します
     /// </summary>
     /// <returns></returns>
     UniTask ConfirmToMoveToField(CardController selectedCard);
@@ -18,4 +18,9 @@ public interface IMultiConfirmationPanelManager
     /// フィールドへ移動するカードを削除します
     /// </summary>
     void DestroyMovingBattleCard();
+
+    /// <summary>
+    /// 必殺技発動の確認をします
+    /// </summary>
+    UniTask ConfirmToActivateSpSkill();
 }
