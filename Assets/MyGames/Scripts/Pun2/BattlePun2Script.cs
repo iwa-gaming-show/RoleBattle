@@ -16,9 +16,6 @@ using static WaitTimes;
 public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallbacks
 {
     [SerializeField]
-    MultiBattleManager _multiBattleManager;
-
-    [SerializeField]
     [Header("最大対戦プレイヤー数")]
     byte _maxPlayers = 2;
 
@@ -46,7 +43,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     Room _room;
     PunTurnManager _punTurnManager;
     PhotonView _photonView;
-    BattlePhase _battlePhase;
 
 
     void Awake()
@@ -59,6 +55,135 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    /// <summary>
+    /// 接続完了時
+    /// </summary>
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    /// <summary>
+    /// 自クライアントのルーム入室時
+    /// </summary>
+    public override void OnJoinedRoom()
+    {
+        InitPlayerIcon();
+        _player = PhotonNetwork.LocalPlayer;
+        _room = PhotonNetwork.CurrentRoom;
+        InitPlayerData();
+
+        if (PhotonNetwork.PlayerList.Length == _maxPlayers)
+        {
+            _photonView.RPC("RpcPrepareBattle", RpcTarget.All);
+        }
+    }
+
+    /// <summary>
+    /// 入室失敗時
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        RoomOptions opt = new RoomOptions();
+        opt.MaxPlayers = _maxPlayers;
+        opt.PublishUserId = true;//お互いにuserIdを見えるようにする
+        PhotonNetwork.CreateRoom(null, opt);
+    }
+
+    /// <summary>
+    /// 自クライアントがルームから退室した時
+    /// </summary>
+    public override void OnLeftRoom()
+    {
+
+    }
+
+    /// <summary>
+    /// 他クライアントがルームに入室した時
+    /// </summary>
+    /// <param name="newPlayer"></param>
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+    }
+
+    /// <summary>
+    /// 他クライアントがルームから離れた時、もしくは非アクティブになった時
+    /// </summary>
+    /// <param name="otherPlayer"></param>
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+
+    }
+
+    /// <summary>
+    /// プレイヤーのカスタムプロパティが呼び出された時
+    /// </summary>
+    /// <param name="targetPlayer"></param>
+    /// <param name="changedProps"></param>
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
+    {
+        //自身と相手のデータへそれぞれ紐付けする
+        bool isPlayer = IsUpdatePlayer(targetPlayer);
+
+        _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
+        _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
+        CheckEnemyIcon();
+        CheckPlayerTurnEnd();
+        ChangeTurn();
+        CheckToNextRound();
+    }
+
+    /// <summary>
+    /// ルームのカスタムプロパティが呼び出された時
+    /// </summary>
+    /// <param name="propertiesThatChanged"></param>
+    public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
+    {
+        Debug.Log("updateBattlePhase" + propertiesThatChanged["BattlePhase"]);
+        CheckActivatingSpSkill();
+    }
+
+    /// <summary>
+    /// プレイヤーアイコンの初期設定
+    /// </summary>
+    void InitPlayerIcon()
+    {
+        _playerIcon = PhotonNetwork.Instantiate("PlayerIcon", Vector3.zero, Quaternion.identity);
+        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
+    }
+
+    /// <summary>
+    /// プレイヤーのデータの初期化
+    /// </summary>
+    void InitPlayerData()
+    {
+        _player.SetPoint(INITIAL_POINT);
+        _player.SetCanUseSpSkill(true);
+    }
+
+    /// <summary>
+    /// ルームのデータの初期化
+    /// </summary>
+    void InitRoomData()
+    {
+        if (_player.IsMasterClient == false) return;
+        _room.SetRoundCount(INITIAL_ROUND_COUNT);
+        _room.SetIntBattlePhase(BattlePhase.NONE);
+        _room.SetEarnedPoint(INITIAL_EARNED_POINT);
+    }
+
+    /// <summary>
+    /// プレイヤーの状態をリセットする
+    /// </summary>
+    public void ResetPlayerState()
+    {
+        _player.SetIsMyTurnEnd(false);
+        _player.SetIsUsingSpInRound(false);
+        _player.SetIsFieldCardPlaced(false);
     }
 
     /// <summary>
@@ -75,6 +200,22 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void RpcStartBattle(bool isFirstBattle)
     {
         StartBattle(isFirstBattle).Forget();
+    }
+
+    /// <summary>
+    /// バトルを開始する
+    /// </summary>
+    public async UniTask StartBattle(bool isFirstBattle)
+    {
+        //1ラウンド目に行う処理
+        if (isFirstBattle) InitRoomData();
+        ResetPlayerState();
+        //_multiBattleUIManager.HideUIAtStart();
+        _multiBattleUIManager.ResetFieldCards();
+        await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount(), _maxRoundCount);
+        if (isFirstBattle) DecideTheTurn();
+        _multiBattleUIManager.DistributeCards();
+        StartTurn();
     }
 
     /// <summary>
@@ -103,38 +244,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// バトルを開始する
-    /// </summary>
-    public async UniTask StartBattle(bool isFirstBattle)
-    {
-        //1ラウンド目に行う処理
-        if (isFirstBattle) InitRoomData();
-        ResetPlayerState();
-        //_multiBattleUIManager.HideUIAtStart();
-        _multiBattleUIManager.ResetFieldCards();
-        await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount(), _maxRoundCount);
-        if (isFirstBattle) DecideTheTurn();
-        _multiBattleUIManager.DistributeCards();
-        StartTurn();
-    }
-
-    /// <summary>
-    /// 自クライアントのルーム入室時
-    /// </summary>
-    public override void OnJoinedRoom()
-    {
-        InitPlayerIcon();
-        _player = PhotonNetwork.LocalPlayer;
-        _room = PhotonNetwork.CurrentRoom;
-        InitPlayerData();
-
-        if (PhotonNetwork.PlayerList.Length == _maxPlayers)
-        {
-            _photonView.RPC("RpcPrepareBattle", RpcTarget.All);
-        }
-    }
-
-    /// <summary>
     /// 先攻、後攻のターンを決めます
     /// </summary>
     public void DecideTheTurn()
@@ -157,11 +266,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         }
     }
 
-    /// <summary>
-    /// ターン開始時に呼ばれます
-    /// </summary>
-    /// <param name="turn"></param>
-    void IPunTurnManagerCallbacks.OnTurnBegins(int turn)
+    [PunRPC]
+    void RpcPlayerTurn()
     {
         PlayerTurn().Forget();
     }
@@ -179,53 +285,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         }
 
         await _multiBattleUIManager.ShowThePlayerTurnText(_player.GetIsMyTurn());
-        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
-        StartCoroutine(CountDown());
-    }
-
-    [PunRPC]
-    void RpcPlayerTurn()
-    {
-        PlayerTurn().Forget();
-    }
-
-    /// <summary>
-    /// プレイヤーのカスタムプロパティが呼び出された時
-    /// </summary>
-    /// <param name="targetPlayer"></param>
-    /// <param name="changedProps"></param>
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
-    {
-        //自身と相手のデータへそれぞれ紐付けする
-        bool isPlayer = IsUpdatePlayer(targetPlayer);
-
-        _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
-        _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
-        CheckEnemyIcon();
-        CheckPlayerTurnEnd();
-        ChangeTurn();
-        CheckToNextRound();
-    }
-
-    /// <summary>
-    /// 必殺技が発動していることを確認します
-    /// </summary>
-    void CheckActivatingSpSkill()
-    {
-        if (_room.GetIsDuringDirecting() == false) return;
-        if (PhotonNetwork.IsMasterClient == false) return;
-        _room.SetIsDuringDirecting(false);
-
-        //発動後カウントダウンをリセットします
-        _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
-    }
-
-    /// <summary>
-    /// カウントダウンをリセットします
-    /// </summary>
-    [PunRPC]
-    void RpcResetCountDown()
-    {
         StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
         StartCoroutine(CountDown());
     }
@@ -257,6 +316,42 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
+    /// カウントダウンをリセットします
+    /// </summary>
+    [PunRPC]
+    void RpcResetCountDown()
+    {
+        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
+        StartCoroutine(CountDown());
+    }
+
+    /// <summary>
+    /// カウントダウン
+    /// </summary>
+    public IEnumerator CountDown()
+    {
+        _countDownTime = _defaultCountDownTime;
+        while (_countDownTime > 0)
+        {
+            //1秒毎に減らしていきます
+            yield return new WaitForSeconds(1f);
+            _countDownTime--;
+            _multiBattleUIManager.ShowCountDownText(_countDownTime);
+
+            //必殺技の演出中はカウントしない
+            //if (_isDuringProductionOfSpSkill == false)
+            //{
+            //    //1秒毎に減らしていきます
+            //    yield return new WaitForSeconds(1f);
+            //    _countDownTime--;
+            //    _battleUIManager.ShowCountDownText(_countDownTime);
+            //}
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
     /// お互いのプレイヤーがバトル場にカードを出しているか
     /// </summary>
     /// <returns></returns>
@@ -273,21 +368,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     bool IsUpdatePlayer(Player targetPlayer)
     {
         return (_player.UserId == targetPlayer.UserId);
-    }
-
-    /// <summary>
-    /// 次のラウンドへの確認をします
-    /// </summary>
-    void CheckToNextRound()
-    {
-        //お互いのカードの判定が終わったら次のラウンドへ
-        if (PhotonNetwork.IsMasterClient == false) return;
-        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
-        if (eachPlayerIsCardJudged == false) return;
-
-        _player.SetIsCardJudged(false);
-        _enemy.SetIsCardJudged(false);
-        NextRound();
     }
 
     /// <summary>
@@ -335,6 +415,21 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
+    /// 次のラウンドへの確認をします
+    /// </summary>
+    void CheckToNextRound()
+    {
+        //お互いのカードの判定が終わったら次のラウンドへ
+        if (PhotonNetwork.IsMasterClient == false) return;
+        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
+        if (eachPlayerIsCardJudged == false) return;
+
+        _player.SetIsCardJudged(false);
+        _enemy.SetIsCardJudged(false);
+        NextRound();
+    }
+
+    /// <summary>
     /// プレイヤーのターンの終了を確認します
     /// </summary>
     /// <param name="player"></param>
@@ -346,13 +441,16 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// プレイヤーの状態をリセットする
+    /// 必殺技が発動していることを確認します
     /// </summary>
-    public void ResetPlayerState()
+    void CheckActivatingSpSkill()
     {
-        _player.SetIsMyTurnEnd(false);
-        _player.SetIsUsingSpInRound(false);
-        _player.SetIsFieldCardPlaced(false);
+        if (_room.GetIsDuringDirecting() == false) return;
+        if (PhotonNetwork.IsMasterClient == false) return;
+        _room.SetIsDuringDirecting(false);
+
+        //発動後カウントダウンをリセットします
+        _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
     }
 
     /// <summary>
@@ -375,6 +473,31 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
         if (isBattle) JudgeTheCard().Forget();
         else Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
+    }
+
+    /// <summary>
+    /// 結果によるポイントを加算する
+    /// </summary>
+    void AddPointBy(CardJudgement result)
+    {
+        if (result != WIN) return;
+
+        int totalPoint = _player.GetPoint() + EarnPoint(_player.GetIsUsingSpInRound());
+        _player.SetPoint(totalPoint);
+    }
+
+    /// <summary>
+    /// 獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    public int EarnPoint(bool isUsingSkillInRound)
+    {
+        int earnPoint = _room.GetEarnedPoint();
+        //このラウンドの間必殺技を使用していた場合
+        if (isUsingSkillInRound)
+            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
+
+        return earnPoint;
     }
 
     /// <summary>
@@ -406,44 +529,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// 結果を反映します
-    /// </summary>
-    /// <param name="result"></param>
-    public async UniTask ReflectTheResult(CardJudgement result)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            _room.SetIntBattlePhase(RESULT);
-        }
-        await _multiBattleUIManager.ShowJudgementResultText(result.ToString());
-    }
-
-    /// <summary>
-    /// 結果によるポイントを加算する
-    /// </summary>
-    void AddPointBy(CardJudgement result)
-    {
-        if (result != WIN) return;
-
-        int totalPoint = _player.GetPoint() + EarnPoint(_player.GetIsUsingSpInRound());
-        _player.SetPoint(totalPoint);
-    }
-
-    /// <summary>
-    /// 獲得ポイント
-    /// </summary>
-    /// <returns></returns>
-    public int EarnPoint(bool isUsingSkillInRound)
-    {
-        int earnPoint = _room.GetEarnedPoint();
-        //このラウンドの間必殺技を使用していた場合
-        if (isUsingSkillInRound)
-            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
-
-        return earnPoint;
-    }
-
-    /// <summary>
     /// カードの勝敗結果を取得する
     /// </summary>
     /// <param name="myCard"></param>
@@ -460,29 +545,25 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// カウントダウン
+    /// 結果を反映します
     /// </summary>
-    public IEnumerator CountDown()
+    /// <param name="result"></param>
+    public async UniTask ReflectTheResult(CardJudgement result)
     {
-        _countDownTime = _defaultCountDownTime;
-        while (_countDownTime > 0)
+        if (PhotonNetwork.IsMasterClient)
         {
-            //1秒毎に減らしていきます
-            yield return new WaitForSeconds(1f);
-            _countDownTime--;
-            _multiBattleUIManager.ShowCountDownText(_countDownTime);
-
-            //必殺技の演出中はカウントしない
-            //if (_isDuringProductionOfSpSkill == false)
-            //{
-            //    //1秒毎に減らしていきます
-            //    yield return new WaitForSeconds(1f);
-            //    _countDownTime--;
-            //    _battleUIManager.ShowCountDownText(_countDownTime);
-            //}
-
-            yield return null;
+            _room.SetIntBattlePhase(RESULT);
         }
+        await _multiBattleUIManager.ShowJudgementResultText(result.ToString());
+    }
+
+    /// <summary>
+    /// ターン開始時に呼ばれます
+    /// </summary>
+    /// <param name="turn"></param>
+    void IPunTurnManagerCallbacks.OnTurnBegins(int turn)
+    {
+        PlayerTurn().Forget();
     }
 
     /// <summary>
@@ -525,90 +606,5 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     void IPunTurnManagerCallbacks.OnTurnTimeEnds(int turn)
     {
         //今回は使用しません
-    }
-
-    /// <summary>
-    /// 接続完了時
-    /// </summary>
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinRandomRoom();
-    }
-
-    /// <summary>
-    /// 入室失敗時
-    /// </summary>
-    /// <param name="returnCode"></param>
-    /// <param name="message"></param>
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        RoomOptions opt = new RoomOptions();
-        opt.MaxPlayers = _maxPlayers;
-        opt.PublishUserId = true;//お互いにuserIdを見えるようにする
-        PhotonNetwork.CreateRoom(null, opt);
-    }
-
-    /// <summary>
-    /// プレイヤーアイコンの初期設定
-    /// </summary>
-    void InitPlayerIcon()
-    {
-        _playerIcon = PhotonNetwork.Instantiate("PlayerIcon", Vector3.zero, Quaternion.identity);
-        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
-    }
-
-    /// <summary>
-    /// プレイヤーのデータの初期化
-    /// </summary>
-    void InitPlayerData()
-    {
-        _player.SetPoint(INITIAL_POINT);
-        _player.SetCanUseSpSkill(true);
-    }
-
-    /// <summary>
-    /// ルームのデータの初期化
-    /// </summary>
-    void InitRoomData()
-    {
-        if (_player.IsMasterClient == false) return;
-        _room.SetRoundCount(INITIAL_ROUND_COUNT);
-        _room.SetIntBattlePhase(BattlePhase.NONE);
-        _room.SetEarnedPoint(INITIAL_EARNED_POINT);
-    }
-
-    /// <summary>
-    /// ルームのカスタムプロパティが呼び出された時
-    /// </summary>
-    /// <param name="propertiesThatChanged"></param>
-    public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
-    {
-        Debug.Log("updateBattlePhase" + propertiesThatChanged["BattlePhase"]);
-        CheckActivatingSpSkill();
-    }
-
-    /// <summary>
-    /// 自クライアントがルームから退室した時
-    /// </summary>
-    public override void OnLeftRoom()
-    {
-
-    }
-
-    /// <summary>
-    /// 他クライアントがルームに入室した時
-    /// </summary>
-    /// <param name="newPlayer"></param>
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-    }
-
-    /// <summary>
-    /// 他クライアントがルームから離れた時、もしくは非アクティブになった時
-    /// </summary>
-    /// <param name="otherPlayer"></param>
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-
     }
 }
