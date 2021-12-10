@@ -64,6 +64,14 @@ public class MultiBattleUIManager : MonoBehaviour
     [Header("ラウンドの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _judgementResultText;
 
+    [SerializeField]
+    [Header("バトルの勝敗の結果表示用UI")]
+    GameObject _battleResultUI;
+
+    [SerializeField]
+    [Header("バトルの勝敗の結果表示のテキスト")]
+    TextMeshProUGUI _battleResultText;
+
 
 
 
@@ -513,7 +521,23 @@ public class MultiBattleUIManager : MonoBehaviour
         _multiConfirmationPanelManager.InactiveUIIfCountDownTimeOut();
     }
 
+    /// <summary>
+    /// バトル結果の表示の切り替え
+    /// </summary>
+    /// <param name="isAcitve"></param>
+    public void ToggleBattleResultUI(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, transform);
+    }
 
+    /// <summary>
+    /// バトルの勝敗のテキストを表示する
+    /// </summary>
+    /// <returns></returns>
+    public void SetBattleResultText(string text)
+    {
+        _battleResultText.text = text;
+    }
 
 
 
@@ -532,24 +556,6 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         //_specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
-    }
-
-    /// <summary>
-    /// ゲーム結果の表示の切り替え
-    /// </summary>
-    /// <param name="isAcitve"></param>
-    public void ToggleGameResultUI(bool isActive)
-    {
-        _directionUIManager.ToggleGameResultUI(isActive);
-    }
-
-    /// <summary>
-    /// ゲームの勝敗のテキストを表示する
-    /// </summary>
-    /// <returns></returns>
-    public void SetGameResultText(string text)
-    {
-        _directionUIManager.SetGameResultText(text);
     }
 
     /// <summary>

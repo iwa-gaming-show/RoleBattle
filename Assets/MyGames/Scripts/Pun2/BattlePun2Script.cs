@@ -9,6 +9,7 @@ using Cysharp.Threading.Tasks;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using static InitializationData;
 using static BattlePhase;
+using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
@@ -385,8 +386,32 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         }
         else
         {
-            Debug.Log("ゲーム終了");
+            _photonView.RPC("RpcEndBattle", RpcTarget.AllViaServer);
         }
+    }
+
+    /// <summary>
+    /// バトルを終了する
+    /// </summary>
+    [PunRPC]
+    void RpcEndBattle()
+    {
+        //勝敗を表示
+        _multiBattleUIManager.ToggleBattleResultUI(true);
+        _multiBattleUIManager.SetBattleResultText(CommonAttribute.GetStringValue(JudgeBattleResult()));
+    }
+
+    /// <summary>
+    /// バトルの結果を取得する
+    /// </summary>
+    public BattleResult JudgeBattleResult()
+    {
+        int playerPoint = _player.GetPoint();
+        int enemyPoint = _enemy.GetPoint();
+
+        if (playerPoint > enemyPoint) return BATTLE_WIN;
+        if (playerPoint == enemyPoint) return BATTLE_DRAW;
+        return BATTLE_LOSE;
     }
 
     /// <summary>

@@ -180,6 +180,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
+--- !u!114 &634543585 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4238336878983756484, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &936262886 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4238336879990495314, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1017899659
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +655,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1075363521}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _battleResultUI
+      value: 
+      objectReference: {fileID: 936262886}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _battleResultText
+      value: 
+      objectReference: {fileID: 634543585}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _hideUIs.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -685,6 +709,10 @@ PrefabInstance:
     - target: {fileID: 4238336878841731695, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336878983756486, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Name
+      value: BattleResultText
       objectReference: {fileID: 0}
     - target: {fileID: 4238336879348561756, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
@@ -797,6 +825,10 @@ PrefabInstance:
     - target: {fileID: 4238336879744854307, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336879990495314, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Name
+      value: BattleResult
       objectReference: {fileID: 0}
     - target: {fileID: 4238336879990495314, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive

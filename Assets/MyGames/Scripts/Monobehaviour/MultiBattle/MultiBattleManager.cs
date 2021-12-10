@@ -5,12 +5,13 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static CardJudgement;
-using static GameResult;
+using static BattleResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
-public class MultiBattleManager : MonoBehaviour, IBattleManager
+public class MultiBattleManager : MonoBehaviour
+    //IBattleManager
 {
     #region
     [SerializeField]
@@ -21,7 +22,7 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
     bool _isOnline;//falseはオフライン
-    GameResult _gameResult;
+    BattleResult _battleResult;
     BattlePhase _battlePhase;
     PlayerData _player;
     PlayerData _enemy;
@@ -51,12 +52,12 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     private void Awake()
     {
         _photonView = GetComponent<PhotonView>();
-        ServiceLocator.Register<IBattleManager>(this);
+        //ServiceLocator.Register<IBattleManager>(this);
     }
 
     void OnDestroy()
     {
-        ServiceLocator.UnRegister<IBattleManager>(this);
+        //ServiceLocator.UnRegister<IBattleManager>(this);
     }
 
     // Start is called before the first frame update
@@ -101,49 +102,49 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     /// バトルの段階を切り替える
     /// </summary>
     /// <param name="phase"></param>
-    public void ChangeBattlePhase(BattlePhase phase)
-    {
-        _battlePhase = phase;
-    }
+    //public void ChangeBattlePhase(BattlePhase phase)
+    //{
+    //    _battlePhase = phase;
+    //}
 
     /// <summary>
     /// カウントダウン
     /// </summary>
-    public IEnumerator CountDown()
-    {
-        _countDownTime = _defaultCountDownTime;
+    //public IEnumerator CountDown()
+    //{
+    //    _countDownTime = _defaultCountDownTime;
 
-        while (_countDownTime > 0)
-        {
-            //必殺技の演出中はカウントしない
-            if (_isDuringProductionOfSpecialSkill == false)
-            {
-                //1秒毎に減らしていきます
-                yield return new WaitForSeconds(1f);
-                _countDownTime--;
-                _battleUIManager.ShowCountDownText(_countDownTime);
-            }
+    //    while (_countDownTime > 0)
+    //    {
+    //        //必殺技の演出中はカウントしない
+    //        if (_isDuringProductionOfSpecialSkill == false)
+    //        {
+    //            //1秒毎に減らしていきます
+    //            yield return new WaitForSeconds(1f);
+    //            _countDownTime--;
+    //            _battleUIManager.ShowCountDownText(_countDownTime);
+    //        }
 
-            yield return null;
-        }
+    //        yield return null;
+    //    }
 
-        //確認画面を全て閉じる
-        _battleUIManager.CloseAllConfirmationPanels();
+    //    //確認画面を全て閉じる
+    //    _battleUIManager.CloseAllConfirmationPanels();
 
-        //0になったらカードをランダムにフィールドへ移動しターンエンドする
-        Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
-        CardController targetCard = _cardManager.GetRandomCardFrom(handTransform);
+    //    //0になったらカードをランダムにフィールドへ移動しターンエンドする
+    //    Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
+    //    CardController targetCard = _cardManager.GetRandomCardFrom(handTransform);
 
-        yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
-    }
+    //    yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
+    //}
 
     /// <summary>
     /// 必殺技の演出中かフラグをセットする
     /// </summary>
-    public void SetIsDuringProductionOfSpecialSkill(bool isDuringProduction)
-    {
-        _isDuringProductionOfSpecialSkill = isDuringProduction;
-    }
+    //public void SetIsDuringProductionOfSpecialSkill(bool isDuringProduction)
+    //{
+    //    _isDuringProductionOfSpecialSkill = isDuringProduction;
+    //}
 
     /// <summary>
     /// ゲームの状態をリセットする
@@ -175,60 +176,60 @@ public class MultiBattleManager : MonoBehaviour, IBattleManager
     /// <summary>
     /// ゲームを終了
     /// </summary>
-    public void EndGame()
-    {
-        //ゲーム結果を判定
-        _gameResult = JudgeGameResult();
-        //勝敗の表示
-        _battleUIManager.ToggleGameResultUI(true);
-        _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
-    }
+    //public void EndGame()
+    //{
+    //    //ゲーム結果を判定
+    //    //_battleResult = JudgeBattleResult();
+    //    //勝敗の表示
+    //    _battleUIManager.ToggleGameResultUI(true);
+    //    _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_battleResult));
+    //}
 
     /// <summary>
     /// ゲーム結果を取得する
     /// </summary>
-    public GameResult JudgeGameResult()
-    {
-        if (_player.Point > _enemy.Point) return GAME_WIN;
-        if (_player.Point == _enemy.Point) return GAME_DRAW;
-        return GAME_LOSE;
-    }
+    //public BattleResult JudgeBattleResult()
+    //{
+    //    if (_player.Point > _enemy.Point) return BATTLE_WIN;
+    //    if (_player.Point == _enemy.Point) return BATTLE_DRAW;
+    //    return BATTLE_LOSE;
+    //}
 
     /// <summary>
     /// 結果を反映します
     /// </summary>
     /// <param name="result"></param>
-    public async UniTask ReflectTheResult(CardJudgement result)
-    {
-        ChangeBattlePhase(RESULT);
+    //public async UniTask ReflectTheResult(CardJudgement result)
+    //{
+    //    ChangeBattlePhase(RESULT);
 
-        if (result == WIN)
-        {
-            _pointManager.AddPointTo(_player, _roundManager.IsUsingPlayerSkillInRound);
-        }
-        else if (result == LOSE)
-        {
-            _pointManager.AddPointTo(_enemy, _roundManager.IsUsingEnemySkillInRound);
-        }
+    //    if (result == WIN)
+    //    {
+    //        _pointManager.AddPointTo(_player, _roundManager.IsUsingPlayerSkillInRound);
+    //    }
+    //    else if (result == LOSE)
+    //    {
+    //        _pointManager.AddPointTo(_enemy, _roundManager.IsUsingEnemySkillInRound);
+    //    }
 
-        //UIへの反映
-        await _battleUIManager.ShowJudgementResultText(result.ToString());
-        _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
-    }
+    //    //UIへの反映
+    //    await _battleUIManager.ShowJudgementResultText(result.ToString());
+    //    _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
+    //}
 
     /// <summary>
     /// 必殺技を使用します
     /// </summary>
-    public void UsedSpecialSkill(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            _player.SetCanUseSpecialSkill(false);
-            _roundManager.SetUsingSkillRound(isPlayer, true);
-            return;
-        }
+    //public void UsedSpecialSkill(bool isPlayer)
+    //{
+    //    if (isPlayer)
+    //    {
+    //        _player.SetCanUseSpecialSkill(false);
+    //        _roundManager.SetUsingSkillRound(isPlayer, true);
+    //        return;
+    //    }
 
-        _enemy.SetCanUseSpecialSkill(false);
-        _roundManager.SetUsingSkillRound(isPlayer, true);
-    }
+    //    _enemy.SetCanUseSpecialSkill(false);
+    //    _roundManager.SetUsingSkillRound(isPlayer, true);
+    //}
 }
