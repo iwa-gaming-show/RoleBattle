@@ -155,7 +155,7 @@ public class PlayerUI : MonoBehaviour
     /// <summary>
     /// 必殺技を発動します
     /// </summary>
-    public async UniTask ShowSpSkillDirection(bool isPlayer)
+    public async UniTask ActivateDirectingOfSpSkill(bool isPlayer)
     {
         RectTransform targetUIRectTranform = _spProduction.GetComponent<RectTransform>();
         float screenEdgeX = UIUtil.GetScreenEdgeXFor(targetUIRectTranform.sizeDelta.x);

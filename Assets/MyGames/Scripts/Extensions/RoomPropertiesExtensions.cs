@@ -8,6 +8,7 @@ public static class RoomPropertiesExtensions
     static readonly string RoundCountKey = "RoundCount";
     static readonly string BattlePhaseKey = "BattlePhase";
     static readonly string EarnedPointKey = "EarnedPoint";
+    static readonly string IsDuringDirectingSpSkillKey = "IsDuringDirectingSpSkill";
 
     /// <summary>
     /// ルームのラウンド数を取得する
@@ -71,6 +72,28 @@ public static class RoomPropertiesExtensions
     public static void SetEarnedPoint(this Room room, int earnedPoint)
     {
         propsToSet[EarnedPointKey] = earnedPoint;
+        room.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// 必殺技発動の演出中かどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static bool GetIsDuringDirecting(this Room room)
+    {
+        return (room.CustomProperties[IsDuringDirectingSpSkillKey] is bool isDuringDirectingSpSkill) ? isDuringDirectingSpSkill : false;
+    }
+
+    /// <summary>
+    /// 必殺技発動の演出中かどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isDuringDirectingSpSkill"></param>
+    public static void SetIsDuringDirecting(this Room room, bool isDuringDirectingSpSkill)
+    {
+        propsToSet[IsDuringDirectingSpSkillKey] = isDuringDirectingSpSkill;
         room.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }

@@ -28,7 +28,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
     [SerializeField]
     [Header("カウントダウンの秒数を指定")]
-    float _countDownTime = DEFAULT_COUNT_DOWN_TIME;
+    int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
 
     [SerializeField]
     [Header("ゲーム盤のCanvasを設定する")]
@@ -37,6 +37,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     [SerializeField]
     MultiBattleUIManager _multiBattleUIManager;
 
+    int _countDownTime;
     bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
@@ -52,7 +53,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         _punTurnManager = gameObject.AddComponent<PunTurnManager>();
         _punTurnManager.TurnManagerListener = this;
-        _punTurnManager.TurnDuration = _countDownTime;
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -205,6 +205,29 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         CheckPlayerTurnEnd();
         ChangeTurn();
         CheckToNextRound();
+    }
+
+    /// <summary>
+    /// 必殺技が発動していることを確認します
+    /// </summary>
+    void CheckActivatingSpSkill()
+    {
+        if (_room.GetIsDuringDirecting() == false) return;
+        if (PhotonNetwork.IsMasterClient == false) return;
+        _room.SetIsDuringDirecting(false);
+
+        //発動後カウントダウンをリセットします
+        _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
+    }
+
+    /// <summary>
+    /// カウントダウンをリセットします
+    /// </summary>
+    [PunRPC]
+    void RpcResetCountDown()
+    {
+        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
+        StartCoroutine(CountDown());
     }
 
     /// <summary>
@@ -441,12 +464,16 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     public IEnumerator CountDown()
     {
-        while (_punTurnManager.RemainingSecondsInTurn > 0)
+        _countDownTime = _defaultCountDownTime;
+        while (_countDownTime > 0)
         {
-            _multiBattleUIManager.ShowCountDownText((int)_punTurnManager.RemainingSecondsInTurn);
+            //1秒毎に減らしていきます
+            yield return new WaitForSeconds(1f);
+            _countDownTime--;
+            _multiBattleUIManager.ShowCountDownText(_countDownTime);
 
             //必殺技の演出中はカウントしない
-            //if (_isDuringProductionOfSpecialSkill == false)
+            //if (_isDuringProductionOfSpSkill == false)
             //{
             //    //1秒毎に減らしていきます
             //    yield return new WaitForSeconds(1f);
@@ -497,7 +524,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="turn"></param>
     void IPunTurnManagerCallbacks.OnTurnTimeEnds(int turn)
     {
-        Debug.Log("カウント終了!");
+        //今回は使用しません
     }
 
     /// <summary>
@@ -557,6 +584,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
     {
         Debug.Log("updateBattlePhase" + propertiesThatChanged["BattlePhase"]);
+        CheckActivatingSpSkill();
     }
 
     /// <summary>

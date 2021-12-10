@@ -367,7 +367,7 @@ MonoBehaviour:
   _multiBattleManager: {fileID: 984557160}
   _maxPlayers: 2
   _maxRoundCount: 3
-  _countDownTime: 15
+  _defaultCountDownTime: 15
   _multiBattleCanvas: {fileID: 2909652730713099851}
   _multiBattleUIManager: {fileID: 1346771253206073630}
 --- !u!4 &1525997563

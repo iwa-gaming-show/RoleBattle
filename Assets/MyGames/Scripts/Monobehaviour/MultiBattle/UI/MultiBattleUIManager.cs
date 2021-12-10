@@ -396,12 +396,10 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
         PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
+        PhotonNetwork.CurrentRoom.SetIsDuringDirecting(true);
 
-        //sp演出中はカウントダウンを止める
         _photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
-        await _playerUI.ShowSpSkillDirection(true);
-        //カウントダウン再開
-        //_battleManager.SetIsDuringProductionOfSpecialSkill(false);
+        await _playerUI.ActivateDirectingOfSpSkill(true);
     }
 
     /// <summary>
@@ -410,7 +408,7 @@ public class MultiBattleUIManager : MonoBehaviour
     [PunRPC]
     void RpcActivateEnemySpSkill()
     {
-        _enemyUI.ShowSpSkillDirection(false).Forget();
+        _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
     }
 
     /// <summary>
