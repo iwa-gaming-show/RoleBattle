@@ -16,6 +16,10 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     [Header("必殺技発動の確認画面を設定する")]
     MultiConfirmationPanelToSp _confirmationPanelToSp;
 
+    [SerializeField]
+    [Header("カウントダウン終了時に閉じるUIを設定する")]
+    GameObject[] _inactiveUIWhenTimeOut;
+
     CardController _movingFieldCard;//フィールドへ移動するカードを保存する
     bool _isSpSkillActivating;//必殺技を発動するか
 
@@ -139,5 +143,16 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     public void SetIsSpSkillActivating(bool isActivating)
     {
         _isSpSkillActivating = isActivating;
+    }
+
+    /// <summary>
+    /// カウントダウンがタイムアウトした場合に閉じる
+    /// </summary>
+    public void InactiveUIIfCountDownTimeOut()
+    {
+        foreach (GameObject _inactiveUI in _inactiveUIWhenTimeOut)
+        {
+            _inactiveUI.GetComponent<IToggleable>()?.ToggleUI(false);
+        }
     }
 }

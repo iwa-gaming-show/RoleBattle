@@ -337,18 +337,21 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
             yield return new WaitForSeconds(1f);
             _countDownTime--;
             _multiBattleUIManager.ShowCountDownText(_countDownTime);
-
-            //必殺技の演出中はカウントしない
-            //if (_isDuringProductionOfSpSkill == false)
-            //{
-            //    //1秒毎に減らしていきます
-            //    yield return new WaitForSeconds(1f);
-            //    _countDownTime--;
-            //    _battleUIManager.ShowCountDownText(_countDownTime);
-            //}
-
             yield return null;
         }
+
+        DoIfCountDownTimeOut();  
+    }
+
+    /// <summary>
+    /// タイムアウトした場合に行う処理
+    /// </summary>
+    void DoIfCountDownTimeOut()
+    {
+        if (_player.GetIsMyTurn() == false) return;
+        //確認画面を全て閉じ、ランダムにカードを移動
+        _multiBattleUIManager.InactiveUIIfCountDownTimeOut();
+        _multiBattleUIManager.MoveRandomCardToField();
     }
 
     /// <summary>

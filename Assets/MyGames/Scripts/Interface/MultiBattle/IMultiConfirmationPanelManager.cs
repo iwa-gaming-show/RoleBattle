@@ -34,5 +34,10 @@ public interface IMultiConfirmationPanelManager
     /// //必殺技発動フラグを設定する
     /// </summary>
     /// <param name="isActivating"></param>
-    public void SetIsSpSkillActivating(bool isActivating);
+    void SetIsSpSkillActivating(bool isActivating);
+
+    /// <summary>
+    /// 確認画面UIを全てを非表示にする
+    /// </summary>
+    void InactiveUIIfCountDownTimeOut();
 }

@@ -340,9 +340,7 @@ public class MultiBattleUIManager : MonoBehaviour
     {
         if (movingCard == null) return;
         _multiConfirmationPanelManager.DestroyMovingBattleCard();
-
-        //すでにバトル場にカードが置かれているなら何もしない
-        if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
+        
         MoveToBattleField(movingCard).Forget();
     }
 
@@ -362,6 +360,9 @@ public class MultiBattleUIManager : MonoBehaviour
     /// </summary>
     async UniTask MoveToBattleField(CardController movingCard)
     {
+        //すでにバトル場にカードが置かれているなら何もしない
+        if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
+
         RegisterCardType(movingCard.CardType);
         //カードを配置済みにする
         PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
@@ -374,6 +375,15 @@ public class MultiBattleUIManager : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
         PhotonNetwork.LocalPlayer.SetIsMyTurnEnd(true);
+    }
+
+    /// <summary>
+    /// ランダムなカードをフィールドに移動します
+    /// </summary>
+    public void MoveRandomCardToField()
+    {
+        CardController movingCard = _playerUI.GetRandomHandCard();
+        MoveToBattleField(movingCard).Forget();
     }
 
     /// <summary>
@@ -495,7 +505,13 @@ public class MultiBattleUIManager : MonoBehaviour
         CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
     }
 
-
+    /// <summary>
+    /// 確認画面UIを全てを非表示にする
+    /// </summary>
+    public void InactiveUIIfCountDownTimeOut()
+    {
+        _multiConfirmationPanelManager.InactiveUIIfCountDownTimeOut();
+    }
 
 
 
@@ -507,16 +523,7 @@ public class MultiBattleUIManager : MonoBehaviour
 
     //下記は保留
 
-    /// <summary>
-    /// 確認画面UIを全てを非表示にする
-    /// </summary>
-    public void CloseAllConfirmationPanels()
-    {
-        foreach (GameObject targetPanel in BattleConfirmationPanels)
-        {
-            targetPanel.GetComponent<IToggleable>()?.ToggleUI(false);
-        }
-    }
+
 
     /// <summary>
     /// UIデータの初期設定

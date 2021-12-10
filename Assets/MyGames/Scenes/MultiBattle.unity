@@ -180,17 +180,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
---- !u!114 &984557160 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5607762334221754696, guid: 7cb5ceb66d8bf4a1cbe1c31785b66e7e, type: 3}
-  m_PrefabInstance: {fileID: 5607762333325936416}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f627a2c64ed23484bab575e18ce08422, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1017899659
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +267,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1175556500 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4238336880509999184, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1502668386
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1df948133d9e400c9d20b5ad61dcde3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _multiBattleManager: {fileID: 984557160}
   _maxPlayers: 2
   _maxRoundCount: 3
   _defaultCountDownTime: 15
@@ -524,7 +517,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6897597758699130732, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_PrefabInstance: {fileID: 1346771253206073628}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1175556500}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05de3dffb206d4e73abbbd62839d400d, type: 3}
@@ -613,6 +606,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2132003483 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4238336880313978633, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1346771253206073628
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -884,6 +882,18 @@ PrefabInstance:
       propertyPath: _confirmationPanelToField
       value: 
       objectReference: {fileID: 1346771253206073637}
+    - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _inactiveUIWhenTimeOut.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _inactiveUIWhenTimeOut.Array.data[0]
+      value: 
+      objectReference: {fileID: 2132003483}
+    - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _inactiveUIWhenTimeOut.Array.data[1]
+      value: 
+      objectReference: {fileID: 1175556500}
     - target: {fileID: 8816056016027227831, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _battleField
       value: 
@@ -907,7 +917,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1346771253206073637, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_PrefabInstance: {fileID: 1346771253206073628}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2132003483}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3320a9bd4b1f04908bbe3928f80d5fa4, type: 3}
