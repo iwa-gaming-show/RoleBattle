@@ -81,7 +81,7 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
         }
 
         _confirmationPanelToSp.SetCanActivateSpSkill(false);
-        _confirmationPanelToSp.SetCanActivateSpSkill(false);
+        _confirmationPanelToSp.SetIsConfirmed(false);
     }
 
     /// <summary>
