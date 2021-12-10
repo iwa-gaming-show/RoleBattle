@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static CardJudgement;
-using static GameResult;
+using static BattleResult;
 using static BattlePhase;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour, IBattleManager
     bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
     bool _isOnline;//falseはオフライン
-    GameResult _gameResult;
+    BattleResult _battleResult;
     BattlePhase _battlePhase;
     PlayerData _player;
     PlayerData _enemy;
@@ -185,21 +185,21 @@ public class BattleManager : MonoBehaviour, IBattleManager
     /// </summary>
     public void EndGame()
     {
-        //ゲーム結果を判定
-        _gameResult = JudgeGameResult();
+        //バトルの結果を判定
+        _battleResult = JudgeBattleResult();
         //勝敗の表示
         _battleUIManager.ToggleGameResultUI(true);
-        _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_gameResult));
+        _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_battleResult));
     }
 
     /// <summary>
-    /// ゲーム結果を取得する
+    /// バトルの結果を取得する
     /// </summary>
-    public GameResult JudgeGameResult()
+    public BattleResult JudgeBattleResult()
     {
-        if (_player.Point > _enemy.Point) return GAME_WIN;
-        if (_player.Point == _enemy.Point) return GAME_DRAW;
-        return GAME_LOSE;
+        if (_player.Point > _enemy.Point) return BATTLE_WIN;
+        if (_player.Point == _enemy.Point) return BATTLE_DRAW;
+        return BATTLE_LOSE;
     }
 
     /// <summary>

@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using UnityEngine;
 using static InitializationData;
-using static GameResult;
+using static BattleResult;
 
 public class BattleManagerTest
 {
@@ -59,10 +59,10 @@ public class BattleManagerTest
     }
 
     [Test, Description("ゲーム結果が正しく取得できているか")]
-    [TestCase(1, 0, GAME_WIN)]
-    [TestCase(2, 2, GAME_DRAW)]
-    [TestCase(3, 4, GAME_LOSE)]
-    public void JudgeGameResultTest(int playerPoint, int enemyPoint, GameResult expected)
+    [TestCase(1, 0, BATTLE_WIN)]
+    [TestCase(2, 2, BATTLE_DRAW)]
+    [TestCase(3, 4, BATTLE_LOSE)]
+    public void JudgeBattleResultTest(int playerPoint, int enemyPoint, BattleResult expected)
     {
         //playerとenemyのデータを作る
         battleManager.InitPlayerData();
@@ -71,7 +71,7 @@ public class BattleManagerTest
         battleManager.Enemy.SetPoint(enemyPoint);
 
         //勝敗を取得
-        GameResult actual = battleManager.JudgeGameResult();
+        BattleResult actual = battleManager.JudgeBattleResult();
 
         Assert.That(actual, Is.EqualTo(expected));
     }
