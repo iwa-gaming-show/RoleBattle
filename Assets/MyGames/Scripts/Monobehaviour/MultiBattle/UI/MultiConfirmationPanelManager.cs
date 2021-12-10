@@ -42,9 +42,8 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
         bool myCard = selectedCard.IsPlayerCard;
         bool controlable = myCard && MySelectionTurn();
         if (controlable == false) return;
-
         //すでに確認画面が表示されているなら何もしない
-        if (_confirmationPanelToField.gameObject.activeInHierarchy) return;
+        if (IsActiveConfirmationPanel()) return;
 
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
         ViewConfirmationPanelFor(_confirmationPanelToField);
@@ -69,7 +68,8 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
         bool canUseSpSkill = PhotonNetwork.LocalPlayer.GetCanUseSpSkill();
         bool activatable = canUseSpSkill && MySelectionTurn();
         if (activatable == false) return;
-        if (_confirmationPanelToSp.gameObject.activeInHierarchy) return;
+        //すでに確認画面が表示されているなら何もしない
+        if (IsActiveConfirmationPanel()) return;
 
         //確認画面を表示しYesなら必殺技を発動します
         ViewConfirmationPanelFor(_confirmationPanelToSp);
@@ -82,6 +82,17 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
 
         _confirmationPanelToSp.SetCanActivateSpSkill(false);
         _confirmationPanelToSp.SetCanActivateSpSkill(false);
+    }
+
+    /// <summary>
+    /// 確認画面がアクティブになっているか
+    /// </summary>
+    /// <returns></returns>
+    bool IsActiveConfirmationPanel()
+    {
+        if (_confirmationPanelToField.gameObject.activeInHierarchy) return true;
+        if (_confirmationPanelToSp.gameObject.activeInHierarchy) return true;
+        return false;
     }
 
     /// <summary>
