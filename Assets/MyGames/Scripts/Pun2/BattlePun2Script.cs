@@ -13,6 +13,7 @@ using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
+using UnityEngine.SceneManagement;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallbacks
 {
@@ -59,11 +60,40 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
+    /// ゲームを再開する
+    /// </summary>
+    public void OnClickToRetryBattle()
+    {
+        //二重送信防止
+        if (_player.GetIsRetryingBattle()) return;
+        _player.SetIsRetryingBattle(true);
+    }
+
+    /// <summary>
+    /// タイトルへ移動する
+    /// </summary>
+    public void OnClickToTitle()
+    {
+        //ルームを退室後、切断しタイトルへ移動します
+        PhotonNetwork.LeaveRoom();
+    }
+
+    /// <summary>
     /// 接続完了時
     /// </summary>
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinRandomRoom();
+    }
+
+    /// <summary>
+    /// 切断時
+    /// </summary>
+    /// <param name="cause"></param>
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        //タイトルへ
+        SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
     }
 
     /// <summary>
@@ -100,7 +130,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     public override void OnLeftRoom()
     {
-
+        PhotonNetwork.Disconnect();
     }
 
     /// <summary>
@@ -117,7 +147,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="otherPlayer"></param>
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-
+        Debug.Log("対戦相手の通信が切断されました。タイトルへ戻ります");
+        PhotonNetwork.LeaveRoom();
     }
 
     /// <summary>
@@ -136,6 +167,67 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         CheckPlayerTurnEnd();
         ChangeTurn();
         CheckToNextRound();
+        CheckRetryingBattle();
+    }
+
+    /// <summary>
+    /// 対戦相手のアイコンを調べます
+    /// </summary>
+    void CheckEnemyIcon()
+    {
+        if (_isEnemyIconPlaced) return;
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIcon"))
+        {
+            //相手のフィールドへアイコンを配置します
+            if (go != _playerIcon)
+            {
+                _multiBattleUIManager.PlacePlayerIconBy(false, go);
+                _isEnemyIconPlaced = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 次のラウンドへの確認をします
+    /// </summary>
+    void CheckToNextRound()
+    {
+        //お互いのカードの判定が終わったら次のラウンドへ
+        if (PhotonNetwork.IsMasterClient == false) return;
+        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
+        if (eachPlayerIsCardJudged == false) return;
+
+        _player.SetIsCardJudged(false);
+        _enemy.SetIsCardJudged(false);
+        NextRound();
+    }
+
+    /// <summary>
+    /// プレイヤーのターンの終了を確認します
+    /// </summary>
+    /// <param name="player"></param>
+    void CheckPlayerTurnEnd()
+    {
+        if (_player.GetIsMyTurnEnd() == false) return;
+        _player.SetIsMyTurnEnd(false);
+        _punTurnManager.SendMove(null, true);
+    }
+
+    /// <summary>
+    /// 再戦をするか確認します
+    /// </summary>
+    void CheckRetryingBattle()
+    {
+        if (PhotonNetwork.IsMasterClient == false) return;
+        bool isRetryingBattle = (_player.GetIsRetryingBattle() && _enemy.GetIsRetryingBattle());
+        if (isRetryingBattle == false) return;
+
+        _player.SetIsRetryingBattle(false);
+        _enemy.SetIsRetryingBattle(false);
+        //状態をリセットし、ゲーム再開
+        InitPlayerData();
+        _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, true);
     }
 
     /// <summary>
@@ -146,6 +238,19 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         Debug.Log("updateBattlePhase" + propertiesThatChanged["BattlePhase"]);
         CheckActivatingSpSkill();
+    }
+
+    /// <summary>
+    /// 必殺技が発動していることを確認します
+    /// </summary>
+    void CheckActivatingSpSkill()
+    {
+        if (_room.GetIsDuringDirecting() == false) return;
+        if (PhotonNetwork.IsMasterClient == false) return;
+        _room.SetIsDuringDirecting(false);
+
+        //発動後カウントダウンをリセットします
+        _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
     }
 
     /// <summary>
@@ -164,6 +269,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         _player.SetPoint(INITIAL_POINT);
         _player.SetCanUseSpSkill(true);
+        _player.SetIsMyTurn(false);
     }
 
     /// <summary>
@@ -422,63 +528,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         int totalRoundCount = _room.GetRoundCount();
         totalRoundCount++;
         _room.SetRoundCount(totalRoundCount);
-    }
-
-    /// <summary>
-    /// 対戦相手のアイコンを調べます
-    /// </summary>
-    void CheckEnemyIcon()
-    {
-        if (_isEnemyIconPlaced) return;
-
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIcon"))
-        {
-            //相手のフィールドへアイコンを配置します
-            if (go != _playerIcon)
-            {
-                _multiBattleUIManager.PlacePlayerIconBy(false, go);
-                _isEnemyIconPlaced = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 次のラウンドへの確認をします
-    /// </summary>
-    void CheckToNextRound()
-    {
-        //お互いのカードの判定が終わったら次のラウンドへ
-        if (PhotonNetwork.IsMasterClient == false) return;
-        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
-        if (eachPlayerIsCardJudged == false) return;
-
-        _player.SetIsCardJudged(false);
-        _enemy.SetIsCardJudged(false);
-        NextRound();
-    }
-
-    /// <summary>
-    /// プレイヤーのターンの終了を確認します
-    /// </summary>
-    /// <param name="player"></param>
-    void CheckPlayerTurnEnd()
-    {
-        if (_player.GetIsMyTurnEnd() == false) return;
-        _player.SetIsMyTurnEnd(false);
-        _punTurnManager.SendMove(null, true);
-    }
-
-    /// <summary>
-    /// 必殺技が発動していることを確認します
-    /// </summary>
-    void CheckActivatingSpSkill()
-    {
-        if (_room.GetIsDuringDirecting() == false) return;
-        if (PhotonNetwork.IsMasterClient == false) return;
-        _room.SetIsDuringDirecting(false);
-
-        //発動後カウントダウンをリセットします
-        _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
     }
 
     /// <summary>

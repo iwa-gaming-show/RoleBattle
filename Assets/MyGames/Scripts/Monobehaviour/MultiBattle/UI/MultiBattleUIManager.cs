@@ -557,12 +557,4 @@ public class MultiBattleUIManager : MonoBehaviour
         //_specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
         _specialSkillUIManager.InitSpecialSkillDescriptions();
     }
-
-    /// <summary>
-    /// 必殺技を発動する
-    /// </summary>
-    public async UniTask ActivateSpecialSkill(bool isPlayer)
-    {
-        await _specialSkillUIManager.ActivateSpecialSkill(isPlayer);
-    }
 }

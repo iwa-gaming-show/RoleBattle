@@ -13,7 +13,7 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// ルームのラウンド数を取得する
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="room"></param>
     /// <returns></returns>
     public static int GetRoundCount(this Room room)
     {
@@ -23,8 +23,8 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// ルームのラウンド数を設定する
     /// </summary>
-    /// <param name="player"></param>
-    /// <param name="point"></param>
+    /// <param name="room"></param>
+    /// <param name="roundCount"></param>
     public static void SetRoundCount(this Room room, int roundCount)
     {
         propsToSet[RoundCountKey] = roundCount;
@@ -35,7 +35,7 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// バトルのフェーズを取得する
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="room"></param>
     /// <returns></returns>
     public static int GetIntBattlePhase(this Room room)
     {
@@ -45,8 +45,8 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// バトルのフェーズを設定する
     /// </summary>
-    /// <param name="player"></param>
-    /// <param name="point"></param>
+    /// <param name="room"></param>
+    /// <param name="battlePhase"></param>
     public static void SetIntBattlePhase(this Room room, BattlePhase battlePhase)
     {
         propsToSet[BattlePhaseKey] = (int)battlePhase;
@@ -57,7 +57,7 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// 獲得ポイントを取得する
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="room"></param>
     /// <returns></returns>
     public static int GetEarnedPoint(this Room room)
     {
@@ -67,8 +67,8 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// 獲得ポイントを設定する
     /// </summary>
-    /// <param name="player"></param>
-    /// <param name="point"></param>
+    /// <param name="room"></param>
+    /// <param name="earnedPoint"></param>
     public static void SetEarnedPoint(this Room room, int earnedPoint)
     {
         propsToSet[EarnedPointKey] = earnedPoint;
@@ -79,7 +79,7 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// 必殺技発動の演出中かどうかを取得する
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="room"></param>
     /// <returns></returns>
     public static bool GetIsDuringDirecting(this Room room)
     {
@@ -89,7 +89,7 @@ public static class RoomPropertiesExtensions
     /// <summary>
     /// 必殺技発動の演出中かどうかを設定する
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="room"></param>
     /// <param name="isDuringDirectingSpSkill"></param>
     public static void SetIsDuringDirecting(this Room room, bool isDuringDirectingSpSkill)
     {

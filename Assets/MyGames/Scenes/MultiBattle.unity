@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxPlayers: 2
-  _maxRoundCount: 3
+  _maxRoundCount: 1
   _defaultCountDownTime: 15
   _multiBattleCanvas: {fileID: 2909652730713099851}
   _multiBattleUIManager: {fileID: 1346771253206073630}
@@ -822,6 +822,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MultiConfirmationPanelToField, App
       objectReference: {fileID: 0}
+    - target: {fileID: 4238336879625296261, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1525997562}
+    - target: {fileID: 4238336879625296261, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToRetryBattle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336879625296261, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePun2Script, App
+      objectReference: {fileID: 0}
     - target: {fileID: 4238336879744854307, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -845,6 +857,18 @@ PrefabInstance:
     - target: {fileID: 4238336880509999184, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336880797524883, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1525997562}
+    - target: {fileID: 4238336880797524883, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToTitle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336880797524883, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePun2Script, App
       objectReference: {fileID: 0}
     - target: {fileID: 5438969055338014442, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

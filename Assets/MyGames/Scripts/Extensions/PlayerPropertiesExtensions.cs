@@ -11,6 +11,7 @@ public static class PlayerPropertiesExtensions
     static readonly string IsUsingSpInRoundKey = "IsUsingSpInRound";
     static readonly string IsFieldCardPlacedKey = "IsFieldCardPlaced";
     static readonly string IsCardJudgedKey = "IsCardJudged";
+    static readonly string IsRetryingBattleKey = "IsRetryingBattle";
     static readonly string BattleCardTypeKey = "BattleCardType";
 
     /// <summary>
@@ -93,7 +94,7 @@ public static class PlayerPropertiesExtensions
     /// プレイヤーのターンが終了したかどうかを設定する
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="isMyTurn"></param>
+    /// <param name="isMyTurnEnd"></param>
     public static void SetIsMyTurnEnd(this Player player, bool isMyTurnEnd)
     {
         propsToSet[IsMyTurnEndKey] = isMyTurnEnd;
@@ -115,7 +116,7 @@ public static class PlayerPropertiesExtensions
     /// 必殺技の発動中かどうかを設定する
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="isMyTurn"></param>
+    /// <param name="isUsingSpInRound"></param>
     public static void SetIsUsingSpInRound(this Player player, bool isUsingSpInRound)
     {
         propsToSet[IsUsingSpInRoundKey] = isUsingSpInRound;
@@ -137,7 +138,7 @@ public static class PlayerPropertiesExtensions
     /// バトル場へのカードのタイプを設定する
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="point"></param>
+    /// <param name="cardType"></param>
     public static void SetIntBattleCardType(this Player player, CardType cardType)
     {
         propsToSet[BattleCardTypeKey] = (int)cardType;
@@ -159,7 +160,7 @@ public static class PlayerPropertiesExtensions
     /// カードをフィールドに配置したかどうかを設定する
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="isMyTurn"></param>
+    /// <param name="isFieldCardPlaced"></param>
     public static void SetIsFieldCardPlaced(this Player player, bool isFieldCardPlaced)
     {
         propsToSet[IsFieldCardPlacedKey] = isFieldCardPlaced;
@@ -181,10 +182,32 @@ public static class PlayerPropertiesExtensions
     /// カードの判定をしたかどうかを設定する
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="isMyTurn"></param>
+    /// <param name="isCardJudged"></param>
     public static void SetIsCardJudged(this Player player, bool isCardJudged)
     {
         propsToSet[IsCardJudgedKey] = isCardJudged;
+        player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
+
+    /// <summary>
+    /// 再戦するかどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static bool GetIsRetryingBattle(this Player player)
+    {
+        return (player.CustomProperties[IsRetryingBattleKey] is bool isRetryingBattle) ? isRetryingBattle : false;
+    }
+
+    /// <summary>
+    /// 再戦するかどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isRetryingBattle"></param>
+    public static void SetIsRetryingBattle(this Player player, bool isRetryingBattle)
+    {
+        propsToSet[IsRetryingBattleKey] = isRetryingBattle;
         player.SetCustomProperties(propsToSet);
         propsToSet.Clear();
     }
