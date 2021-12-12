@@ -12,7 +12,7 @@ using static UIStrings;
 using static WaitTimes;
 using static BattlePhase;
 
-public class MultiBattleUIManager : MonoBehaviour
+public class BattleUIManager : MonoBehaviour
 {
     [SerializeField]
     [Header("プレイヤーのUI")]
