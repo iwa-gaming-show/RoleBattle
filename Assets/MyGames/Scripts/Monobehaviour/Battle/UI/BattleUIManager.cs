@@ -227,7 +227,7 @@ public class BattleUIManager : MonoBehaviour
             .Select((ce, i) => new { CardType = ce.CardType, Index = i });
 
         int cardIndex = (cardEntities.Where(ce => ce.CardType == cardType)
-            .First().Index is int index) ? index : 0;
+            .First().Index is int index) ? index: 0;
 
         return CreateCard(cardIndex, isPlayer);
     }
@@ -318,7 +318,7 @@ public class BattleUIManager : MonoBehaviour
     {
         if (movingCard == null) return;
         _multiConfirmationPanelManager.DestroyMovingBattleCard();
-
+        
         MoveToBattleField(movingCard).Forget();
     }
 

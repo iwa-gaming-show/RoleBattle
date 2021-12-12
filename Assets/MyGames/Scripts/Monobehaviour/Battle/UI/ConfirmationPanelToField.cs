@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GM = GameManager;
+using UnityEngine.UI;
+using static UIStrings;
 
 /// <summary>
 /// バトル場へ送るカードの確認UI
@@ -9,18 +10,23 @@ using GM = GameManager;
 public class ConfirmationPanelToField : MonoBehaviour,
     IToggleable,
     IYesButtonAction,
-    INoButtonAction
+    INoButtonAction,
+    IRequiredConfirmation
 {
     [SerializeField]
-    [Header("CanvasForDirectionを設定")]
-    Transform directionUIManagerTransform;
+    [Header("CanvasForConfirmationPanelsを設定")]
+    Transform _canvasForConfirmationPanelsTransform;
 
-    bool _isClickedConfirmationButton;//確認ボタンをクリックしたか
+    [SerializeField]
+    [Header("バトル場への確認画面のテキスト")]
+    Text _fieldConfirmationText;
+
     bool _canMoveToField;//カードの移動ができる
+    bool _isConfirmed;
 
     #region//プロパティ
     public bool CanMoveToField => _canMoveToField;
-    public bool IsClickedConfirmationButton => _isClickedConfirmationButton;
+    public bool IsConfirmed => _isConfirmed;
     #endregion
 
     /// <summary>
@@ -29,7 +35,8 @@ public class ConfirmationPanelToField : MonoBehaviour,
     /// <param name="isActive"></param>
     public void ToggleUI(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, directionUIManagerTransform);
+        CanvasForObjectPool._instance
+            .ToggleUIGameObject(gameObject, isActive, _canvasForConfirmationPanelsTransform);
     }
 
     /// <summary>
@@ -38,7 +45,7 @@ public class ConfirmationPanelToField : MonoBehaviour,
     public void OnClickYes()
     {
         ToggleUI(false);
-        _isClickedConfirmationButton = true;
+        _isConfirmed = true;
         _canMoveToField = true;
     }
 
@@ -48,7 +55,7 @@ public class ConfirmationPanelToField : MonoBehaviour,
     public void OnClickNo()
     {
         ToggleUI(false);
-        _isClickedConfirmationButton = true;
+        _isConfirmed = true;
         _canMoveToField = false;
     }
 
@@ -56,9 +63,9 @@ public class ConfirmationPanelToField : MonoBehaviour,
     /// バトル場への移動確認画面の押下フラグのセット
     /// </summary>
     /// <param name="isClicked"></param>
-    public void SetIsClickedConfirmationButton(bool isClicked)
+    public void SetIsConfirmed(bool isConfirmed)
     {
-        _isClickedConfirmationButton = isClicked;
+        _isConfirmed = isConfirmed;
     }
 
     /// <summary>
@@ -67,5 +74,14 @@ public class ConfirmationPanelToField : MonoBehaviour,
     public void SetCanMoveToField(bool can)
     {
         _canMoveToField = can;
+    }
+
+    /// <summary>
+    /// 確認画面のメッセージを、選択したカード名にする
+    /// </summary>
+    /// <param name="selectedCard"></param>
+    public void SetFieldConfirmationText(CardController selectedCard)
+    {
+        _fieldConfirmationText.text = selectedCard.CardModel.Name + FIELD_CONFIRMATION_TEXT_SUFFIX;
     }
 }
