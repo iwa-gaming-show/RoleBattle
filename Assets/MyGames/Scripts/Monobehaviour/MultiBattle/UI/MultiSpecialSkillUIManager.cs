@@ -129,13 +129,13 @@ public class MultiSpecialSkillUIManager : MonoBehaviour, IHideableUIsAtStart
     /// <summary>
     /// 必殺技の説明文の設定
     /// </summary>
-    public void InitSpecialSkillDescriptions()
-    {
-        foreach (Text description in _descriptionsOfSpecialSkill)
-        {
-            description.text = _specialSkillDescription;
-        }
-    }
+    //public void InitSpecialSkillDescriptions()
+    //{
+    //    foreach (Text description in _descriptionsOfSpecialSkill)
+    //    {
+    //        description.text = _specialSkillDescription;
+    //    }
+    //}
 
     ///// <summary>
     ///// 必殺技ボタンを押した時

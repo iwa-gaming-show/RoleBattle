@@ -315,6 +315,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         //1ラウンド目に行う処理
         if (isFirstBattle) InitRoomData();
+        if (isFirstBattle) _multiBattleUIManager.InitSpSkillDescriptions();
         ResetPlayerState();
         _multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();

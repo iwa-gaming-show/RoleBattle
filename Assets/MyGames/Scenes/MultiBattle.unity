@@ -180,6 +180,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
+--- !u!114 &264551978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6963250445189111806, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &634543585 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238336878983756484, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
@@ -288,6 +299,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4238336880509999184, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_PrefabInstance: {fileID: 1346771253206073628}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1289291631 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4238336879428001696, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1380951211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6963250445655501362, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1502668386
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,9 +700,29 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _spSkillDescription
+      value: "\u3053\u306E\u30E9\u30A6\u30F3\u30C9\u306E\u9593\u3001\u30D0\u30C8\u30EB\u306B\u52DD\u3063\u305F\u6642\u306B\u7372\u5F97\u3067\u304D\u308B\u30DD\u30A4\u30F3\u30C8\u30922\u500D\u306B\u3059\u308B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _judgementResultText
       value: 
       objectReference: {fileID: 1512450301}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _descriptionsOfSpSkill.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _descriptionsOfSpSkill.Array.data[0]
+      value: 
+      objectReference: {fileID: 1289291631}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _descriptionsOfSpSkill.Array.data[1]
+      value: 
+      objectReference: {fileID: 264551978}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _descriptionsOfSpSkill.Array.data[2]
+      value: 
+      objectReference: {fileID: 1380951211}
     - target: {fileID: 3408448462816873576, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_text
       value: 0P
@@ -905,6 +958,10 @@ PrefabInstance:
     - target: {fileID: 6917833062636073271, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963250445189111806, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Text
+      value: "\u3053\u306E\u30E9\u30A6\u30F3\u30C9\u306E\u9593\u3001\u30D0\u30C8\u30EB\u306B\u52DD\u3063\u305F\u6642\u306B\u7372\u5F97\u3067\u304D\u308B\u30DD\u30A4\u30F3\u30C8\u30922\u500D\u306B\u3059\u308B"
       objectReference: {fileID: 0}
     - target: {fileID: 6963250446383944843, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive

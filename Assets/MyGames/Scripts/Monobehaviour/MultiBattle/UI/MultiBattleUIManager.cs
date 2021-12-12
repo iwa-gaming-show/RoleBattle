@@ -2,17 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UIStrings;
 using TMPro;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
+using System.Linq;
+using UnityEngine.UI;
+using static UIStrings;
 using static WaitTimes;
 using static BattlePhase;
-using System.Linq;
 
 public class MultiBattleUIManager : MonoBehaviour
-    //, IBattleUIManager
 {
     [SerializeField]
     [Header("プレイヤーのUI")]
@@ -70,50 +70,23 @@ public class MultiBattleUIManager : MonoBehaviour
     [Header("バトルの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _battleResultText;
 
-
-
-
-    //下は保留の値
+    [SerializeField]
+    [Header("必殺技の詳細を記述するテキストを格納する")]
+    Text[] _descriptionsOfSpSkill;
 
     [SerializeField]
-    [Header("ゲームの進行に関するUIマネージャーを設定")]
-    DirectionUIManager _directionUIManager;
-
-    [SerializeField]
-    [Header("必殺技のUIマネージャーを設定")]
-    SpecialSkillUIManager _specialSkillUIManager;
-
-    [SerializeField]
-    [Header("バトル中に使用する確認画面のUIを格納する")]
-    GameObject[] BattleConfirmationPanels;
-
-    //[SerializeField]
-    //[Header("オブジェクトプールに使用する非表示にしたUIを格納するCanvasを設定")]
-    //GameObject CanvasForObjectPool;
-
-    //IHideableUIsAtStart _hideableUIsAtStartByDir;
-    //IHideableUIsAtStart _hideableUIsAtStartBySP;
-
-    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
-    PhotonView _photonView;
+    [Header("必殺技の説明用のテキストを設定")]
+    string _spSkillDescription;
 
 
     #region//プロパティ
-    public SpecialSkillUIManager SpecialSkillUIManager => _specialSkillUIManager;
-    public DirectionUIManager DirectionUIManager => _directionUIManager;
+    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    PhotonView _photonView;
     #endregion
 
     void Awake()
     {
-        //ServiceLocator.Register<IBattleUIManager>(this);
-        //_hideableUIsAtStartByDir = _directionUIManager.GetComponent<IHideableUIsAtStart>();
-        //_hideableUIsAtStartBySP = _specialSkillUIManager.GetComponent<IHideableUIsAtStart>();
         _photonView = GetComponent<PhotonView>();
-    }
-
-    void OnDestroy()
-    {
-        //ServiceLocator.UnRegister<IBattleUIManager>(this);
     }
 
     void Start()
@@ -537,22 +510,14 @@ public class MultiBattleUIManager : MonoBehaviour
         _battleResultText.text = text;
     }
 
-
-
-
-
-
-
-    //下記は保留
-
-
-
     /// <summary>
-    /// UIデータの初期設定
+    /// 必殺技の説明文の設定
     /// </summary>
-    public void InitUIData()
+    public void InitSpSkillDescriptions()
     {
-        //_specialSkillUIManager.InitSpecialSkillButtonImageByPlayers();
-        _specialSkillUIManager.InitSpecialSkillDescriptions();
+        foreach (Text description in _descriptionsOfSpSkill)
+        {
+            description.text = _spSkillDescription;
+        }
     }
 }
