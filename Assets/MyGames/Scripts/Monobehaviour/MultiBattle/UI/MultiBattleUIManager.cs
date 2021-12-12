@@ -2,13 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using static UIStrings;
 using TMPro;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
-using Photon.Realtime;
 using static WaitTimes;
 using static BattlePhase;
 using System.Linq;
@@ -71,7 +69,6 @@ public class MultiBattleUIManager : MonoBehaviour
     [SerializeField]
     [Header("バトルの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _battleResultText;
-
 
 
 
@@ -475,7 +472,8 @@ public class MultiBattleUIManager : MonoBehaviour
     /// </summary>
     public void HideUIAtStart()
     {
-
+        CanvasForObjectPool._instance
+            .ToggleUIGameObject(_battleResultUI, false, transform);
     }
 
     /// <summary>

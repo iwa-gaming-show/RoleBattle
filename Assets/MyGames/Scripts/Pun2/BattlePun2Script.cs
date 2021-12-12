@@ -236,7 +236,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="propertiesThatChanged"></param>
     public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
     {
-        Debug.Log("updateBattlePhase" + propertiesThatChanged["BattlePhase"]);
         CheckActivatingSpSkill();
     }
 
@@ -317,7 +316,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         //1ラウンド目に行う処理
         if (isFirstBattle) InitRoomData();
         ResetPlayerState();
-        //_multiBattleUIManager.HideUIAtStart();
+        _multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
         await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount(), _maxRoundCount);
         if (isFirstBattle) DecideTheTurn();
@@ -649,7 +648,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="turn"></param>
     void IPunTurnManagerCallbacks.OnTurnCompleted(int turn)
     {
-        Debug.Log("ターン完了");
         JudgePlayerProgress();
     }
 
@@ -661,7 +659,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="move"></param>
     void IPunTurnManagerCallbacks.OnPlayerMove(Player player, int turn, object move)
     {
-        Debug.Log("プレイヤーが移動");
+        //今回は使用しません
     }
 
     /// <summary>
@@ -672,7 +670,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="move"></param>
     void IPunTurnManagerCallbacks.OnPlayerFinished(Player player, int turn, object move)
     {
-        Debug.Log("ターン終了");
         SwitchPlayerTurnFlg();
     }
 
