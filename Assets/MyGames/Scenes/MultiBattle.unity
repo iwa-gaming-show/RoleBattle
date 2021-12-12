@@ -191,6 +191,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &563982596 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7227291899773677196, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9a6475a72e74d249b0006c1364c577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &634543585 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238336878983756484, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
@@ -655,6 +666,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2060500897 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8718406798907978139, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9a6475a72e74d249b0006c1364c577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2132003483 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4238336880313978633, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
@@ -683,6 +705,14 @@ PrefabInstance:
       propertyPath: _battleField
       value: 
       objectReference: {fileID: 1048937891}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _enemyUI
+      value: 
+      objectReference: {fileID: 2060500897}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _playerUI
+      value: 
+      objectReference: {fileID: 563982596}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _openPhaseText
       value: 

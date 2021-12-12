@@ -142,7 +142,7 @@ public class BattleManager : MonoBehaviour, IBattleManager
         Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
         CardController targetCard = _cardManager.GetRandomCardFrom(handTransform);
 
-        yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
+        //yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
     }
 
     /// <summary>
