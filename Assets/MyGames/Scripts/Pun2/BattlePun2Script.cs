@@ -31,9 +31,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
 
     [SerializeField]
     [Header("ゲーム盤のCanvasを設定する")]
-    GameObject _multiBattleCanvas;
-
-    [SerializeField]
     MultiBattleUIManager _multiBattleUIManager;
 
     int _countDownTime;
