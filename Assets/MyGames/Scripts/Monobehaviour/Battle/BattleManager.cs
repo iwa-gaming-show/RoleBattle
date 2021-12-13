@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
-        SwitchPlayerTurnFlg(_battleDataManager);
+        ChangeTurn(_battleDataManager);
     }
 
     /// <summary>
@@ -109,12 +109,14 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // <summary>
-    /// プレイヤーのターンのフラグを切り替えます
+    /// <summary>
+    /// ターンを切り替えます
     /// </summary>
-    void SwitchPlayerTurnFlg(IBattleDataManager dataM)
+    void ChangeTurn(IBattleDataManager dataM)
     {
         if (dataM.CanChangeTurn == false) return;
+
+        SwitchPlayerTurnFlg(dataM);
 
         if (IsEachPlayerFieldCardPlaced())
         {
@@ -122,10 +124,20 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            ChangeTurn(dataM);
+            StartTurn();
         }
 
         dataM.SetCanChangeTurn(false);
+    }
+
+    /// <summary>
+    /// プレイヤーのターンのフラグを切り替えます
+    /// </summary>
+    void SwitchPlayerTurnFlg(IBattleDataManager dataM)
+    {
+        //プレイヤーとエネミーのフラグをそれぞれ逆にします
+        dataM.SetIsPlayerTurnBy(true, !dataM.GetPlayerTurnBy(true));
+        dataM.SetIsPlayerTurnBy(false, !dataM.GetPlayerTurnBy(false));
     }
 
     /// <summary>
@@ -229,17 +241,6 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ターンを切り替えます
-    /// </summary>
-    void ChangeTurn(IBattleDataManager dataM)
-    {
-        //プレイヤーとエネミーのフラグをそれぞれ逆にします
-        dataM.SetIsPlayerTurnBy(true, !dataM.GetPlayerTurnBy(true));
-        dataM.SetIsPlayerTurnBy(false, !dataM.GetPlayerTurnBy(false));
-        StartTurn();
-    }
-
-    /// <summary>
     /// お互いのプレイヤーがバトル場にカードを出しているか
     /// </summary>
     /// <returns></returns>
@@ -275,6 +276,15 @@ public class BattleManager : MonoBehaviour
         //trueなら自身を先攻にする
         if (RandomBool()) _battleDataManager.SetIsPlayerTurnBy(true, true);
         else _battleDataManager.SetIsPlayerTurnBy(false, true);
+    }
+
+    /// <summary>
+    /// エネミーが必殺技を使用するラウンドを決めます
+    /// </summary>
+    public void DecideSpSkillRoundForEnemy()
+    {
+        int spSkillRound = UnityEngine.Random.Range(INITIAL_ROUND_COUNT, _maxRoundCount + INITIAL_ROUND_COUNT);
+        _battleDataManager.SetEnemySpSkillRound(spSkillRound);
     }
 
     /// <summary>
