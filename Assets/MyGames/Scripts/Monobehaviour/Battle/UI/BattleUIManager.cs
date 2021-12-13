@@ -349,9 +349,10 @@ public class BattleUIManager : MonoBehaviour
     void TryToActivateSpSkill(bool IsSpSkillActivating)
     {
         if (IsSpSkillActivating == false) return;
+
         _confirmationPanelManager.SetIsSpSkillActivating(false);
 
-        ActivateSpSkill().Forget();
+        ActivateSpSkill(true).Forget();
     }
 
     /// <summary>
@@ -422,14 +423,12 @@ public class BattleUIManager : MonoBehaviour
     /// 必殺技を発動する
     /// </summary>
     /// <returns></returns>
-    async UniTask ActivateSpSkill()
+    async UniTask ActivateSpSkill(bool isPlayer)
     {
-        PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
-        PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
-        PhotonNetwork.CurrentRoom.SetIsDuringDirecting(true);
-
-        _photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
-        await _playerUI.ActivateDirectingOfSpSkill(true);
+        _battleDataManager.ActivatingSpSkillState(isPlayer);
+        SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
+        //_photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
+        await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
 
     /// <summary>

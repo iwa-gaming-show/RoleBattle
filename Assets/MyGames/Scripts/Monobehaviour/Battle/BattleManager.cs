@@ -29,28 +29,13 @@ public class BattleManager : MonoBehaviour
     int _countDownTime;
     GameObject _playerIcon;
 
-    //bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
-    //bool _isOnline;//falseはオフライン
-    ////BattleResult _battleResult;
     //CancellationToken _token;
     IBattleDataManager _battleDataManager;
 
 
     #region プロパティ
     //public CancellationToken Token => _token;
-    //public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
     #endregion
-
-
-    private void Awake()
-    {
-        //ServiceLocator.Register<IBattleManager>(this);
-    }
-
-    void OnDestroy()
-    {
-        //ServiceLocator.UnRegister<IBattleManager>(this);
-    }
 
     // Start is called before the first frame update
     void Start()

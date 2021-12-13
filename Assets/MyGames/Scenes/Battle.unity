@@ -739,6 +739,22 @@ PrefabInstance:
       propertyPath: _descriptionsOfSpSkill.Array.data[2]
       value: 
       objectReference: {fileID: 8900892210001788669}
+    - target: {fileID: 1955755401951558738, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755401951558738, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544094, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544094, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2928447268505752361, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

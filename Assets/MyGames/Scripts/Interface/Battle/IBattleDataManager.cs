@@ -67,6 +67,11 @@ public interface IBattleDataManager
     void ResetPlayerState();
 
     /// <summary>
+    /// 必殺技を発動する状態にする
+    /// </summary>
+    void ActivatingSpSkillState(bool isPlayer);
+
+    /// <summary>
     /// プレイヤーのターンを設定する
     /// </summary>
     void SetIsPlayerTurnBy(bool isPlayer, bool isMyTurn);

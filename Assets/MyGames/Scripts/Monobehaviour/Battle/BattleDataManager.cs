@@ -12,6 +12,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     int _roundCount;
     int _earnedPoint = INITIAL_EARNED_POINT;
     bool _canChangeTurn;
+    bool _isDuringDirectingSpSkill;//必殺技の演出中か
 
     #region プロパティ
     public PlayerData Player => _player;
@@ -78,6 +79,16 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     {
         ResetStateBy(true);
         ResetStateBy(false);
+    }
+
+    /// <summary>
+    /// 必殺技を発動する状態にする
+    /// </summary>
+    public void ActivatingSpSkillState(bool isPlayer)
+    {
+        GetPlayerDataBy(isPlayer).SetIsUsingSpInRound(true);
+        GetPlayerDataBy(isPlayer).SetCanUseSpSkill(false);
+        _isDuringDirectingSpSkill = true;
     }
 
     /// <summary>
