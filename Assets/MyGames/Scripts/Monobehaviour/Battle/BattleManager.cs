@@ -73,12 +73,17 @@ public class BattleManager : MonoBehaviour
         {
             _battleDataManager.InitRoomData();
             _battleUIManager.InitSpSkillDescriptions();
-            DecideTheTurn();
+            //プレイヤーごとにpointをUIに反映
             _battleUIManager.ShowPoint(
                 _battleDataManager.GetPlayerPointBy(true),
                 _battleDataManager.GetPlayerPointBy(false)
             );
-            //enemyが必殺技を使用するタイミングを決める
+            //必殺技が発動可能であることをUIに反映
+            _battleUIManager.SetSpButtonImage(
+                _battleDataManager.GetCanUseSpSkillBy(true),
+                _battleDataManager.GetCanUseSpSkillBy(false)
+            );
+            DecideTheTurn();
         }
         _battleDataManager.ResetPlayerState();
         _battleUIManager.HideUIAtStart();

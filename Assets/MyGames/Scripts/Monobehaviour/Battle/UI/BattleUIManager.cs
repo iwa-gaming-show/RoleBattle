@@ -130,6 +130,15 @@ public class BattleUIManager : MonoBehaviour
     }
 
     ///<summary>
+    //必殺技のImageの状態を設定する
+    ///</summary>
+    public void SetSpButtonImage(bool playerCanUseSpSkill, bool enemyCanUseSpSkill)
+    {
+        SetSpButtonImageBy(true, playerCanUseSpSkill);
+        SetSpButtonImageBy(false, enemyCanUseSpSkill);
+    }
+
+    ///<summary>
     //プレイヤーの必殺技のImageの状態を設定する
     ///</summary>
     public void SetSpButtonImageBy(bool isPlayer, bool canUseSpSkill)
@@ -299,7 +308,8 @@ public class BattleUIManager : MonoBehaviour
     public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
     {
         GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
-        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, AnnounceThePlayerTurn.transform
+            .parent);
     }
 
     /// <summary>

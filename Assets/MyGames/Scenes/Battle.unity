@@ -276,6 +276,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5773307611191149020, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5773307611191149021, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: _battleUIManager
       value: 
@@ -558,6 +562,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasForObjectPool
       objectReference: {fileID: 0}
+    - target: {fileID: 8478602501757988176, guid: 85c705d6449b44943b84a9eb79c2ea7a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8478602501757988179, guid: 85c705d6449b44943b84a9eb79c2ea7a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -710,11 +718,11 @@ PrefabInstance:
     - target: {fileID: 1326759447004024330, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _spButtonIcons.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: f0712dd86bb641b4a9894bab9b6bf218, type: 3}
+      objectReference: {fileID: 21300000, guid: 5204c4a5f9b80744192b880dd0d3345f, type: 3}
     - target: {fileID: 1326759447004024330, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _spButtonIcons.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 5204c4a5f9b80744192b880dd0d3345f, type: 3}
+      objectReference: {fileID: 21300000, guid: f0712dd86bb641b4a9894bab9b6bf218, type: 3}
     - target: {fileID: 1326759447004024330, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _descriptionsOfSpSkill.Array.size
       value: 3
@@ -786,6 +794,10 @@ PrefabInstance:
     - target: {fileID: 4708454732287191026, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Name
       value: BattleCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708454732287191026, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4708454732287191038, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Pivot.x
