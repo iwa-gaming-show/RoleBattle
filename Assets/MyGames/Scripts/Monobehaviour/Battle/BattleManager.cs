@@ -6,7 +6,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static BattlePhase;
-using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
@@ -172,6 +171,35 @@ public class BattleManager : MonoBehaviour
         );
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
         //次のラウンドへ
+        NextRound();
+    }
+
+    /// <summary>
+    /// 次のラウンドへ進みます
+    /// </summary>
+    void NextRound()
+    {
+        if (_battleDataManager.RoundCount != _maxRoundCount)
+        {
+            _battleDataManager.AddRoundCount();
+            StartBattle(false).Forget();
+        }
+        else
+        {
+            EndBattle();
+        }
+    }
+
+    /// <summary>
+    /// バトルを終了する
+    /// </summary>
+    void EndBattle()
+    {
+        //勝敗を表示
+        _battleUIManager.ToggleBattleResultUI(true);  
+        _battleUIManager.SetBattleResultText(
+            CommonAttribute.GetStringValue(_battleDataManager.JudgeBattleResult())
+        );
     }
 
     /// <summary>

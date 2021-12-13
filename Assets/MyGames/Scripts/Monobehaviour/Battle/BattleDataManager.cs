@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
+using static BattleResult;
 
 public class BattleDataManager : MonoBehaviour, IBattleDataManager
 {
@@ -240,5 +241,26 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
             earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
 
         return earnPoint;
+    }
+
+    /// <summary>
+    /// ラウンドの増加
+    /// </summary>
+    public void AddRoundCount()
+    {
+        _roundCount++;
+    }
+
+    /// <summary>
+    /// バトルの結果を取得する
+    /// </summary>
+    public BattleResult JudgeBattleResult()
+    {
+        int playerPoint = _player.Point;
+        int enemyPoint = _enemy.Point;
+
+        if (playerPoint > enemyPoint) return BATTLE_WIN;
+        if (playerPoint == enemyPoint) return BATTLE_DRAW;
+        return BATTLE_LOSE;
     }
 }

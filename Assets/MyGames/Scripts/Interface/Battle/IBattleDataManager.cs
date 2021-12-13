@@ -135,4 +135,14 @@ public interface IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     void AddPointTo(bool isPlayer);
+
+    /// <summary>
+    /// ラウンドの増加
+    /// </summary>
+    void AddRoundCount();
+
+    /// <summary>
+    /// バトルの結果を取得する
+    /// </summary>
+    BattleResult JudgeBattleResult();
 }
