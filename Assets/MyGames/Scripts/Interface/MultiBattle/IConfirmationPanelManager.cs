@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// 確認画面を管理するManagerInterface
 /// </summary>
-public interface IMultiConfirmationPanelManager
+public interface IConfirmationPanelManager
 {
     CardController MovingFieldCard
     {

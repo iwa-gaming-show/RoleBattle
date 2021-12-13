@@ -6,7 +6,7 @@ using Photon.Pun;
 using static BattlePhase;
 
 public class MultiConfirmationPanelManager : MonoBehaviour,
-    IMultiConfirmationPanelManager
+    IConfirmationPanelManager
 {
     [SerializeField]
     [Header("バトル場へ移動する確認画面を設定する")]
@@ -28,12 +28,12 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
 
     void Awake()
     {
-        ServiceLocator.Register<IMultiConfirmationPanelManager>(this);
+        ServiceLocator.Register<IConfirmationPanelManager>(this);
     }
 
     void OnDestroy()
     {
-        ServiceLocator.UnRegister<IMultiConfirmationPanelManager>(this);
+        ServiceLocator.UnRegister<IConfirmationPanelManager>(this);
     }
 
     /// <summary>

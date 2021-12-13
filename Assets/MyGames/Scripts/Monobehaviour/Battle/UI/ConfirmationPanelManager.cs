@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Photon.Pun;
 using static BattlePhase;
 
 public class ConfirmationPanelManager : MonoBehaviour,
-    IMultiConfirmationPanelManager
+    IConfirmationPanelManager
 {
     [SerializeField]
     [Header("バトル場へ移動する確認画面を設定する")]
@@ -22,18 +21,24 @@ public class ConfirmationPanelManager : MonoBehaviour,
 
     CardController _movingFieldCard;//フィールドへ移動するカードを保存する
     bool _isSpSkillActivating;//必殺技を発動するか
+    IBattleDataManager _battleDataManager;
 
     public CardController MovingFieldCard => _movingFieldCard;
     public bool IsSpSkillActivating => _isSpSkillActivating;
 
     void Awake()
     {
-        ServiceLocator.Register<IMultiConfirmationPanelManager>(this);
+        ServiceLocator.Register<IConfirmationPanelManager>(this);
     }
 
     void OnDestroy()
     {
-        ServiceLocator.UnRegister<IMultiConfirmationPanelManager>(this);
+        ServiceLocator.UnRegister<IConfirmationPanelManager>(this);
+    }
+
+    void Start()
+    {
+        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
     }
 
     /// <summary>
@@ -53,7 +58,6 @@ public class ConfirmationPanelManager : MonoBehaviour,
         ViewConfirmationPanelFor(_confirmationPanelToField);
         _confirmationPanelToField.SetFieldConfirmationText(selectedCard);
         await WaitFieldConfirmationButton(_confirmationPanelToField);
-
         //yesを押した時、フィールドへ移動するカードとして保持
         if (_confirmationPanelToField.CanMoveToField)
         {
@@ -69,7 +73,7 @@ public class ConfirmationPanelManager : MonoBehaviour,
     /// </summary>
     public async UniTask ConfirmToActivateSpSkill()
     {
-        bool canUseSpSkill = PhotonNetwork.LocalPlayer.GetCanUseSpSkill();
+        bool canUseSpSkill = _battleDataManager.GetCanUseSpSkillFor(true);
         bool activatable = canUseSpSkill && MySelectionTurn();
         if (activatable == false) return;
         //すでに確認画面が表示されているなら何もしない
@@ -105,9 +109,10 @@ public class ConfirmationPanelManager : MonoBehaviour,
     /// <returns></returns>
     public bool MySelectionTurn()
     {
-        bool myTurn = PhotonNetwork.LocalPlayer.GetIsMyTurn();
-        bool selectionPhase = (PhotonNetwork.CurrentRoom.GetIntBattlePhase() == (int)SELECTION);
-        bool placeable = PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced() == false;
+        bool myTurn = _battleDataManager.GetPlayerTurnFor(true);
+        bool selectionPhase = (_battleDataManager.BattlePhase == SELECTION);
+        bool placeable = (_battleDataManager.GetIsFieldCardPlacedFor(true) == false);
+
         return myTurn && selectionPhase && placeable;
     }
 

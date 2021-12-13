@@ -4,114 +4,106 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
-using static CardJudgement;
-using static BattleResult;
 using static BattlePhase;
-using UnityEngine.SceneManagement;
 
-public class BattleManager : MonoBehaviour, IBattleManager
+public class BattleManager : MonoBehaviour
 {
     #region
     [SerializeField]
+    [Header("最大ラウンド数")]
+    int _maxRoundCount = 3;
+
+    [SerializeField]
     [Header("カウントダウンの秒数を設定")]
     int _defaultCountDownTime = DEFAULT_COUNT_DOWN_TIME;
+
+    [SerializeField]
+    [Header("ゲーム盤のCanvasを設定する")]
+    BattleUIManager _battleUIManager;
     #endregion
 
-    bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
     int _countDownTime;
-    bool _isOnline;//falseはオフライン
-    BattleResult _battleResult;
-    BattlePhase _battlePhase;
-    PlayerData _player;
-    PlayerData _enemy;
-    CancellationToken _token;
-    IBattleUIManager _battleUIManager;
-    ITurnManager _turnManager;//プレイヤーのターン管理
-    ICardManager _cardManager;//カードの管理
-    IRoundManager _roundManager;//ラウンドの管理
-    IFieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
-    IPointManager _pointManager;//ポイントの管理
+    GameObject _playerIcon;
+
+    //bool _isDuringProductionOfSpecialSkill;//必殺技の演出中か
+    //bool _isOnline;//falseはオフライン
+    ////BattleResult _battleResult;
+    //CancellationToken _token;
+    //ITurnManager _turnManager;//プレイヤーのターン管理
+    //ICardManager _cardManager;//カードの管理
+    //IRoundManager _roundManager;//ラウンドの管理
+    //IFieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
+    //IPointManager _pointManager;//ポイントの管理
+    IBattleDataManager _battleDataManager;
 
 
     #region プロパティ
-    public bool IsOnline => _isOnline;
-    public PlayerData Player => _player;
-    public PlayerData Enemy => _enemy;
-    public BattlePhase BattlePhase => _battlePhase;
-    public CancellationToken Token => _token;
-    public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
+    //public CancellationToken Token => _token;
+    //public bool IsDuringProductionOfSpecialSkill => _isDuringProductionOfSpecialSkill;
     #endregion
 
 
     private void Awake()
     {
-        ServiceLocator.Register<IBattleManager>(this);
+        //ServiceLocator.Register<IBattleManager>(this);
     }
 
     void OnDestroy()
     {
-        ServiceLocator.UnRegister<IBattleManager>(this);
+        //ServiceLocator.UnRegister<IBattleManager>(this);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _token = this.GetCancellationTokenOnDestroy();
-        _roundManager = ServiceLocator.Resolve<IRoundManager>();
-        _turnManager = ServiceLocator.Resolve<ITurnManager>();
-        _cardManager = ServiceLocator.Resolve<ICardManager>();
-        _pointManager = ServiceLocator.Resolve<IPointManager>();
-        _fieldTransformManager = ServiceLocator.Resolve<IFieldTransformManager>();
-        _battleUIManager = ServiceLocator.Resolve<IBattleUIManager>();
-
-        StartGame(true).Forget();
+        //_token = this.GetCancellationTokenOnDestroy();
+        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
+        _battleDataManager.CreatePlayerData();
+        _battleDataManager.InitPlayerData();
+        StartBattle(true).Forget();
     }
 
     /// <summary>
-    /// ゲームを開始する
+    /// バトルを開始する
     /// </summary>
-    /// <param name="isFirstGame"></param>
-    /// <returns></returns>
-    public async UniTask StartGame(bool isFirstGame)
+    public async UniTask StartBattle(bool isFirstBattle)
     {
         //1ラウンド目に行う処理
-        if (isFirstGame)
+        if (isFirstBattle)
         {
-            InitPlayerData();
-            _player.SetCanUseSpecialSkill(true);//必殺技を使用可能に
-            _enemy.SetCanUseSpecialSkill(true);
-            _roundManager.SetRoundCount(INITIAL_ROUND_COUNT);
-            _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
-            _battleUIManager.InitUIData();
-            _turnManager.DecideTheTurn();
-            _turnManager.DecideTheTurnOnEnemySp(_roundManager.MaxRoundCount);
+            _battleDataManager.InitRoomData();
+            _battleUIManager.InitSpSkillDescriptions();
+            DecideTheTurn();
+            //pointの表示
+            //enemyが必殺技を使用するタイミングを決める
         }
-
-        //1ラウンド目以降に行う処理
-        ResetGameState(_turnManager, _roundManager);
+        _battleDataManager.ResetPlayerState();
         _battleUIManager.HideUIAtStart();
-        _cardManager.ResetFieldCard(_fieldTransformManager.BattleFieldTransforms, _fieldTransformManager.HandTransforms);
-        await _battleUIManager.ShowRoundCountText(_roundManager.RoundCount, _roundManager.MaxRoundCount);
-        _cardManager.DistributeCards(_fieldTransformManager.MyHandTransform, _fieldTransformManager.EnemyHandTransform);
-        _turnManager.ChangeTurn().Forget();
+        _battleUIManager.ResetFieldCards();
+        await _battleUIManager.ShowRoundCountText(_battleDataManager.RoundCount, _maxRoundCount);
+        _battleUIManager.DistributeCards();
+        StartTurn();
     }
 
     /// <summary>
-    /// プレイヤーデータの初期化
+    /// ターンを開始します
     /// </summary>
-    public void InitPlayerData()
+    void StartTurn()
     {
-        _player = new PlayerData(INITIAL_POINT);
-        _enemy = new PlayerData(INITIAL_POINT);
+        PlayerTurn().Forget();
     }
 
     /// <summary>
-    /// バトルの段階を切り替える
+    /// プレイヤーのターンを開始します
     /// </summary>
-    /// <param name="phase"></param>
-    public void ChangeBattlePhase(BattlePhase phase)
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    async UniTask PlayerTurn()
     {
-        _battlePhase = phase;
+        _battleDataManager.SetBattlePhase(SELECTION);//カード選択フェイズへ
+        await _battleUIManager.ShowThePlayerTurnText(_battleDataManager.GetPlayerTurnFor(true));
+        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
+        StartCoroutine(CountDown());
     }
 
     /// <summary>
@@ -120,123 +112,34 @@ public class BattleManager : MonoBehaviour, IBattleManager
     public IEnumerator CountDown()
     {
         _countDownTime = _defaultCountDownTime;
-
         while (_countDownTime > 0)
         {
-            //必殺技の演出中はカウントしない
-            if (_isDuringProductionOfSpecialSkill == false)
-            {
-                //1秒毎に減らしていきます
-                yield return new WaitForSeconds(1f);
-                _countDownTime--;
-                _battleUIManager.ShowCountDownText(_countDownTime);
-            }
-
+            //1秒毎に減らしていきます
+            yield return new WaitForSeconds(1f);
+            _countDownTime--;
+            _battleUIManager.ShowCountDownText(_countDownTime);
             yield return null;
         }
 
-        //確認画面を全て閉じる
-        _battleUIManager.CloseAllConfirmationPanels();
-
-        //0になったらカードをランダムにフィールドへ移動しターンエンドする
-        Transform handTransform = _fieldTransformManager.GetHandTransformByTurn(_turnManager.IsMyTurn);
-        CardController targetCard = _cardManager.GetRandomCardFrom(handTransform);
-
-        //yield return targetCard.CardEvent.MoveToBattleField(_fieldTransformManager.MyBattleFieldTransform).ToCoroutine();
+        //DoIfCountDownTimeOut();
     }
 
     /// <summary>
-    /// 必殺技の演出中かフラグをセットする
+    /// 先攻、後攻のターンを決めます
     /// </summary>
-    public void SetIsDuringProductionOfSpecialSkill(bool isDuringProduction)
+    public void DecideTheTurn()
     {
-        _isDuringProductionOfSpecialSkill = isDuringProduction;
+        //trueなら自身を先攻にする
+        if (RandomBool()) _battleDataManager.SetIsPlayerTurnFor(true, true);
+        else _battleDataManager.SetIsPlayerTurnFor(false, true);
     }
 
     /// <summary>
-    /// ゲームの状態をリセットする
+    /// bool型をランダムに取得する
     /// </summary>
-    public void ResetGameState(params IGameDataResetable[] targetManagerList)
+    /// <returns></returns>
+    bool RandomBool()
     {
-        foreach (IGameDataResetable targetManager in targetManagerList)
-        {
-            targetManager.ResetData();
-        }
-    }
-
-    /// <summary>
-    /// ゲームを再開する
-    /// </summary>
-    public void RetryGame()
-    {
-        StartGame(true).Forget();
-    }
-
-    /// <summary>
-    /// タイトルへ移動する
-    /// </summary>
-    public void OnClickToTitle()
-    {
-        SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
-    }
-
-    /// <summary>
-    /// ゲームを終了
-    /// </summary>
-    public void EndGame()
-    {
-        //バトルの結果を判定
-        _battleResult = JudgeBattleResult();
-        //勝敗の表示
-        _battleUIManager.ToggleGameResultUI(true);
-        _battleUIManager.SetGameResultText(CommonAttribute.GetStringValue(_battleResult));
-    }
-
-    /// <summary>
-    /// バトルの結果を取得する
-    /// </summary>
-    public BattleResult JudgeBattleResult()
-    {
-        if (_player.Point > _enemy.Point) return BATTLE_WIN;
-        if (_player.Point == _enemy.Point) return BATTLE_DRAW;
-        return BATTLE_LOSE;
-    }
-
-    /// <summary>
-    /// 結果を反映します
-    /// </summary>
-    /// <param name="result"></param>
-    public async UniTask ReflectTheResult(CardJudgement result)
-    {
-        ChangeBattlePhase(RESULT);
-
-        if (result == WIN)
-        {
-            _pointManager.AddPointTo(_player, _roundManager.IsUsingPlayerSkillInRound);
-        }
-        else if (result == LOSE)
-        {
-            _pointManager.AddPointTo(_enemy, _roundManager.IsUsingEnemySkillInRound);
-        }
-
-        //UIへの反映
-        await _battleUIManager.ShowJudgementResultText(result.ToString());
-        _battleUIManager.ShowPoint(_player.Point, _enemy.Point);
-    }
-
-    /// <summary>
-    /// 必殺技を使用します
-    /// </summary>
-    public void UsedSpecialSkill(bool isPlayer)
-    {
-        if (isPlayer)
-        {
-            _player.SetCanUseSpecialSkill(false);
-            _roundManager.SetUsingSkillRound(isPlayer, true);
-            return;
-        }
-
-        _enemy.SetCanUseSpecialSkill(false);
-        _roundManager.SetUsingSkillRound(isPlayer, true);
+        return Random.Range(0, 2) == 0;
     }
 }

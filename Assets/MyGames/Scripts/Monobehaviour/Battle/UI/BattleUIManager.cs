@@ -16,11 +16,11 @@ public class BattleUIManager : MonoBehaviour
 {
     [SerializeField]
     [Header("プレイヤーのUI")]
-    MultiPlayerUI _playerUI;
+    PlayerUI _playerUI;
 
     [SerializeField]
     [Header("エネミーのUI")]
-    MultiPlayerUI _enemyUI;
+    PlayerUI _enemyUI;
 
     [SerializeField]
     [Header("未使用、使用済みの順にアイコン画像を必殺技ボタンに設定する")]
@@ -78,9 +78,10 @@ public class BattleUIManager : MonoBehaviour
     [Header("必殺技の説明用のテキストを設定")]
     string _spSkillDescription;
 
+    IBattleDataManager _battleDataManager;
 
     #region//プロパティ
-    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    IConfirmationPanelManager _confirmationPanelManager;
     PhotonView _photonView;
     #endregion
 
@@ -91,20 +92,21 @@ public class BattleUIManager : MonoBehaviour
 
     void Start()
     {
-        _multiConfirmationPanelManager = ServiceLocator.Resolve<IMultiConfirmationPanelManager>();
+        _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
+        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
     }
 
     void Update()
     {
-        TryToMoveToField(_multiConfirmationPanelManager.MovingFieldCard);
-        TryToActivateSpSkill(_multiConfirmationPanelManager.IsSpSkillActivating);
+        TryToMoveToField(_confirmationPanelManager.MovingFieldCard);
+        TryToActivateSpSkill(_confirmationPanelManager.IsSpSkillActivating);
     }
 
     /// <summary>
     /// プレイヤーかエネミーのUIを取得する
     /// </summary>
     /// <returns></returns>
-    public MultiPlayerUI GetPlayerUI(bool isPlayer)
+    public PlayerUI GetPlayerUI(bool isPlayer)
     {
         if (isPlayer) return _playerUI;
         return _enemyUI;
@@ -317,7 +319,7 @@ public class BattleUIManager : MonoBehaviour
     void TryToMoveToField(CardController movingCard)
     {
         if (movingCard == null) return;
-        _multiConfirmationPanelManager.DestroyMovingBattleCard();
+        _confirmationPanelManager.DestroyMovingBattleCard();
         
         MoveToBattleField(movingCard).Forget();
     }
@@ -328,7 +330,7 @@ public class BattleUIManager : MonoBehaviour
     void TryToActivateSpSkill(bool IsSpSkillActivating)
     {
         if (IsSpSkillActivating == false) return;
-        _multiConfirmationPanelManager.SetIsSpSkillActivating(false);
+        _confirmationPanelManager.SetIsSpSkillActivating(false);
 
         ActivateSpSkill().Forget();
     }
@@ -339,20 +341,27 @@ public class BattleUIManager : MonoBehaviour
     async UniTask MoveToBattleField(CardController movingCard)
     {
         //すでにバトル場にカードが置かれているなら何もしない
-        if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
+        if (_battleDataManager.GetIsFieldCardPlacedFor(true)) return;
 
-        RegisterCardType(movingCard.CardType);
+        //RegisterCardType(movingCard.CardType);
         //カードを配置済みにする
-        PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
-        PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
+        _battleDataManager.SetIsFieldCardPlacedFor(true, true);
+        _battleDataManager.SetBattlePhase(SELECTED);
 
         //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
-        _photonView.RPC("RpcMoveEnemyCardToField", RpcTarget.Others);
         await _playerUI.MoveToBattleField(movingCard);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
-        PhotonNetwork.LocalPlayer.SetIsMyTurnEnd(true);
+        _battleDataManager.SetIsPlayerTurnEndFor(true, true);
+    }
+
+    /// <summary>
+    /// カードタイプを登録します
+    /// </summary>
+    void RegisterCardType(CardType cardType)
+    {
+        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
     }
 
     /// <summary>
@@ -397,14 +406,6 @@ public class BattleUIManager : MonoBehaviour
     void RpcActivateEnemySpSkill()
     {
         _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
-    }
-
-    /// <summary>
-    /// カードタイプを登録します
-    /// </summary>
-    void RegisterCardType(CardType cardType)
-    {
-        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
     }
 
     /// <summary>
@@ -489,7 +490,7 @@ public class BattleUIManager : MonoBehaviour
     /// </summary>
     public void InactiveUIIfCountDownTimeOut()
     {
-        _multiConfirmationPanelManager.InactiveUIIfCountDownTimeOut();
+        _confirmationPanelManager.InactiveUIIfCountDownTimeOut();
     }
 
     /// <summary>

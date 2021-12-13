@@ -5,10 +5,21 @@ public class PlayerData
     string _name;
     Sprite _icon;
     int _point;
-    bool _canUseSpecialSkill;
+    bool _canUseSpSkill;
+    bool _isMyTurn;
+    bool _isMyTurnEnd;
+    bool _isUsingSpInRound;
+    bool _isFieldCardPlaced;
+    bool _isCardJudged;
+    bool _isRetryingBattle;
+    CardType _battleCardType;
+
 
     public int Point => _point;
-    public bool CanUseSpecialSkill => _canUseSpecialSkill;
+    public bool IsMyTurn => _isMyTurn;
+    public bool IsMyTurnEnd => _isMyTurnEnd;
+    public bool CanUseSpSkill => _canUseSpSkill;
+    public bool IsFieldCardPlaced => _isFieldCardPlaced;
 
     public PlayerData(int point)
     {
@@ -36,8 +47,44 @@ public class PlayerData
     /// 必殺技が使用可能かの設定
     /// </summary>
     /// <param name="canUseSp"></param>
-    public void SetCanUseSpecialSkill(bool canUseSp)
+    public void SetCanUseSpSkill(bool canUseSp)
     {
-        _canUseSpecialSkill = canUseSp;
+        _canUseSpSkill = canUseSp;
+    }
+
+    /// <summary>
+    /// プレイヤーのターンかどうかを設定する
+    /// </summary>
+    /// <param name="isMyTurn"></param>
+    public void SetIsMyTurn(bool isMyTurn)
+    {
+        _isMyTurn = isMyTurn;
+    }
+
+    /// <summary>
+    /// プレイヤーのターンが終了したかどうかを設定する
+    /// </summary>
+    /// <param name="isMyTurnEnd"></param>
+    public void SetIsMyTurnEnd(bool isMyTurnEnd)
+    {
+        _isMyTurnEnd  = isMyTurnEnd;
+    }
+
+    /// <summary>
+    /// 必殺技の発動中かどうかを設定する
+    /// </summary>
+    /// <param name="isUsingSpInRound"></param>
+    public void SetIsUsingSpInRound(bool isUsingSpInRound)
+    {
+        _isUsingSpInRound = isUsingSpInRound;
+    }
+
+    /// <summary>
+    /// カードをフィールドに配置したかどうかを設定する
+    /// </summary>
+    /// <param name="isFieldCardPlaced"></param>
+    public void SetIsFieldCardPlaced(bool isFieldCardPlaced)
+    {
+        _isFieldCardPlaced = isFieldCardPlaced;
     }
 }

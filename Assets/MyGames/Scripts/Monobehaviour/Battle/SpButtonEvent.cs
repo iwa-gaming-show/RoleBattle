@@ -6,11 +6,11 @@ using Cysharp.Threading.Tasks;
 
 public class SpButtonEvent : MonoBehaviour, IPointerClickHandler
 {
-    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    IConfirmationPanelManager _confirmationPanelManager;
 
     void Start()
     {
-        _multiConfirmationPanelManager = ServiceLocator.Resolve<IMultiConfirmationPanelManager>();
+        _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
     }
 
     /// <summary>
@@ -20,6 +20,6 @@ public class SpButtonEvent : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //spSkillの確認画面を表示
-        _multiConfirmationPanelManager.ConfirmToActivateSpSkill().Forget();
+        _confirmationPanelManager.ConfirmToActivateSpSkill().Forget();
     }
 }

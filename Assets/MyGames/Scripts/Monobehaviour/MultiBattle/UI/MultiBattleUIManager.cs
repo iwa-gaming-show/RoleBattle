@@ -80,7 +80,7 @@ public class MultiBattleUIManager : MonoBehaviour
 
 
     #region//プロパティ
-    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    IConfirmationPanelManager _confirmationPanelManager;
     PhotonView _photonView;
     #endregion
 
@@ -91,13 +91,13 @@ public class MultiBattleUIManager : MonoBehaviour
 
     void Start()
     {
-        _multiConfirmationPanelManager = ServiceLocator.Resolve<IMultiConfirmationPanelManager>();
+        _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
     }
 
     void Update()
     {
-        TryToMoveToField(_multiConfirmationPanelManager.MovingFieldCard);
-        TryToActivateSpSkill(_multiConfirmationPanelManager.IsSpSkillActivating);
+        TryToMoveToField(_confirmationPanelManager.MovingFieldCard);
+        TryToActivateSpSkill(_confirmationPanelManager.IsSpSkillActivating);
     }
 
     /// <summary>
@@ -317,7 +317,7 @@ public class MultiBattleUIManager : MonoBehaviour
     void TryToMoveToField(CardController movingCard)
     {
         if (movingCard == null) return;
-        _multiConfirmationPanelManager.DestroyMovingBattleCard();
+        _confirmationPanelManager.DestroyMovingBattleCard();
         
         MoveToBattleField(movingCard).Forget();
     }
@@ -328,7 +328,7 @@ public class MultiBattleUIManager : MonoBehaviour
     void TryToActivateSpSkill(bool IsSpSkillActivating)
     {
         if (IsSpSkillActivating == false) return;
-        _multiConfirmationPanelManager.SetIsSpSkillActivating(false);
+        _confirmationPanelManager.SetIsSpSkillActivating(false);
 
         ActivateSpSkill().Forget();
     }
@@ -489,7 +489,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// </summary>
     public void InactiveUIIfCountDownTimeOut()
     {
-        _multiConfirmationPanelManager.InactiveUIIfCountDownTimeOut();
+        _confirmationPanelManager.InactiveUIIfCountDownTimeOut();
     }
 
     /// <summary>

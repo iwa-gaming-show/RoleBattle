@@ -42,9 +42,9 @@ public class PlayerDataTest
     [Test, Description("必殺技の使用可能設定を切り替えられるか")]
     [TestCase(true, true)]
     [TestCase(false, false)]
-    public void SetCanUseSpecialSkillTest(bool input, bool expected)
+    public void SetCanUseSpSkillTest(bool input, bool expected)
     {
-        playerData.SetCanUseSpecialSkill(input);
-        Assert.That(playerData.CanUseSpecialSkill, Is.EqualTo(expected));
+        playerData.SetCanUseSpSkill(input);
+        Assert.That(playerData.CanUseSpSkill, Is.EqualTo(expected));
     }
 }

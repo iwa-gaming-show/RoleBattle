@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class MultiCardEvent : MonoBehaviour, IPointerClickHandler
 {
-    IMultiConfirmationPanelManager _multiConfirmationPanelManager;
+    IConfirmationPanelManager _confirmationPanelManager;
     CardController cardController;
 
     void Awake()
@@ -16,7 +16,7 @@ public class MultiCardEvent : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
-        _multiConfirmationPanelManager = ServiceLocator.Resolve<IMultiConfirmationPanelManager>();
+        _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
     }
 
     /// <summary>
@@ -25,6 +25,6 @@ public class MultiCardEvent : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        _multiConfirmationPanelManager.ConfirmToMoveToField(cardController).Forget();
+        _confirmationPanelManager.ConfirmToMoveToField(cardController).Forget();
     }
 }
