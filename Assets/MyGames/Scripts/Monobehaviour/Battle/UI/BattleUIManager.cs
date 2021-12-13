@@ -373,6 +373,7 @@ public class BattleUIManager : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
         _battleDataManager.SetIsPlayerTurnEndBy(true, true);
+        _battleDataManager.SetCanChangeTurn(true);
     }
 
     /// <summary>

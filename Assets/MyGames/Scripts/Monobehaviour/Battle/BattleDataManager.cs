@@ -10,12 +10,14 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     BattlePhase _battlePhase;
     int _roundCount;
     int _earnedPoint;
+    bool _canChangeTurn;
 
     #region プロパティ
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
     public int RoundCount => _roundCount;
     public BattlePhase BattlePhase => _battlePhase;
+    public bool CanChangeTurn => _canChangeTurn;
     #endregion
 
     private void Awake()
@@ -160,7 +162,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// <returns></returns>
     public bool GetIsFieldCardPlacedBy(bool isPlayer)
     {
-        throw new System.NotImplementedException();
+        return GetPlayerDataBy(isPlayer).IsFieldCardPlaced;
     }
 
     /// <summary>
@@ -181,5 +183,15 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     public int GetPlayerPointBy(bool isPlayer)
     {
         return GetPlayerDataBy(isPlayer).Point;
+    }
+
+    /// <summary>
+    /// ターンを切り替えることができるかどうかを設定する
+    /// </summary>
+    /// <param name="can"></param>
+    /// <returns></returns>
+    public void SetCanChangeTurn(bool can)
+    {
+        _canChangeTurn = can;
     }
 }

@@ -63,6 +63,11 @@ public class BattleManager : MonoBehaviour
         StartBattle(true).Forget();
     }
 
+    void Update()
+    {
+        SwitchPlayerTurnFlg(_battleDataManager);
+    }
+
     /// <summary>
     /// バトルを開始する
     /// </summary>
@@ -112,6 +117,61 @@ public class BattleManager : MonoBehaviour
         await _battleUIManager.ShowThePlayerTurnText(_battleDataManager.GetPlayerTurnBy(true));
         StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
         StartCoroutine(CountDown());
+
+        //相手のターンならアクションをする
+        if (_battleDataManager.GetPlayerTurnBy(false))
+        {
+            await EnemyAction();
+        }
+    }
+
+    /// <summary>
+    /// エネミーの行動をします
+    /// </summary>
+    /// <returns></returns>
+    async UniTask EnemyAction()
+    {
+        await UniTask.Yield();
+    }
+
+    // <summary>
+    /// プレイヤーのターンのフラグを切り替えます
+    /// </summary>
+    void SwitchPlayerTurnFlg(IBattleDataManager dataM)
+    {
+        if (dataM.CanChangeTurn == false) return;
+
+        if (IsEachPlayerFieldCardPlaced())
+        {
+            Debug.Log("バトルする");
+        }
+        else
+        {
+            ChangeTurn(dataM);
+        }
+
+        dataM.SetCanChangeTurn(false);
+    }
+
+    /// <summary>
+    /// ターンを切り替えます
+    /// </summary>
+    void ChangeTurn(IBattleDataManager dataM)
+    {
+        //プレイヤーとエネミーのフラグをそれぞれ逆にします
+        dataM.SetIsPlayerTurnBy(true, !dataM.GetPlayerTurnBy(true));
+        dataM.SetIsPlayerTurnBy(false, !dataM.GetPlayerTurnBy(false));
+        StartTurn();
+    }
+
+    /// <summary>
+    /// お互いのプレイヤーがバトル場にカードを出しているか
+    /// </summary>
+    /// <returns></returns>
+    bool IsEachPlayerFieldCardPlaced()
+    {
+        return _battleDataManager.GetIsFieldCardPlacedBy(true)
+            && _battleDataManager.GetIsFieldCardPlacedBy(false);
     }
 
     /// <summary>

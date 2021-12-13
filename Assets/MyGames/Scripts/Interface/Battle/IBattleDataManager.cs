@@ -22,6 +22,11 @@ public interface IBattleDataManager
         get;
     }
 
+    bool CanChangeTurn
+    {
+        get;
+    }
+
     /// <summary>
     /// プレイヤーデータの作成
     /// </summary>
@@ -99,4 +104,11 @@ public interface IBattleDataManager
     /// <param name="isPlayer"></param>
     /// <returns></returns>
     int GetPlayerPointBy(bool isPlayer);
+
+    /// <summary>
+    /// ターンを切り替えることができるかどうかを設定する
+    /// </summary>
+    /// <param name="can"></param>
+    /// <returns></returns>
+    void SetCanChangeTurn(bool can);
 }
