@@ -29,11 +29,6 @@ public class BattleManager : MonoBehaviour
     //bool _isOnline;//falseはオフライン
     ////BattleResult _battleResult;
     //CancellationToken _token;
-    //ITurnManager _turnManager;//プレイヤーのターン管理
-    //ICardManager _cardManager;//カードの管理
-    //IRoundManager _roundManager;//ラウンドの管理
-    //IFieldTransformManager _fieldTransformManager;//フィールドのTransformの管理
-    //IPointManager _pointManager;//ポイントの管理
     IBattleDataManager _battleDataManager;
 
 
@@ -121,17 +116,8 @@ public class BattleManager : MonoBehaviour
         //相手のターンならアクションをする
         if (_battleDataManager.GetPlayerTurnBy(false))
         {
-            await EnemyAction();
+            await _battleUIManager.NpcEnemyAction();
         }
-    }
-
-    /// <summary>
-    /// エネミーの行動をします
-    /// </summary>
-    /// <returns></returns>
-    async UniTask EnemyAction()
-    {
-        await UniTask.Yield();
     }
 
     // <summary>

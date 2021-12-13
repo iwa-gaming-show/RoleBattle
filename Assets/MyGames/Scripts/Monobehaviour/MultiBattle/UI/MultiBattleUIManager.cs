@@ -391,7 +391,7 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 相手のカードをフィールドに移動します
+    /// 相手の必殺技を発動します
     /// </summary>
     [PunRPC]
     void RpcActivateEnemySpSkill()

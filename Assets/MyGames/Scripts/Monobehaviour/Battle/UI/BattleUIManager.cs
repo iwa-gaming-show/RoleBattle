@@ -340,7 +340,7 @@ public class BattleUIManager : MonoBehaviour
         if (movingCard == null) return;
         _confirmationPanelManager.DestroyMovingBattleCard();
         
-        MoveToBattleField(movingCard).Forget();
+        MoveToBattleField(true, movingCard).Forget();
     }
 
     /// <summary>
@@ -357,22 +357,22 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// カードを移動する
     /// </summary>
-    async UniTask MoveToBattleField(CardController movingCard)
+    async UniTask MoveToBattleField(bool isPlayer, CardController movingCard)
     {
         //すでにバトル場にカードが置かれているなら何もしない
-        if (_battleDataManager.GetIsFieldCardPlacedBy(true)) return;
+        if (_battleDataManager.GetIsFieldCardPlacedBy(isPlayer)) return;
 
         //RegisterCardType(movingCard.CardType);
         //カードを配置済みにする
-        _battleDataManager.SetIsFieldCardPlacedBy(true, true);
+        _battleDataManager.SetIsFieldCardPlacedBy(isPlayer, true);
         _battleDataManager.SetBattlePhase(SELECTED);
 
-        //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
-        await _playerUI.MoveToBattleField(movingCard);
+        //カードを移動する
+        await GetPlayerUI(isPlayer).MoveToBattleField(movingCard);
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
-        _battleDataManager.SetIsPlayerTurnEndBy(true, true);
+        _battleDataManager.SetIsPlayerTurnEndBy(isPlayer, true);
         _battleDataManager.SetCanChangeTurn(true);
     }
 
@@ -387,10 +387,23 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// ランダムなカードをフィールドに移動します
     /// </summary>
-    public void MoveRandomCardToField()
+    public async UniTask MoveRandomCardToField(bool isPlayer)
     {
-        CardController movingCard = _playerUI.GetRandomHandCard();
-        MoveToBattleField(movingCard).Forget();
+        CardController movingCard = GetPlayerUI(isPlayer).GetRandomHandCard();
+        await MoveToBattleField(isPlayer, movingCard);
+    }
+
+    /// <summary>
+    /// エネミーの行動をします
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask NpcEnemyAction()
+    {
+        //必殺技を使用するターンなら必殺技を発動
+
+
+        //ランダムにカードを選びフィールドへ
+        await MoveRandomCardToField(false);
     }
 
     /// <summary>
@@ -420,7 +433,7 @@ public class BattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 相手のカードをフィールドに移動します
+    /// 相手の必殺技を発動します
     /// </summary>
     [PunRPC]
     void RpcActivateEnemySpSkill()
