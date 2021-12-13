@@ -17,6 +17,11 @@ public interface IBattleDataManager
         get;
     }
 
+    int EarnedPoint
+    {
+        get;
+    }
+
     BattlePhase BattlePhase
     {
         get;
@@ -111,4 +116,23 @@ public interface IBattleDataManager
     /// <param name="can"></param>
     /// <returns></returns>
     void SetCanChangeTurn(bool can);
+
+    /// <summary>
+    /// プレイヤーのフィールドに配置したカードの種類を取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    CardType GetCardTypeBy(bool isPlayer);
+
+    /// <summary>
+    /// プレイヤーのフィールドに配置したカードの種類を設定します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <param name="cardType"></param>
+    void RegisterCardTypeBy(bool isPlayer, CardType cardType);
+
+    /// <summary>
+    /// ポイントを加算します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    void AddPointTo(bool isPlayer);
 }

@@ -362,7 +362,7 @@ public class BattleUIManager : MonoBehaviour
         //すでにバトル場にカードが置かれているなら何もしない
         if (_battleDataManager.GetIsFieldCardPlacedBy(isPlayer)) return;
 
-        //RegisterCardType(movingCard.CardType);
+        _battleDataManager.RegisterCardTypeBy(isPlayer, movingCard.CardType);
         //カードを配置済みにする
         _battleDataManager.SetIsFieldCardPlacedBy(isPlayer, true);
         _battleDataManager.SetBattlePhase(SELECTED);
@@ -379,10 +379,10 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// カードタイプを登録します
     /// </summary>
-    void RegisterCardType(CardType cardType)
-    {
-        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
-    }
+    //void RegisterCardType(CardType cardType)
+    //{
+    //    PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
+    //}
 
     /// <summary>
     /// ランダムなカードをフィールドに移動します
@@ -400,7 +400,7 @@ public class BattleUIManager : MonoBehaviour
     public async UniTask NpcEnemyAction()
     {
         //必殺技を使用するターンなら必殺技を発動
-
+        //todo
 
         //ランダムにカードを選びフィールドへ
         await MoveRandomCardToField(false);

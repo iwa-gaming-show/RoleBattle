@@ -9,13 +9,14 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     PlayerData _enemy;
     BattlePhase _battlePhase;
     int _roundCount;
-    int _earnedPoint;
+    int _earnedPoint = INITIAL_EARNED_POINT;
     bool _canChangeTurn;
 
     #region プロパティ
     public PlayerData Player => _player;
     public PlayerData Enemy => _enemy;
     public int RoundCount => _roundCount;
+    public int EarnedPoint => _earnedPoint;
     public BattlePhase BattlePhase => _battlePhase;
     public bool CanChangeTurn => _canChangeTurn;
     #endregion
@@ -169,6 +170,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// プレイヤーがフィールドにカードを置いたかどうかを設定する
     /// </summary>
     /// <param name="isPlayer"></param>
+    /// <param name="isFieldCardPlaced"></param>
     /// <returns></returns>
     public void SetIsFieldCardPlacedBy(bool isPlayer, bool isFieldCardPlaced)
     {
@@ -193,5 +195,50 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     public void SetCanChangeTurn(bool can)
     {
         _canChangeTurn = can;
+    }
+
+    /// <summary>
+    /// プレイヤーのフィールドに配置したカードの種類を取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    public CardType GetCardTypeBy(bool isPlayer)
+    {
+        return GetPlayerDataBy(isPlayer).BattleCardType;
+    }
+
+    /// <summary>
+    /// プレイヤーのフィールドに配置したカードの種類を設定します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <param name="cardType"></param>
+    public void RegisterCardTypeBy(bool isPlayer, CardType cardType)
+    {
+        GetPlayerDataBy(isPlayer).SetCardType(cardType);
+    }
+
+    /// <summary>
+    /// ポイントを加算します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    public void AddPointTo(bool isPlayer)
+    {
+        // 獲得ポイント含めたこれまでの取得ポイント
+        int totalPoint = GetPlayerDataBy(isPlayer).Point + EarnPoint(GetPlayerDataBy(isPlayer).IsUsingSpInRound);
+
+        GetPlayerDataBy(isPlayer).SetPoint(totalPoint);
+    }
+
+    /// <summary>
+    /// 獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    public int EarnPoint(bool isUsingSkillInRound)
+    {
+        int earnPoint = _earnedPoint;
+        //このラウンドの間必殺技を使用していた場合
+        if (isUsingSkillInRound)
+            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
+
+        return earnPoint;
     }
 }

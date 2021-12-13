@@ -18,8 +18,10 @@ public class PlayerData
     public int Point => _point;
     public bool IsMyTurn => _isMyTurn;
     public bool IsMyTurnEnd => _isMyTurnEnd;
-    public bool CanUseSpSkill => _canUseSpSkill;
     public bool IsFieldCardPlaced => _isFieldCardPlaced;
+    public bool IsUsingSpInRound => _isUsingSpInRound;
+    public bool CanUseSpSkill => _canUseSpSkill;
+    public CardType BattleCardType => _battleCardType;
 
     public PlayerData(int point)
     {
@@ -86,5 +88,14 @@ public class PlayerData
     public void SetIsFieldCardPlaced(bool isFieldCardPlaced)
     {
         _isFieldCardPlaced = isFieldCardPlaced;
+    }
+
+    /// <summary>
+    /// フィールドに配置したカードの種類を設定する
+    /// </summary>
+    /// <param name="isFieldCardPlaced"></param>
+    public void SetCardType(CardType battleCardType)
+    {
+        _battleCardType = battleCardType;
     }
 }

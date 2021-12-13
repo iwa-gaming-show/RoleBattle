@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -5,6 +6,10 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static InitializationData;
 using static BattlePhase;
+using static BattleResult;
+using static CardJudgement;
+using static CardType;
+using static WaitTimes;
 
 public class BattleManager : MonoBehaviour
 {
@@ -129,7 +134,7 @@ public class BattleManager : MonoBehaviour
 
         if (IsEachPlayerFieldCardPlaced())
         {
-            Debug.Log("バトルする");
+            JudgeTheCard().Forget();
         }
         else
         {
@@ -137,6 +142,77 @@ public class BattleManager : MonoBehaviour
         }
 
         dataM.SetCanChangeTurn(false);
+    }
+
+    /// <summary>
+    /// カードを判定する
+    /// </summary>
+    async UniTask JudgeTheCard()
+    {
+        _battleDataManager.SetBattlePhase(JUDGEMENT);
+
+        CardType playerCardType = _battleDataManager.GetCardTypeBy(true);
+        CardType enemyCardType = _battleDataManager.GetCardTypeBy(false);
+
+        //じゃんけんする
+        CardJudgement result = JudgeCardResult(playerCardType, enemyCardType);
+
+        //OPENのメッセージを出す
+        await _battleUIManager.AnnounceToOpenTheCard();
+        //カードを表にする
+        await _battleUIManager.OpenTheBattleFieldCards();
+        //結果の反映
+        await ReflectTheResult(result);
+        //ポイントの追加
+        AddPointBy(result);
+        //ポイントの反映
+        _battleUIManager.ShowPoint(
+            _battleDataManager.GetPlayerPointBy(true),
+            _battleDataManager.GetPlayerPointBy(false)
+        );
+        await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
+        //次のラウンドへ
+    }
+
+    /// <summary>
+    /// カードの勝敗結果を取得する
+    /// </summary>
+    /// <param name="myCard"></param>
+    /// <param name="enemyCard"></param>
+    /// <returns></returns>
+    CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
+    {
+        //じゃんけんによる勝敗の判定
+        if (playerCardType == enemyCardType) return DRAW;
+        if (playerCardType == PRINCESS && enemyCardType == BRAVE) return WIN;
+        if (playerCardType == BRAVE && enemyCardType == DEVIL) return WIN;
+        if (playerCardType == DEVIL && enemyCardType == PRINCESS) return WIN;
+        return LOSE;
+    }
+
+    /// <summary>
+    /// 結果を反映します
+    /// </summary>
+    /// <param name="result"></param>
+    public async UniTask ReflectTheResult(CardJudgement result)
+    {
+        _battleDataManager.SetBattlePhase(RESULT);
+        await _battleUIManager.ShowJudgementResultText(result.ToString());
+    }
+
+    /// <summary>
+    /// 結果によるポイントを加算する
+    /// </summary>
+    void AddPointBy(CardJudgement result)
+    {
+        if (result == WIN)
+        {
+            _battleDataManager.AddPointTo(true);
+        }
+        else if (result == LOSE)
+        {
+            _battleDataManager.AddPointTo(false);
+        }
     }
 
     /// <summary>
@@ -194,6 +270,6 @@ public class BattleManager : MonoBehaviour
     /// <returns></returns>
     bool RandomBool()
     {
-        return Random.Range(0, 2) == 0;
+        return UnityEngine.Random.Range(0, 2) == 0;
     }
 }
