@@ -11,6 +11,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     BattlePhase _battlePhase;
     int _roundCount;
     int _earnedPoint = INITIAL_EARNED_POINT;
+    int _enemySpSkillRound;//エネミーが必殺技を使用するラウンド
     bool _canChangeTurn;
     bool _isDuringDirectingSpSkill;//必殺技の演出中か
 
@@ -19,6 +20,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     public PlayerData Enemy => _enemy;
     public int RoundCount => _roundCount;
     public int EarnedPoint => _earnedPoint;
+    public int EnemySpSkillRound => _enemySpSkillRound;
     public BattlePhase BattlePhase => _battlePhase;
     public bool CanChangeTurn => _canChangeTurn;
     #endregion
@@ -70,6 +72,15 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
         GetPlayerDataBy(isPlayer).SetPoint(INITIAL_POINT);
         GetPlayerDataBy(isPlayer).SetCanUseSpSkill(true);
         GetPlayerDataBy(isPlayer).SetIsMyTurn(false);
+    }
+
+    /// <summary>
+    /// エネミーが必殺技を使用するラウンドを設定します
+    /// </summary>
+    /// <param name="spSkillRound"></param>
+    public void SetEnemySpSkillRound(int spSkillRound)
+    {
+        _enemySpSkillRound = spSkillRound;
     }
 
     /// <summary>

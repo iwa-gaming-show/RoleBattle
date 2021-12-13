@@ -401,7 +401,13 @@ public class BattleUIManager : MonoBehaviour
     public async UniTask NpcEnemyAction()
     {
         //必殺技を使用するターンなら必殺技を発動
-        //todo
+        bool useSpecialSkill
+            = (_battleDataManager.RoundCount == _battleDataManager.EnemySpSkillRound);
+        
+        if (_battleDataManager.GetCanUseSpSkillBy(false) && useSpecialSkill)
+        {
+            await ActivateSpSkill(false);
+        }
 
         //ランダムにカードを選びフィールドへ
         await MoveRandomCardToField(false);
@@ -427,7 +433,6 @@ public class BattleUIManager : MonoBehaviour
     {
         _battleDataManager.ActivatingSpSkillState(isPlayer);
         SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
-        //_photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
 

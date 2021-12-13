@@ -22,6 +22,11 @@ public interface IBattleDataManager
         get;
     }
 
+    int EnemySpSkillRound
+    {
+        get;
+    }
+
     BattlePhase BattlePhase
     {
         get;
@@ -46,6 +51,12 @@ public interface IBattleDataManager
     /// プレイヤーデータの初期化
     /// </summary>
     void InitPlayerData();
+
+    /// <summary>
+    /// エネミーが必殺技を使用するラウンドを設定します
+    /// </summary>
+    /// <param name="spSkillRound"></param>
+    void SetEnemySpSkillRound(int spSkillRound);
 
     /// <summary>
     /// プレイヤーのターンを取得する

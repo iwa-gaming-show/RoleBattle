@@ -73,6 +73,7 @@ public class BattleManager : MonoBehaviour
                 _battleDataManager.GetCanUseSpSkillBy(false)
             );
             DecideTheTurn();
+            DecideSpSkillRoundForEnemy();
         }
         _battleDataManager.ResetPlayerState();
         _battleUIManager.HideUIAtStart();
