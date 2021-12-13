@@ -74,7 +74,10 @@ public class BattleManager : MonoBehaviour
             _battleDataManager.InitRoomData();
             _battleUIManager.InitSpSkillDescriptions();
             DecideTheTurn();
-            //pointの表示
+            _battleUIManager.ShowPoint(
+                _battleDataManager.GetPlayerPointBy(true),
+                _battleDataManager.GetPlayerPointBy(false)
+            );
             //enemyが必殺技を使用するタイミングを決める
         }
         _battleDataManager.ResetPlayerState();
@@ -101,7 +104,7 @@ public class BattleManager : MonoBehaviour
     async UniTask PlayerTurn()
     {
         _battleDataManager.SetBattlePhase(SELECTION);//カード選択フェイズへ
-        await _battleUIManager.ShowThePlayerTurnText(_battleDataManager.GetPlayerTurnFor(true));
+        await _battleUIManager.ShowThePlayerTurnText(_battleDataManager.GetPlayerTurnBy(true));
         StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
         StartCoroutine(CountDown());
     }
@@ -130,8 +133,8 @@ public class BattleManager : MonoBehaviour
     public void DecideTheTurn()
     {
         //trueなら自身を先攻にする
-        if (RandomBool()) _battleDataManager.SetIsPlayerTurnFor(true, true);
-        else _battleDataManager.SetIsPlayerTurnFor(false, true);
+        if (RandomBool()) _battleDataManager.SetIsPlayerTurnBy(true, true);
+        else _battleDataManager.SetIsPlayerTurnBy(false, true);
     }
 
     /// <summary>

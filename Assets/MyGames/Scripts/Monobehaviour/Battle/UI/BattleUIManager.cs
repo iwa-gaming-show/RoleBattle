@@ -115,6 +115,15 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// ポイントの表示
     /// </summary>
+    public void ShowPoint(int playerPoint, int enemyPoint)
+    {
+        _playerUI.ShowPoint(playerPoint);
+        _enemyUI.ShowPoint(enemyPoint);
+    }
+
+    /// <summary>
+    /// プレイヤーごとのポイントの表示
+    /// </summary>
     public void ShowPointBy(bool isPlayer, int point)
     {
         GetPlayerUI(isPlayer).ShowPoint(point);
@@ -341,11 +350,11 @@ public class BattleUIManager : MonoBehaviour
     async UniTask MoveToBattleField(CardController movingCard)
     {
         //すでにバトル場にカードが置かれているなら何もしない
-        if (_battleDataManager.GetIsFieldCardPlacedFor(true)) return;
+        if (_battleDataManager.GetIsFieldCardPlacedBy(true)) return;
 
         //RegisterCardType(movingCard.CardType);
         //カードを配置済みにする
-        _battleDataManager.SetIsFieldCardPlacedFor(true, true);
+        _battleDataManager.SetIsFieldCardPlacedBy(true, true);
         _battleDataManager.SetBattlePhase(SELECTED);
 
         //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
@@ -353,7 +362,7 @@ public class BattleUIManager : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
-        _battleDataManager.SetIsPlayerTurnEndFor(true, true);
+        _battleDataManager.SetIsPlayerTurnEndBy(true, true);
     }
 
     /// <summary>

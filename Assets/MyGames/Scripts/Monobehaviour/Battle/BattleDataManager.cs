@@ -52,19 +52,19 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     public void InitPlayerData()
     {
-        InitDataFor(true);
-        InitDataFor(false);
+        InitDataBy(true);
+        InitDataBy(false);
     }
 
     /// <summary>
     /// プレイヤーごとに状態をリセットする
     /// </summary>
     /// <param name="isPlayer"></param>
-    void InitDataFor(bool isPlayer)
+    void InitDataBy(bool isPlayer)
     {
-        GetPlayerDataFor(isPlayer).SetPoint(INITIAL_POINT);
-        GetPlayerDataFor(isPlayer).SetCanUseSpSkill(true);
-        GetPlayerDataFor(isPlayer).SetIsMyTurn(false);
+        GetPlayerDataBy(isPlayer).SetPoint(INITIAL_POINT);
+        GetPlayerDataBy(isPlayer).SetCanUseSpSkill(true);
+        GetPlayerDataBy(isPlayer).SetIsMyTurn(false);
     }
 
     /// <summary>
@@ -72,8 +72,8 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     public void ResetPlayerState()
     {
-        ResetStateFor(true);
-        ResetStateFor(false);
+        ResetStateBy(true);
+        ResetStateBy(false);
     }
 
     /// <summary>
@@ -81,17 +81,17 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public bool GetPlayerTurnFor(bool isPlayer)
+    public bool GetPlayerTurnBy(bool isPlayer)
     {
-        return GetPlayerDataFor(isPlayer).IsMyTurn;
+        return GetPlayerDataBy(isPlayer).IsMyTurn;
     }
 
     /// <summary>
     /// プレイヤーのターンを設定する
     /// </summary>
-    public void SetIsPlayerTurnFor(bool isPlayer, bool isMyTurn)
+    public void SetIsPlayerTurnBy(bool isPlayer, bool isMyTurn)
     {
-        GetPlayerDataFor(isPlayer).SetIsMyTurn(isMyTurn);
+        GetPlayerDataBy(isPlayer).SetIsMyTurn(isMyTurn);
     }
 
     /// <summary>
@@ -99,28 +99,28 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public bool GetPlayerTurnEndFor(bool isPlayer)
+    public bool GetPlayerTurnEndBy(bool isPlayer)
     {
-        return GetPlayerDataFor(isPlayer).IsMyTurnEnd;
+        return GetPlayerDataBy(isPlayer).IsMyTurnEnd;
     }
 
     /// <summary>
     /// プレイヤーのターンが終了したかどうかを設定する
     /// </summary>
-    public void SetIsPlayerTurnEndFor(bool isPlayer, bool isMyTurnEnd)
+    public void SetIsPlayerTurnEndBy(bool isPlayer, bool isMyTurnEnd)
     {
-        GetPlayerDataFor(isPlayer).SetIsMyTurnEnd(isMyTurnEnd);
+        GetPlayerDataBy(isPlayer).SetIsMyTurnEnd(isMyTurnEnd);
     }
 
     /// <summary>
     /// プレイヤーごとに状態をリセットする
     /// </summary>
     /// <param name="isPlayer"></param>
-    void ResetStateFor(bool isPlayer)
+    void ResetStateBy(bool isPlayer)
     {
-        GetPlayerDataFor(isPlayer).SetIsMyTurnEnd(false);
-        GetPlayerDataFor(isPlayer).SetIsUsingSpInRound(false);
-        GetPlayerDataFor(isPlayer).SetIsFieldCardPlaced(false);
+        GetPlayerDataBy(isPlayer).SetIsMyTurnEnd(false);
+        GetPlayerDataBy(isPlayer).SetIsUsingSpInRound(false);
+        GetPlayerDataBy(isPlayer).SetIsFieldCardPlaced(false);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public PlayerData GetPlayerDataFor(bool isPlayer)
+    public PlayerData GetPlayerDataBy(bool isPlayer)
     {
         if (isPlayer) return _player;
         return _enemy;
@@ -139,9 +139,9 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public bool GetCanUseSpSkillFor(bool isPlayer)
+    public bool GetCanUseSpSkillBy(bool isPlayer)
     {
-        return GetPlayerDataFor(isPlayer).CanUseSpSkill;
+        return GetPlayerDataBy(isPlayer).CanUseSpSkill;
     }
 
     /// <summary>
@@ -154,22 +154,32 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     }
 
     /// <summary>
-    /// プレイヤーがフィールドにカードを置いたかどうかを設定する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    public void SetIsFieldCardPlacedFor(bool isPlayer, bool isFieldCardPlaced)
-    {
-        GetPlayerDataFor(isPlayer).SetIsFieldCardPlaced(isFieldCardPlaced);
-    }
-
-    /// <summary>
     /// プレイヤーがフィールドにカードを置いたかどうかを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    public bool GetIsFieldCardPlacedFor(bool isPlayer)
+    public bool GetIsFieldCardPlacedBy(bool isPlayer)
     {
-        return GetPlayerDataFor(isPlayer).IsFieldCardPlaced;
+        throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// プレイヤーがフィールドにカードを置いたかどうかを設定する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public void SetIsFieldCardPlacedBy(bool isPlayer, bool isFieldCardPlaced)
+    {
+        GetPlayerDataBy(isPlayer).SetIsFieldCardPlaced(isFieldCardPlaced);
+    }
+
+    /// <summary>
+    /// プレイヤーのポイントを取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public int GetPlayerPointBy(bool isPlayer)
+    {
+        return GetPlayerDataBy(isPlayer).Point;
     }
 }

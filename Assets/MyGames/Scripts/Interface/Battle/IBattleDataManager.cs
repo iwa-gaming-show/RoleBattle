@@ -42,14 +42,14 @@ public interface IBattleDataManager
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    bool GetPlayerTurnFor(bool isPlayer);
+    bool GetPlayerTurnBy(bool isPlayer);
 
     /// <summary>
     /// プレイヤーのターンが終了したかどうかを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    bool GetPlayerTurnEndFor(bool isPlayer);
+    bool GetPlayerTurnEndBy(bool isPlayer);
 
     /// <summary>
     /// プレイヤーの状態をリセットする
@@ -59,19 +59,19 @@ public interface IBattleDataManager
     /// <summary>
     /// プレイヤーのターンを設定する
     /// </summary>
-    void SetIsPlayerTurnFor(bool isPlayer, bool isMyTurn);
+    void SetIsPlayerTurnBy(bool isPlayer, bool isMyTurn);
 
     /// <summary>
     /// プレイヤーのターンが終了したかどうかを設定する
     /// </summary>
-    void SetIsPlayerTurnEndFor(bool isPlayer, bool isMyTurnEnd);
+    void SetIsPlayerTurnEndBy(bool isPlayer, bool isMyTurnEnd);
 
     /// <summary>
     /// プレイヤーが必殺技が発動可能かどうかを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    bool GetCanUseSpSkillFor(bool isPlayer);
+    bool GetCanUseSpSkillBy(bool isPlayer);
 
     /// <summary>
     /// バトルの段階を設定します
@@ -80,16 +80,23 @@ public interface IBattleDataManager
     void SetBattlePhase(BattlePhase battlePhase);
 
     /// <summary>
-    /// プレイヤーがフィールドにカードを置いたかどうかを設定する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    void SetIsFieldCardPlacedFor(bool isPlayer, bool isFieldCardPlaced);
-
-    /// <summary>
     /// プレイヤーがフィールドにカードを置いたかどうかを取得する
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    bool GetIsFieldCardPlacedFor(bool isPlayer);
+    bool GetIsFieldCardPlacedBy(bool isPlayer);
+
+    /// <summary>
+    /// プレイヤーがフィールドにカードを置いたかどうかを設定する
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    void SetIsFieldCardPlacedBy(bool isPlayer, bool isFieldCardPlaced);
+
+    /// <summary>
+    /// プレイヤーのポイントを取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    int GetPlayerPointBy(bool isPlayer);
 }

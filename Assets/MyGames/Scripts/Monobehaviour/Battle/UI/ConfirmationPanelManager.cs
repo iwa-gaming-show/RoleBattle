@@ -73,7 +73,7 @@ public class ConfirmationPanelManager : MonoBehaviour,
     /// </summary>
     public async UniTask ConfirmToActivateSpSkill()
     {
-        bool canUseSpSkill = _battleDataManager.GetCanUseSpSkillFor(true);
+        bool canUseSpSkill = _battleDataManager.GetCanUseSpSkillBy(true);
         bool activatable = canUseSpSkill && MySelectionTurn();
         if (activatable == false) return;
         //すでに確認画面が表示されているなら何もしない
@@ -109,9 +109,9 @@ public class ConfirmationPanelManager : MonoBehaviour,
     /// <returns></returns>
     public bool MySelectionTurn()
     {
-        bool myTurn = _battleDataManager.GetPlayerTurnFor(true);
+        bool myTurn = _battleDataManager.GetPlayerTurnBy(true);
         bool selectionPhase = (_battleDataManager.BattlePhase == SELECTION);
-        bool placeable = (_battleDataManager.GetIsFieldCardPlacedFor(true) == false);
+        bool placeable = (_battleDataManager.GetIsFieldCardPlacedBy(true) == false);
 
         return myTurn && selectionPhase && placeable;
     }
