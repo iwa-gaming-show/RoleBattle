@@ -254,18 +254,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1983631998101756306, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
   m_PrefabInstance: {fileID: 8900892210001788668}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1306409746 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4708454731254776860, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
-  m_PrefabInstance: {fileID: 8900892210001788668}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1001 &1543030947
+--- !u!1001 &1303979748
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -276,17 +265,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5773307611191149020, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5773307611191149021, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: _battleUIManager
       value: 
       objectReference: {fileID: 892569100}
     - target: {fileID: 5773307611191149022, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5773307611191149022, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: m_LocalPosition.x
@@ -328,13 +313,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8589810697776444703, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
-    - {fileID: 8705158721288169189, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
-    - {fileID: 5773307611191149023, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
-    - {fileID: 4469812796171786813, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
-    - {fileID: 9089628718880402941, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+--- !u!114 &1303979749 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5773307611191149021, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+  m_PrefabInstance: {fileID: 1303979748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b54c5d7454f4dbd937d2b8321673fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1306409746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4708454731254776860, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+  m_PrefabInstance: {fileID: 8900892210001788668}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1581870315 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4708454730988268298, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
@@ -398,7 +400,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1727438154 stripped
 MonoBehaviour:
@@ -787,6 +789,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleResult
       objectReference: {fileID: 0}
+    - target: {fileID: 4708454731235429174, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1303979749}
+    - target: {fileID: 4708454731235429174, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToTitle
+      objectReference: {fileID: 0}
     - target: {fileID: 4708454731571761763, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Name
       value: BattleResultText
@@ -910,6 +920,14 @@ PrefabInstance:
     - target: {fileID: 4708454732543458300, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ConfirmationPanelToField, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708454732548862240, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1303979749}
+    - target: {fileID: 4708454732548862240, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToRetryBattle
       objectReference: {fileID: 0}
     - target: {fileID: 6110100049213596877, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_text

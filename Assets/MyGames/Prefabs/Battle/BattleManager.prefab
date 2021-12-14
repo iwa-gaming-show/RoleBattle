@@ -10,11 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5773307611191149022}
   - component: {fileID: 5773307611191149021}
-  - component: {fileID: 5773307611191149023}
-  - component: {fileID: 4469812796171786813}
-  - component: {fileID: 9089628718880402941}
-  - component: {fileID: 8705158721288169189}
-  - component: {fileID: 8589810697776444703}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -48,72 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b54c5d7454f4dbd937d2b8321673fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultCountDownTime: 15
---- !u!114 &5773307611191149023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80b5a1e7dd5fa42d8ac859fee6c09144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4469812796171786813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a4e26569be7743b795f3fc9650509f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   _maxRoundCount: 3
---- !u!114 &9089628718880402941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3ed273389e204b49868c829c85f5b2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _earnedPoint: 1
---- !u!114 &8705158721288169189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a3651045fddb4d7db93d5e77db0bdd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myHandTransform: {fileID: 0}
-  _enemyHandTransform: {fileID: 0}
-  _myBattleFieldTransform: {fileID: 0}
-  _enemyBattleFieldTransform: {fileID: 0}
---- !u!114 &8589810697776444703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5773307611191149020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2ffb35ec534e4d89bbfb40f242f98f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cardEntityList: {fileID: 0}
-  _cardPrefab: {fileID: 0}
+  _defaultCountDownTime: 15
+  _battleUIManager: {fileID: 0}

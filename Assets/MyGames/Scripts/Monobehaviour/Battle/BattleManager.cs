@@ -9,6 +9,7 @@ using static BattlePhase;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class BattleManager : MonoBehaviour
 
     int _countDownTime;
     GameObject _playerIcon;
+    bool _isFirstClick;
 
     //CancellationToken _token;
     IBattleDataManager _battleDataManager;
@@ -50,6 +52,28 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         ChangeTurn(_battleDataManager);
+    }
+
+    /// <summary>
+    /// ゲームを再開する
+    /// </summary>
+    public void OnClickToRetryBattle()
+    {
+        //二重送信防止
+        _battleDataManager.InitPlayerData();
+        StartBattle(true).Forget();
+    }
+
+    /// <summary>
+    /// タイトルへ移動する
+    /// </summary>
+    public void OnClickToTitle()
+    {
+        //二重送信防止
+        if (_isFirstClick) return;
+        _isFirstClick = true;
+
+        SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
     }
 
     /// <summary>
