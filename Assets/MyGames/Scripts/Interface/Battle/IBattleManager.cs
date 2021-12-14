@@ -59,5 +59,5 @@ public interface IBattleManager
     /// <summary>
     /// 必殺技の演出中かフラグをセットする
     /// </summary>
-    void SetIsDuringProductionOfSpecialSkill(bool isDuringProduction);
+    void SetIsDuringDirectingSpSkill(bool isDuringProduction);
 }

@@ -38,11 +38,11 @@
 //    [Test, Description("必殺技の演出中フラグの切り替えができる")]
 //    [TestCase(true)]
 //    [TestCase(false)]
-//    public void SetIsDuringProductionOfSpecialSkillTest(bool input)
+//    public void SetIsDuringDirectingSpSkillTest(bool input)
 //    {
-//        battleManager.SetIsDuringProductionOfSpecialSkill(input);
+//        battleManager.SetIsDuringDirectingSpSkill(input);
 
-//        Assert.That(battleManager.IsDuringProductionOfSpecialSkill, Is.EqualTo(input));
+//        Assert.That(battleManager.IsDuringDirectingSpSkill, Is.EqualTo(input));
 //    }
 
 //    [Test, Description("ゲームリセット処理が正しく呼ばれているか")]
