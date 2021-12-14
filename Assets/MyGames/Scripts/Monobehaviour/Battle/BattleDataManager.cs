@@ -256,11 +256,11 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// 獲得ポイント
     /// </summary>
     /// <returns></returns>
-    public int EarnPoint(bool isUsingSkillInRound)
+    public int EarnPoint(bool isUsingSpSkillInRound)
     {
         int earnPoint = _earnedPoint;
         //このラウンドの間必殺技を使用していた場合
-        if (isUsingSkillInRound)
+        if (isUsingSpSkillInRound)
             earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
 
         return earnPoint;

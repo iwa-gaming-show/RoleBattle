@@ -564,11 +564,11 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// 獲得ポイント
     /// </summary>
     /// <returns></returns>
-    public int EarnPoint(bool isUsingSkillInRound)
+    public int EarnPoint(bool isUsingSpSkillInRound)
     {
         int earnPoint = _room.GetEarnedPoint();
         //このラウンドの間必殺技を使用していた場合
-        if (isUsingSkillInRound)
+        if (isUsingSpSkillInRound)
             earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
 
         return earnPoint;
