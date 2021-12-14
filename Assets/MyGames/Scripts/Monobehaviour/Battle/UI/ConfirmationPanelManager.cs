@@ -8,7 +8,7 @@ public class ConfirmationPanelManager : MonoBehaviour,
     IConfirmationPanelManager
 {
     [SerializeField]
-    [Header("バトル場へ移動する確認画面を設定する")]
+    [Header("フィールドへ移動する確認画面を設定する")]
     ConfirmationPanelToField _confirmationPanelToField;
 
     [SerializeField]
@@ -134,7 +134,7 @@ public class ConfirmationPanelManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// バトル場へ移動するカードの保存情報を破棄する
+    /// フィールドへ移動するカードの保存情報を破棄する
     /// </summary>
     public void DestroyMovingBattleCard()
     {

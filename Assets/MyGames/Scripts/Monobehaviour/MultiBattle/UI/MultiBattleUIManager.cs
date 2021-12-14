@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -338,7 +338,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// </summary>
     async UniTask MoveToBattleField(CardController movingCard)
     {
-        //すでにバトル場にカードが置かれているなら何もしない
+        //すでにフィールドにカードが置かれているなら何もしない
         if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
 
         RegisterCardType(movingCard.CardType);
@@ -450,7 +450,7 @@ public class MultiBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場のカードを表にします
+    /// フィールドのカードを表にします
     /// </summary>
     public async UniTask OpenTheBattleFieldCards()
     {

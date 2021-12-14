@@ -267,7 +267,7 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// お互いのプレイヤーがバトル場にカードを出しているか
+    /// お互いのプレイヤーがフィールドにカードを出しているか
     /// </summary>
     /// <returns></returns>
     bool IsEachPlayerFieldCardPlaced()

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -9,7 +9,7 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     IConfirmationPanelManager
 {
     [SerializeField]
-    [Header("バトル場へ移動する確認画面を設定する")]
+    [Header("フィールドへ移動する確認画面を設定する")]
     MultiConfirmationPanelToField _confirmationPanelToField;
 
     [SerializeField]
@@ -129,7 +129,7 @@ public class MultiConfirmationPanelManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// バトル場へ移動するカードの保存情報を破棄する
+    /// フィールドへ移動するカードの保存情報を破棄する
     /// </summary>
     public void DestroyMovingBattleCard()
     {

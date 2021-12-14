@@ -24,7 +24,7 @@ public static class UIStrings
     public static readonly string JUDGEMENT_RESULT_SUFFIX = "!";
 
     /// <summary>
-    /// バトル場への移動の確認用テキスト、選択したカード名の接尾時につける
+    /// フィールドへの移動の確認用テキスト、選択したカード名の接尾時につける
     /// </summary>
-    public static readonly string FIELD_CONFIRMATION_TEXT_SUFFIX = "をバトル場へ移動します";
+    public static readonly string FIELD_CONFIRMATION_TEXT_SUFFIX = "をフィールドへ移動します";
 }

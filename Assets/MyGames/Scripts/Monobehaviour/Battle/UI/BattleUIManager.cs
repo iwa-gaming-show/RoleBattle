@@ -360,7 +360,7 @@ public class BattleUIManager : MonoBehaviour
     /// </summary>
     async UniTask MoveToBattleField(bool isPlayer, CardController movingCard)
     {
-        //すでにバトル場にカードが置かれているなら何もしない
+        //すでにフィールドにカードが置かれているなら何もしない
         if (_battleDataManager.GetIsFieldCardPlacedBy(isPlayer)) return;
 
         _battleDataManager.RegisterCardTypeBy(isPlayer, movingCard.CardType);
@@ -488,7 +488,7 @@ public class BattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場のカードを表にします
+    /// フィールドのカードを表にします
     /// </summary>
     public async UniTask OpenTheBattleFieldCards()
     {

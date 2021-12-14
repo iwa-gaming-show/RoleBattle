@@ -411,7 +411,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     {
         if (PhotonNetwork.IsMasterClient == false) return;
 
-        //どちらかのプレイヤーがまだバトル場にカードを出していない時のみターンを切り替えます
+        //どちらかのプレイヤーがまだフィールドにカードを出していない時のみターンを切り替えます
         if (IsEachPlayerFieldCardPlaced() == false)
             _canChangeTurn = true;
 
@@ -459,7 +459,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// お互いのプレイヤーがバトル場にカードを出しているか
+    /// お互いのプレイヤーがフィールドにカードを出しているか
     /// </summary>
     /// <returns></returns>
     bool IsEachPlayerFieldCardPlaced()

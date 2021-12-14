@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using static UIStrings;
 using static WaitTimes;
@@ -28,7 +28,7 @@ public class MultiPlayerUI : MonoBehaviour
     Transform _handPanel;
 
     [SerializeField]
-    [Header("カードのバトル場の配置場所を設定する")]
+    [Header("カードのフィールドの配置場所を設定する")]
     Transform _battleField;
 
     [SerializeField]
@@ -103,7 +103,7 @@ public class MultiPlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// カードをバトル場へ移動します
+    /// カードをフィールドへ移動します
     /// </summary>
     /// <param name="movingCard"></param>
     public async UniTask MoveToBattleField(CardController movingCard)
@@ -128,7 +128,7 @@ public class MultiPlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場のカードを取得します
+    /// フィールドのカードを取得します
     /// </summary>
     /// <returns></returns>
     public CardController GetFieldCard()
@@ -137,7 +137,7 @@ public class MultiPlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場のカードを破棄します
+    /// フィールドのカードを破棄します
     /// </summary>
     public void DestroyFieldCard()
     {
@@ -145,7 +145,7 @@ public class MultiPlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル場へカードをセットします
+    /// フィールドへカードをセットします
     /// </summary>
     public void SetFieldCard(CardController cardController)
     {

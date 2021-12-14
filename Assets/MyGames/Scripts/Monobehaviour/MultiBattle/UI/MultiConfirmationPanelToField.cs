@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
 
 /// <summary>
-/// バトル場へ送るカードの確認UI
+/// フィールドへ送るカードの確認UI
 /// </summary>
 public class MultiConfirmationPanelToField : MonoBehaviour,
     IToggleable,
@@ -18,7 +18,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     Transform _canvasForConfirmationPanelsTransform;
 
     [SerializeField]
-    [Header("バトル場への確認画面のテキスト")]
+    [Header("フィールドへの確認画面のテキスト")]
     Text _fieldConfirmationText;
 
     bool _canMoveToField;//カードの移動ができる
@@ -40,7 +40,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     }
 
     /// <summary>
-    /// バトル場への確認画面でYesを押した時
+    /// フィールドへの確認画面でYesを押した時
     /// </summary>
     public void OnClickYes()
     {
@@ -50,7 +50,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     }
 
     /// <summary>
-    /// バトル場への確認画面でNoを押した時
+    /// フィールドへの確認画面でNoを押した時
     /// </summary>
     public void OnClickNo()
     {
@@ -60,7 +60,7 @@ public class MultiConfirmationPanelToField : MonoBehaviour,
     }
 
     /// <summary>
-    /// バトル場への移動確認画面の押下フラグのセット
+    /// フィールドへの移動確認画面の押下フラグのセット
     /// </summary>
     /// <param name="isClicked"></param>
     public void SetIsConfirmed(bool isConfirmed)

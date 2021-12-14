@@ -1,4 +1,4 @@
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using Photon.Realtime;
 
 public static class PlayerPropertiesExtensions
@@ -125,7 +125,7 @@ public static class PlayerPropertiesExtensions
     }
 
     /// <summary>
-    /// バトル場へのカードのタイプを取得する
+    /// フィールドへのカードのタイプを取得する
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
@@ -135,7 +135,7 @@ public static class PlayerPropertiesExtensions
     }
 
     /// <summary>
-    /// バトル場へのカードのタイプを設定する
+    /// フィールドへのカードのタイプを設定する
     /// </summary>
     /// <param name="player"></param>
     /// <param name="cardType"></param>
