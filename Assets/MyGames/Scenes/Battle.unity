@@ -937,7 +937,8 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2965055163447872698, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
 --- !u!114 &8900892210001788669 stripped
 MonoBehaviour:
