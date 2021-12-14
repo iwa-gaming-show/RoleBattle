@@ -17,7 +17,7 @@ public interface IBattleUIManager
     /// <summary>
     /// 必殺技を発動する
     /// </summary>
-    UniTask ActivateSpecialSkill(bool isPlayer);
+    UniTask ActivateSpSkill(bool isPlayer);
 
     /// <summary>
     /// ポイントの表示

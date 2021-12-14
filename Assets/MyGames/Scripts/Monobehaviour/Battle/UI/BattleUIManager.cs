@@ -401,10 +401,10 @@ public class BattleUIManager : MonoBehaviour
     public async UniTask NpcEnemyAction()
     {
         //必殺技を使用するターンなら必殺技を発動
-        bool useSpecialSkill
+        bool useSpSkill
             = (_battleDataManager.RoundCount == _battleDataManager.EnemySpSkillRound);
         
-        if (_battleDataManager.GetCanUseSpSkillBy(false) && useSpecialSkill)
+        if (_battleDataManager.GetCanUseSpSkillBy(false) && useSpSkill)
         {
             await ActivateSpSkill(false);
         }

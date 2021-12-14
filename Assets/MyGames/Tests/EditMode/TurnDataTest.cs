@@ -25,10 +25,10 @@ public class TurnDataTest
     [Test, Description("エネミーが必殺技を使用するターンの設定が正しくできているか")]
     [TestCase(1, 1)]
     [TestCase(2, 2)]
-    public void SetEnemySpecialSkillTurnTest(int input, int expected)
+    public void SetEnemySpSkillTurnTest(int input, int expected)
     {
-        turnData.SetEnemySpecialSkillTurn(input);
-        Assert.That(turnData.EnemySpecialSkillTurn, Is.EqualTo(expected));
+        turnData.SetEnemySpSkillTurn(input);
+        Assert.That(turnData.EnemySpSkillTurn, Is.EqualTo(expected));
     }
 
     [Test, Description("自身のターンが終わったか")]

@@ -6,13 +6,13 @@ public class TurnData
     bool _isMyTurn;//自身のターンか
     bool _isMyTurnEnd;
     bool _isEnemyTurnEnd;
-    int _enemySpecialSkillTurn;//敵が必殺技を使用するターン
+    int _enemySpSkillTurn;//敵が必殺技を使用するターン
 
     #region プロパティ
     public bool IsMyTurn => _isMyTurn;
     public bool IsMyTurnEnd => _isMyTurnEnd;
     public bool IsEnemyTurnEnd => _isEnemyTurnEnd;
-    public int EnemySpecialSkillTurn => _enemySpecialSkillTurn;
+    public int EnemySpSkillTurn => _enemySpSkillTurn;
     #endregion
 
     /// <summary>
@@ -27,9 +27,9 @@ public class TurnData
     ///　エネミーが必殺技を使用するターンを設定します
     /// </summary>
     /// <param name="turn"></param>
-    public void SetEnemySpecialSkillTurn(int turn)
+    public void SetEnemySpSkillTurn(int turn)
     {
-        _enemySpecialSkillTurn = turn;
+        _enemySpSkillTurn = turn;
     }
 
     /// <summary>

@@ -71,7 +71,7 @@ public class MultiPlayerUI : MonoBehaviour
     /// <summary>
     /// 必殺技ボタンを使用済みにする
     /// </summary>
-    void UsedSpecialSkillButton(Sprite usedIcon)
+    void UsedSpSkillButton(Sprite usedIcon)
     {
         SetSpButtonSprite(usedIcon);
     }
@@ -167,9 +167,9 @@ public class MultiPlayerUI : MonoBehaviour
         firstMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, GetScreenEdgeXForPlayer(isPlayer, true, screenEdgeX), 0);
         lastMove = UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, GetScreenEdgeXForPlayer(isPlayer, false, screenEdgeX) , 0.4f);
 
-        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpecialSkill(true)));
+        sequence.Append(firstMove.OnStart(() => ToggleProductionToSpSkill(true)));
         sequence.Append(UIUtil.MoveAnchorPosXByDOT(targetUIRectTranform, 0f, 0.25f));
-        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpecialSkill(false)));
+        sequence.Append(lastMove.SetDelay(SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME).OnComplete(() => ToggleProductionToSpSkill(false)));
 
         await sequence
            .Play()
@@ -180,7 +180,7 @@ public class MultiPlayerUI : MonoBehaviour
     /// 必殺技演出UIの表示の切り替え
     /// </summary>
     /// <param name="isActive"></param>
-    public void ToggleProductionToSpecialSkill(bool isActive)
+    public void ToggleProductionToSpSkill(bool isActive)
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(_spProduction, isActive, transform);
     }

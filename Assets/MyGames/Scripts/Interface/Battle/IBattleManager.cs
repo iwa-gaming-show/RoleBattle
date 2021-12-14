@@ -54,7 +54,7 @@ public interface IBattleManager
     /// <summary>
     /// 必殺技を使用します
     /// </summary>
-    void UsedSpecialSkill(bool isPlayer);
+    void UsedSpSkill(bool isPlayer);
 
     /// <summary>
     /// 必殺技の演出中かフラグをセットする
