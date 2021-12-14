@@ -78,11 +78,9 @@ public class MultiBattleUIManager : MonoBehaviour
     [Header("必殺技の説明用のテキストを設定")]
     string _spSkillDescription;
 
-
-    #region//プロパティ
     IConfirmationPanelManager _confirmationPanelManager;
     PhotonView _photonView;
-    #endregion
+
 
     void Awake()
     {

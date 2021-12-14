@@ -42,11 +42,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
-    Player _player;
-    Player _enemy;
-    Room _room;
     PunTurnManager _punTurnManager;
     PhotonView _photonView;
+    IMultiBattleDataManager _multiBattleDataManager;
 
 
     void Awake()
@@ -59,6 +57,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        _multiBattleDataManager = ServiceLocator.Resolve<IMultiBattleDataManager>();
     }
 
     /// <summary>
@@ -67,8 +66,8 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public void OnClickToRetryBattle()
     {
         //二重送信防止
-        if (_player.GetIsRetryingBattle()) return;
-        _player.SetIsRetryingBattle(true);
+        if (_multiBattleDataManager.Player.GetIsRetryingBattle()) return;
+        _multiBattleDataManager.Player.SetIsRetryingBattle(true);
     }
 
     /// <summary>
@@ -76,7 +75,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public void RetryBattle()
     {
-        InitPlayerData();
+        _multiBattleDataManager.InitPlayerData();
         _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, true);
     }
 
@@ -113,9 +112,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public override void OnJoinedRoom()
     {
         InitPlayerIcon();
-        _player = PhotonNetwork.LocalPlayer;
-        _room = PhotonNetwork.CurrentRoom;
-        InitPlayerData();
+        _multiBattleDataManager.SetPlayer(PhotonNetwork.LocalPlayer);
+        _multiBattleDataManager.SetRoom(PhotonNetwork.CurrentRoom);
+        _multiBattleDataManager.InitPlayerData();
 
         if (PhotonNetwork.PlayerList.Length == _maxPlayers)
         {
@@ -170,15 +169,15 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashTable changedProps)
     {
         //自身と相手のデータへそれぞれ紐付けする
-        bool isPlayer = IsUpdatePlayer(targetPlayer);
+        bool isPlayer = _multiBattleDataManager.IsUpdatePlayer(targetPlayer);
 
         _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
         _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
         CheckEnemyIcon();
-        CheckPlayerTurnEnd();
+        CheckPlayerTurnEnd(_multiBattleDataManager);
         ChangeTurn();
-        CheckToNextRound();
-        CheckRetryingBattle();
+        CheckToNextRound(_multiBattleDataManager);
+        CheckRetryingBattle(_multiBattleDataManager);
     }
 
     /// <summary>
@@ -202,15 +201,14 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <summary>
     /// 次のラウンドへの確認をします
     /// </summary>
-    void CheckToNextRound()
+    void CheckToNextRound(IMultiBattleDataManager dataM)
     {
         //お互いのカードの判定が終わったら次のラウンドへ
-        if (PhotonNetwork.IsMasterClient == false) return;
-        bool eachPlayerIsCardJudged = (_player.GetIsCardJudged() && _enemy.GetIsCardJudged());
-        if (eachPlayerIsCardJudged == false) return;
+        if (dataM.IsMasterClient() == false) return;
+        if (dataM.IsCardJudgedForEachPlayer() == false) return;
 
-        _player.SetIsCardJudged(false);
-        _enemy.SetIsCardJudged(false);
+        dataM.SetIsCardJudged(dataM.GetPlayerBy(true), false);
+        dataM.SetIsCardJudged(dataM.GetPlayerBy(false), false);
         NextRound();
     }
 
@@ -218,24 +216,23 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// プレイヤーのターンの終了を確認します
     /// </summary>
     /// <param name="player"></param>
-    void CheckPlayerTurnEnd()
+    void CheckPlayerTurnEnd(IMultiBattleDataManager dataM)
     {
-        if (_player.GetIsMyTurnEnd() == false) return;
-        _player.SetIsMyTurnEnd(false);
+        if (dataM.GetIsMyTurnEnd(dataM.GetPlayerBy(true)) == false) return;
+        dataM.SetIsMyTurnEnd(dataM.GetPlayerBy(true), false);
         _punTurnManager.SendMove(null, true);
     }
 
     /// <summary>
     /// 再戦をするか確認します
     /// </summary>
-    void CheckRetryingBattle()
+    void CheckRetryingBattle(IMultiBattleDataManager dataM)
     {
-        if (PhotonNetwork.IsMasterClient == false) return;
-        bool isRetryingBattle = (_player.GetIsRetryingBattle() && _enemy.GetIsRetryingBattle());
-        if (isRetryingBattle == false) return;
+        if (dataM.IsMasterClient() == false) return;
+        if (dataM.IsRetryingBattleForEachPlayer() == false) return;
 
-        _player.SetIsRetryingBattle(false);
-        _enemy.SetIsRetryingBattle(false);
+        dataM.SetIsRetryingBattle(dataM.GetPlayerBy(true), false);
+        dataM.SetIsRetryingBattle(dataM.GetPlayerBy(false), false);
         //状態をリセットし、ゲーム再開
         RetryBattle();
     }
@@ -246,17 +243,17 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <param name="propertiesThatChanged"></param>
     public override void OnRoomPropertiesUpdate(PhotonHashTable propertiesThatChanged)
     {
-        CheckActivatingSpSkill();
+        CheckActivatingSpSkill(_multiBattleDataManager);
     }
 
     /// <summary>
     /// 必殺技が発動していることを確認します
     /// </summary>
-    void CheckActivatingSpSkill()
+    void CheckActivatingSpSkill(IMultiBattleDataManager dataM)
     {
-        if (_room.GetIsDuringDirecting() == false) return;
-        if (PhotonNetwork.IsMasterClient == false) return;
-        _room.SetIsDuringDirecting(false);
+        if (dataM.Room.GetIsDuringDirecting() == false) return;
+        if (dataM.IsMasterClient() == false) return;
+        dataM.Room.SetIsDuringDirecting(false);
 
         //発動後カウントダウンをリセットします
         _photonView.RPC("RpcResetCountDown", RpcTarget.AllViaServer);
@@ -269,37 +266,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         _playerIcon = PhotonNetwork.Instantiate("PlayerIcon", Vector3.zero, Quaternion.identity);
         _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
-    }
-
-    /// <summary>
-    /// プレイヤーのデータの初期化
-    /// </summary>
-    void InitPlayerData()
-    {
-        _player.SetPoint(INITIAL_POINT);
-        _player.SetCanUseSpSkill(true);
-        _player.SetIsMyTurn(false);
-    }
-
-    /// <summary>
-    /// ルームのデータの初期化
-    /// </summary>
-    void InitRoomData()
-    {
-        if (_player.IsMasterClient == false) return;
-        _room.SetRoundCount(INITIAL_ROUND_COUNT);
-        _room.SetIntBattlePhase(BattlePhase.NONE);
-        _room.SetEarnedPoint(INITIAL_EARNED_POINT);
-    }
-
-    /// <summary>
-    /// プレイヤーの状態をリセットする
-    /// </summary>
-    public void ResetPlayerState()
-    {
-        _player.SetIsMyTurnEnd(false);
-        _player.SetIsUsingSpInRound(false);
-        _player.SetIsFieldCardPlaced(false);
     }
 
     /// <summary>
@@ -323,13 +289,14 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public async UniTask StartBattle(bool isFirstBattle)
     {
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
         //1ラウンド目に行う処理
-        if (isFirstBattle) InitRoomData();
+        if (isFirstBattle) dataM.InitRoomData();
         if (isFirstBattle) _multiBattleUIManager.InitSpSkillDescriptions();
-        ResetPlayerState();
+        dataM.ResetPlayerState();
         _multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
-        await _multiBattleUIManager.ShowRoundCountText(_room.GetRoundCount(), _maxRoundCount);
+        await _multiBattleUIManager.ShowRoundCountText(dataM.Room.GetRoundCount(), _maxRoundCount);
         if (isFirstBattle) DecideTheTurn();
         _multiBattleUIManager.DistributeCards();
         StartTurn();
@@ -342,7 +309,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (_player.UserId != player.UserId)
+            if (_multiBattleDataManager.IsEnemy(player.UserId))
             {
                 SetEnemyInfo(player);
                 break;
@@ -357,7 +324,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         _multiBattleUIManager.ShowPointBy(false, player.GetPoint());
         _multiBattleUIManager.SetSpButtonImageBy(false, player.GetCanUseSpSkill());
-        _enemy = player;
+        _multiBattleDataManager.SetEnemy(player);
     }
 
     /// <summary>
@@ -365,11 +332,12 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public void DecideTheTurn()
     {
-        if (_player.IsMasterClient == false) return;
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
+        if (dataM.IsMasterClient() == false) return;
 
         //trueならmasterClientを先攻にする
-        if (RandomBool()) PhotonNetwork.MasterClient.SetIsMyTurn(true);
-        else PhotonNetwork.PlayerListOthers[0].SetIsMyTurn(true);
+        if (RandomBool()) dataM.SetIsMyTurn(dataM.GetMasterClient(), true);
+        else dataM.SetIsMyTurn(dataM.GetOtherPlayer(), true);
     }
 
     /// <summary>
@@ -377,7 +345,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public void StartTurn()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (_multiBattleDataManager.IsMasterClient())
         {
             _punTurnManager.BeginTurn();
         }
@@ -396,12 +364,13 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <returns></returns>
     public async UniTask PlayerTurn()
     {
-        if (PhotonNetwork.IsMasterClient)
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
+        if (dataM.IsMasterClient())
         {
-            _room.SetIntBattlePhase(SELECTION);//カード選択フェイズへ
+            dataM.Room.SetIntBattlePhase(SELECTION);//カード選択フェイズへ
         }
 
-        await _multiBattleUIManager.ShowThePlayerTurnText(_player.GetIsMyTurn());
+        await _multiBattleUIManager.ShowThePlayerTurnText(dataM.GetIsMyTurn(dataM.GetPlayerBy(true)));
         StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
         StartCoroutine(CountDown());
     }
@@ -422,14 +391,16 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void SwitchPlayerTurnFlg()
     {
-        if (PhotonNetwork.IsMasterClient == false) return;
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
 
+        if (dataM.IsMasterClient() == false) return;
         //どちらかのプレイヤーがまだフィールドにカードを出していない時のみターンを切り替えます
-        if (IsEachPlayerFieldCardPlaced() == false)
+        if (dataM.IsEachPlayerFieldCardPlaced() == false)
             _canChangeTurn = true;
 
-        _player.SetIsMyTurn(!_player.GetIsMyTurn());
-        _enemy.SetIsMyTurn(!_enemy.GetIsMyTurn());
+        //わかりずらいですが、player、enemyのisMyTurnフラグを逆にしてセットしています
+        dataM.SetIsMyTurn(dataM.GetPlayerBy(true), !dataM.GetIsMyTurn(dataM.GetPlayerBy(true)));
+        dataM.SetIsMyTurn(dataM.GetPlayerBy(false), !dataM.GetIsMyTurn(dataM.GetPlayerBy(false)));
     }
 
     /// <summary>
@@ -465,29 +436,11 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public void DoIfCountDownTimeOut()
     {
-        if (_player.GetIsMyTurn() == false) return;
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
+        if (dataM.GetIsMyTurn(dataM.GetPlayerBy(true)) == false) return;
         //確認画面を全て閉じ、ランダムにカードを移動
         _multiBattleUIManager.InactiveUIIfCountDownTimeOut();
         _multiBattleUIManager.MoveRandomCardToField();
-    }
-
-    /// <summary>
-    /// お互いのプレイヤーがフィールドにカードを出しているか
-    /// </summary>
-    /// <returns></returns>
-    bool IsEachPlayerFieldCardPlaced()
-    {
-        return _player.GetIsFieldCardPlaced() && _enemy.GetIsFieldCardPlaced();
-    }
-
-    /// <summary>
-    /// 更新プレイヤーかどうかを取得する
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns></returns>
-    bool IsUpdatePlayer(Player targetPlayer)
-    {
-        return (_player.UserId == targetPlayer.UserId);
     }
 
     /// <summary>
@@ -495,7 +448,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void NextRound()
     {
-        if (_room.GetRoundCount() != _maxRoundCount)
+        if (_multiBattleDataManager.Room.GetRoundCount() != _maxRoundCount)
         {
             AddRoundCount();
             _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, false);
@@ -522,8 +475,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public BattleResult JudgeBattleResult()
     {
-        int playerPoint = _player.GetPoint();
-        int enemyPoint = _enemy.GetPoint();
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
+        int playerPoint = dataM.GetPoint(dataM.GetPlayerBy(true));
+        int enemyPoint = dataM.GetPoint(dataM.GetPlayerBy(false));
 
         if (playerPoint > enemyPoint) return BATTLE_WIN;
         if (playerPoint == enemyPoint) return BATTLE_DRAW;
@@ -535,9 +489,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void AddRoundCount()
     {
-        int totalRoundCount = _room.GetRoundCount();
+        int totalRoundCount = _multiBattleDataManager.Room.GetRoundCount();
         totalRoundCount++;
-        _room.SetRoundCount(totalRoundCount);
+        _multiBattleDataManager.Room.SetRoundCount(totalRoundCount);
     }
 
     /// <summary>
@@ -555,10 +509,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     void JudgePlayerProgress()
     {
         //お互いにカードをフィールドに配置していたらバトルをします。
-        bool isBattle = (_player.GetIsFieldCardPlaced()
-            && _enemy.GetIsFieldCardPlaced());
-
-        if (isBattle) JudgeTheCard().Forget();
+        if (_multiBattleDataManager.IsBattle()) JudgeTheCard().Forget();
         else Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
     }
 
@@ -569,8 +520,11 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         if (result != WIN) return;
 
-        int totalPoint = _player.GetPoint() + EarnPoint(_player.GetIsUsingSpInRound());
-        _player.SetPoint(totalPoint);
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
+        dataM.GetPoint(dataM.GetPlayerBy(true));
+
+        int totalPoint = dataM.GetPoint(dataM.GetPlayerBy(true)) + EarnPoint(dataM.GetIsUsingSpInRound(dataM.GetPlayerBy(true)));
+        dataM.SetPoint(dataM.GetPlayerBy(true), totalPoint);
     }
 
     /// <summary>
@@ -579,7 +533,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <returns></returns>
     public int EarnPoint(bool isUsingSpSkillInRound)
     {
-        int earnPoint = _room.GetEarnedPoint();
+        int earnPoint = _multiBattleDataManager.Room.GetEarnedPoint();
         //このラウンドの間必殺技を使用していた場合
         if (isUsingSpSkillInRound)
             earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
@@ -592,11 +546,13 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     public async UniTask JudgeTheCard()
     {
-        if (PhotonNetwork.IsMasterClient)
-            _room.SetIntBattlePhase(JUDGEMENT);
+        IMultiBattleDataManager dataM = _multiBattleDataManager;
 
-        CardType playerCardType = (CardType)_player.GetIntBattleCardType();
-        CardType enemyCardType = (CardType)_enemy.GetIntBattleCardType();
+        if (dataM.IsMasterClient())
+            dataM.Room.SetIntBattlePhase(JUDGEMENT);
+
+        CardType playerCardType = (CardType)dataM.GetIntBattleCardType(dataM.GetPlayerBy(true));
+        CardType enemyCardType = (CardType)dataM.GetIntBattleCardType(dataM.GetPlayerBy(false));
         //じゃんけんする
         CardJudgement result = JudgeCardResult(playerCardType, enemyCardType);
 
@@ -612,7 +568,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
         AddPointBy(result);
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_ROUND));
         //判定終了フラグをオンにする
-        _player.SetIsCardJudged(true);
+        dataM.SetIsCardJudged(dataM.GetPlayerBy(true), true);
     }
 
     /// <summary>
@@ -637,9 +593,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <param name="result"></param>
     public async UniTask ReflectTheResult(CardJudgement result)
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (_multiBattleDataManager.IsMasterClient())
         {
-            _room.SetIntBattlePhase(RESULT);
+            _multiBattleDataManager.Room.SetIntBattlePhase(RESULT);
         }
         await _multiBattleUIManager.ShowJudgementResultText(result.ToString());
     }

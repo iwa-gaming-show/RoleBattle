@@ -78,10 +78,8 @@ public class BattleUIManager : MonoBehaviour
     string _spSkillDescription;
 
     IBattleDataManager _battleDataManager;
-
-    #region//プロパティ
     IConfirmationPanelManager _confirmationPanelManager;
-    #endregion
+
 
     void Start()
     {
@@ -371,14 +369,6 @@ public class BattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// カードタイプを登録します
-    /// </summary>
-    //void RegisterCardType(CardType cardType)
-    //{
-    //    PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
-    //}
-
-    /// <summary>
     /// ランダムなカードをフィールドに移動します
     /// </summary>
     public async UniTask MoveRandomCardToField(bool isPlayer)
@@ -407,18 +397,6 @@ public class BattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 相手のカードをフィールドに移動します
-    /// </summary>
-    //[PunRPC]
-    //void RpcMoveEnemyCardToField()
-    //{
-    //    //演出用にランダムなカードを選び移動させる。
-    //    //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
-    //    CardController randomFieldCard = _enemyUI.GetRandomHandCard();
-    //    _enemyUI.MoveToBattleField(randomFieldCard).Forget();
-    //}
-
-    /// <summary>
     /// 必殺技を発動する
     /// </summary>
     /// <returns></returns>
@@ -428,15 +406,6 @@ public class BattleUIManager : MonoBehaviour
         SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
-
-    /// <summary>
-    /// 相手の必殺技を発動します
-    /// </summary>
-    //[PunRPC]
-    //void RpcActivateEnemySpSkill()
-    //{
-    //    _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
-    //}
 
     /// <summary>
     /// カードを開くことをアナウンスします
