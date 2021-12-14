@@ -290,7 +290,20 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        //DoIfCountDownTimeOut();
+        DoIfCountDownTimeOut();
+    }
+
+    /// <summary>
+    /// タイムアウトした場合に行う処理
+    /// </summary>
+    void DoIfCountDownTimeOut()
+    {
+        //自分のターンではない場合
+        if (_battleDataManager.GetPlayerTurnBy(true) == false) return;
+
+        //確認画面を全て閉じ、ランダムにカードを移動
+        _battleUIManager.InactiveUIIfCountDownTimeOut();
+        _battleUIManager.MoveRandomCardToField(true).Forget();
     }
 
     /// <summary>

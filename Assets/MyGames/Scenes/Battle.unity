@@ -266,6 +266,10 @@ PrefabInstance:
       value: BattleManager
       objectReference: {fileID: 0}
     - target: {fileID: 5773307611191149021, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
+      propertyPath: _maxRoundCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5773307611191149021, guid: b82acac1c2c9e436f8b0bf4539925c86, type: 3}
       propertyPath: _battleUIManager
       value: 
       objectReference: {fileID: 892569100}
