@@ -52,6 +52,7 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         ChangeTurn(_battleDataManager);
+        CheckActivatingSpSkill();
     }
 
     /// <summary>
@@ -291,6 +292,27 @@ public class BattleManager : MonoBehaviour
         }
 
         DoIfCountDownTimeOut();
+    }
+
+    /// <summary>
+    /// 必殺技が発動していることを確認します
+    /// </summary>
+    void CheckActivatingSpSkill()
+    {
+        if (_battleDataManager.IsDuringDirectingSpSkill == false) return;
+        _battleDataManager.SetIsDuringDirectingSpSkill(false);
+
+        //発動後カウントダウンをリセットします
+        ResetCountDown();
+    }
+
+    /// <summary>
+    /// カウントダウンをリセットします
+    /// </summary>
+    void ResetCountDown()
+    {
+        StopAllCoroutines();//前のカウントダウンが走っている可能性があるため一度止めます
+        StartCoroutine(CountDown());
     }
 
     /// <summary>

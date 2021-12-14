@@ -3,39 +3,18 @@ using Cysharp.Threading.Tasks;
 
 public interface IBattleDataManager
 {
-    PlayerData Player
-    {
-        get;
-    }
-    PlayerData Enemy
-    {
-        get;
-    }
+    PlayerData Player { get; }
+    PlayerData Enemy { get; }
+    int RoundCount { get; }
+    int EarnedPoint { get; }
+    int EnemySpSkillRound { get; }
+    BattlePhase BattlePhase { get; }
+    bool CanChangeTurn { get; }
+    /// <summary>
+    /// 必殺技発動の演出中か
+    /// </summary>
+    bool IsDuringDirectingSpSkill { get; }
 
-    int RoundCount
-    {
-        get;
-    }
-
-    int EarnedPoint
-    {
-        get;
-    }
-
-    int EnemySpSkillRound
-    {
-        get;
-    }
-
-    BattlePhase BattlePhase
-    {
-        get;
-    }
-
-    bool CanChangeTurn
-    {
-        get;
-    }
 
     /// <summary>
     /// プレイヤーデータの作成
@@ -161,4 +140,10 @@ public interface IBattleDataManager
     /// バトルの結果を取得する
     /// </summary>
     BattleResult JudgeBattleResult();
+
+    /// <summary>
+    /// 必殺技発動の演出中かどうかを設定する
+    /// </summary>
+    /// <param name="_isDuring"></param>
+    void SetIsDuringDirectingSpSkill(bool _isDuring);
 }

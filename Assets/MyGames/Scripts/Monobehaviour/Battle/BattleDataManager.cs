@@ -23,6 +23,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     public int EnemySpSkillRound => _enemySpSkillRound;
     public BattlePhase BattlePhase => _battlePhase;
     public bool CanChangeTurn => _canChangeTurn;
+    public bool IsDuringDirectingSpSkill => _isDuringDirectingSpSkill;
     #endregion
 
     private void Awake()
@@ -284,5 +285,14 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
         if (playerPoint > enemyPoint) return BATTLE_WIN;
         if (playerPoint == enemyPoint) return BATTLE_DRAW;
         return BATTLE_LOSE;
+    }
+
+    /// <summary>
+    /// 必殺技発動の演出中かどうかを設定する
+    /// </summary>
+    /// <param name="_isDuring"></param>
+    public void SetIsDuringDirectingSpSkill(bool _isDuring)
+    {
+        _isDuringDirectingSpSkill = _isDuring;
     }
 }
