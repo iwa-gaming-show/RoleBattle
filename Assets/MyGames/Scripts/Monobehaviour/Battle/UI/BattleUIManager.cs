@@ -5,7 +5,6 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
-using Photon.Pun;
 using System.Linq;
 using UnityEngine.UI;
 using static UIStrings;
@@ -82,13 +81,7 @@ public class BattleUIManager : MonoBehaviour
 
     #region//プロパティ
     IConfirmationPanelManager _confirmationPanelManager;
-    PhotonView _photonView;
     #endregion
-
-    void Awake()
-    {
-        _photonView = GetComponent<PhotonView>();
-    }
 
     void Start()
     {
@@ -416,14 +409,14 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// 相手のカードをフィールドに移動します
     /// </summary>
-    [PunRPC]
-    void RpcMoveEnemyCardToField()
-    {
-        //演出用にランダムなカードを選び移動させる。
-        //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
-        CardController randomFieldCard = _enemyUI.GetRandomHandCard();
-        _enemyUI.MoveToBattleField(randomFieldCard).Forget();
-    }
+    //[PunRPC]
+    //void RpcMoveEnemyCardToField()
+    //{
+    //    //演出用にランダムなカードを選び移動させる。
+    //    //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
+    //    CardController randomFieldCard = _enemyUI.GetRandomHandCard();
+    //    _enemyUI.MoveToBattleField(randomFieldCard).Forget();
+    //}
 
     /// <summary>
     /// 必殺技を発動する
@@ -439,11 +432,11 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// 相手の必殺技を発動します
     /// </summary>
-    [PunRPC]
-    void RpcActivateEnemySpSkill()
-    {
-        _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
-    }
+    //[PunRPC]
+    //void RpcActivateEnemySpSkill()
+    //{
+    //    _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
+    //}
 
     /// <summary>
     /// カードを開くことをアナウンスします

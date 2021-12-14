@@ -11,7 +11,11 @@ using static CardType;
 using static WaitTimes;
 using UnityEngine.SceneManagement;
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : MonoBehaviour,
+    IBattleAdvanceable,
+    ITurnAdvanceable,
+    IJudgableTheCard,
+    ICountDowner
 {
     #region
     [SerializeField]
@@ -51,18 +55,20 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
-        ChangeTurn(_battleDataManager);
+        ChangeTurn();
         CheckActivatingSpSkill();
     }
 
     /// <summary>
-    /// ゲームを再開する
+    /// バトルを再開する
     /// </summary>
     public void OnClickToRetryBattle()
     {
         //二重送信防止
-        _battleDataManager.InitPlayerData();
-        StartBattle(true).Forget();
+        if (_isFirstClick) return;
+        _isFirstClick = true;
+
+        RetryBattle();
     }
 
     /// <summary>
@@ -109,9 +115,30 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
+    /// バトルを終了する
+    /// </summary>
+    public void EndBattle()
+    {
+        //勝敗を表示
+        _battleUIManager.ToggleBattleResultUI(true);
+        _battleUIManager.SetBattleResultText(
+            CommonAttribute.GetStringValue(_battleDataManager.JudgeBattleResult())
+        );
+    }
+
+    /// <summary>
+    /// バトルを再開する
+    /// </summary>
+    public void RetryBattle()
+    {
+        _battleDataManager.InitPlayerData();
+        StartBattle(true).Forget();
+    }
+
+    /// <summary>
     /// ターンを開始します
     /// </summary>
-    void StartTurn()
+    public void StartTurn()
     {
         PlayerTurn().Forget();
     }
@@ -121,7 +148,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    async UniTask PlayerTurn()
+    public async UniTask PlayerTurn()
     {
         _battleDataManager.SetBattlePhase(SELECTION);//カード選択フェイズへ
         await _battleUIManager.ShowThePlayerTurnText(_battleDataManager.GetPlayerTurnBy(true));
@@ -138,8 +165,10 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// ターンを切り替えます
     /// </summary>
-    void ChangeTurn(IBattleDataManager dataM)
+    public void ChangeTurn()
     {
+        IBattleDataManager dataM = _battleDataManager;
+
         if (dataM.CanChangeTurn == false) return;
 
         SwitchPlayerTurnFlg(dataM);
@@ -169,7 +198,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// カードを判定する
     /// </summary>
-    async UniTask JudgeTheCard()
+    public async UniTask JudgeTheCard()
     {
         _battleDataManager.SetBattlePhase(JUDGEMENT);
 
@@ -214,24 +243,12 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// バトルを終了する
-    /// </summary>
-    void EndBattle()
-    {
-        //勝敗を表示
-        _battleUIManager.ToggleBattleResultUI(true);  
-        _battleUIManager.SetBattleResultText(
-            CommonAttribute.GetStringValue(_battleDataManager.JudgeBattleResult())
-        );
-    }
-
-    /// <summary>
     /// カードの勝敗結果を取得する
     /// </summary>
     /// <param name="myCard"></param>
     /// <param name="enemyCard"></param>
     /// <returns></returns>
-    CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
+    public CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
     {
         //じゃんけんによる勝敗の判定
         if (playerCardType == enemyCardType) return DRAW;
@@ -316,9 +333,9 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// タイムアウトした場合に行う処理
+    /// カウントダウン終了時の処理
     /// </summary>
-    void DoIfCountDownTimeOut()
+    public void DoIfCountDownTimeOut()
     {
         //自分のターンではない場合
         if (_battleDataManager.GetPlayerTurnBy(true) == false) return;

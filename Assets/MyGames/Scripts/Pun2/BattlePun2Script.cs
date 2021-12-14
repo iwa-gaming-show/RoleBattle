@@ -15,7 +15,12 @@ using static CardType;
 using static WaitTimes;
 using UnityEngine.SceneManagement;
 
-public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallbacks
+public class BattlePun2Script : MonoBehaviourPunCallbacks,
+    IPunTurnManagerCallbacks,
+    IBattleAdvanceable,
+    ITurnAdvanceable,
+    IJudgableTheCard,
+    ICountDowner
 {
     [SerializeField]
     [Header("最大対戦プレイヤー数")]
@@ -64,6 +69,15 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         //二重送信防止
         if (_player.GetIsRetryingBattle()) return;
         _player.SetIsRetryingBattle(true);
+    }
+
+    /// <summary>
+    /// バトルを再開する
+    /// </summary>
+    public void RetryBattle()
+    {
+        InitPlayerData();
+        _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, true);
     }
 
     /// <summary>
@@ -223,8 +237,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         _player.SetIsRetryingBattle(false);
         _enemy.SetIsRetryingBattle(false);
         //状態をリセットし、ゲーム再開
-        InitPlayerData();
-        _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, true);
+        RetryBattle();
     }
 
     /// <summary>
@@ -362,7 +375,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <summary>
     /// ターンを開始します
     /// </summary>
-    void StartTurn()
+    public void StartTurn()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -381,7 +394,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// </summary>
     /// <param name="isPlayer"></param>
     /// <returns></returns>
-    async UniTask PlayerTurn()
+    public async UniTask PlayerTurn()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -396,7 +409,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <summary>
     /// ターンを切り替えます
     /// </summary>
-    void ChangeTurn()
+    public void ChangeTurn()
     {
         if (_canChangeTurn == false) return;
         _canChangeTurn = false;
@@ -448,9 +461,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     }
 
     /// <summary>
-    /// タイムアウトした場合に行う処理
+    /// カウントダウン終了時の処理
     /// </summary>
-    void DoIfCountDownTimeOut()
+    public void DoIfCountDownTimeOut()
     {
         if (_player.GetIsMyTurn() == false) return;
         //確認画面を全て閉じ、ランダムにカードを移動
@@ -489,7 +502,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
         }
         else
         {
-            _photonView.RPC("RpcEndBattle", RpcTarget.AllViaServer);
+            _photonView.RPC("EndBattle", RpcTarget.AllViaServer);
         }
     }
 
@@ -497,7 +510,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// バトルを終了する
     /// </summary>
     [PunRPC]
-    void RpcEndBattle()
+    public void EndBattle()
     {
         //勝敗を表示
         _multiBattleUIManager.ToggleBattleResultUI(true);
@@ -577,7 +590,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <summary>
     /// カードを判定する
     /// </summary>
-    async UniTask JudgeTheCard()
+    public async UniTask JudgeTheCard()
     {
         if (PhotonNetwork.IsMasterClient)
             _room.SetIntBattlePhase(JUDGEMENT);
@@ -608,7 +621,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks, IPunTurnManagerCallba
     /// <param name="myCard"></param>
     /// <param name="enemyCard"></param>
     /// <returns></returns>
-    CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
+    public CardJudgement JudgeCardResult(CardType playerCardType, CardType enemyCardType)
     {
         //じゃんけんによる勝敗の判定
         if (playerCardType == enemyCardType) return DRAW;
