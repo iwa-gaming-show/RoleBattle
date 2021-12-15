@@ -1,12 +1,10 @@
-using static BattlePhase;
-
 public class ConfirmationPanelManager : SuperConfirmationPanelManager
 {
-    IBattleDataManager _battleDataManager;
+    IBattleDataManager _dataM;
 
     void Start()
     {
-        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
+        _dataM = ServiceLocator.Resolve<IBattleDataManager>();
     }
 
     #region //override methods
@@ -16,7 +14,7 @@ public class ConfirmationPanelManager : SuperConfirmationPanelManager
     /// <returns></returns>
     protected override bool canActivateSpSkill()
     {
-        return (_battleDataManager.GetCanUseSpSkillBy(true) && MySelectionTurn());
+        return (_dataM.GetCanUseSpSkillBy(true) && MySelectionTurn());
     }
 
     /// <summary>
@@ -25,11 +23,7 @@ public class ConfirmationPanelManager : SuperConfirmationPanelManager
     /// <returns></returns>
     protected override bool MySelectionTurn()
     {
-        bool myTurn = _battleDataManager.GetPlayerTurnBy(true);
-        bool selectionPhase = (_battleDataManager.BattlePhase == SELECTION);
-        bool placeable = (_battleDataManager.GetIsFieldCardPlacedBy(true) == false);
-
-        return myTurn && selectionPhase && placeable;
+        return _dataM.MySelectionTurn();
     }
     #endregion
 }

@@ -146,4 +146,10 @@ public interface IBattleDataManager
     /// </summary>
     /// <param name="_isDuring"></param>
     void SetIsDuringDirectingSpSkill(bool _isDuring);
+
+    /// <summary>
+    /// 自身の選択ターンかどうかを返します
+    /// </summary>
+    /// <returns></returns>
+    bool MySelectionTurn();
 }

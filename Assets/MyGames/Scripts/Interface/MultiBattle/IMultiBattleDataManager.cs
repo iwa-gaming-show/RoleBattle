@@ -197,6 +197,13 @@ public interface IMultiBattleDataManager
     void SetIntBattleCardType(Player player, CardType cardType);
 
     /// <summary>
+    /// プレイヤーの必殺技発動可能フラグを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    bool GetCanUseSpSkill(Player player);
+
+    /// <summary>
     /// 必殺技を発動する状態にする
     /// </summary>
     void ActivatingSpSkillState(Player player);
@@ -205,4 +212,10 @@ public interface IMultiBattleDataManager
     /// カードタイプを登録します
     /// </summary>
     void RegisterCardType(Player player, CardType cardType);
+
+    /// <summary>
+    /// 自身の選択ターンかどうかを返します
+    /// </summary>
+    /// <returns></returns>
+    bool MySelectionTurn();
 }

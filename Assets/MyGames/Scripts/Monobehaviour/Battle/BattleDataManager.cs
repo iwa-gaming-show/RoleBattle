@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
 using static BattleResult;
+using static BattlePhase;
 
 public class BattleDataManager : MonoBehaviour, IBattleDataManager
 {
@@ -294,5 +295,17 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     public void SetIsDuringDirectingSpSkill(bool _isDuring)
     {
         _isDuringDirectingSpSkill = _isDuring;
+    }
+
+    /// <summary>
+    /// 自身の選択ターンかどうかを返します
+    /// </summary>
+    /// <returns></returns>
+    public bool MySelectionTurn()
+    {
+        bool myTurn = GetPlayerTurnBy(true);
+        bool selectionPhase = (_battlePhase == SELECTION);
+        bool placeable = (GetIsFieldCardPlacedBy(true) == false);
+        return myTurn && selectionPhase && placeable;
     }
 }

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
-using static BattleResult;
+using static BattlePhase;
 using Photon.Realtime;
 using Photon.Pun;
 
@@ -313,6 +311,16 @@ public class MultiBattleDataManager : MonoBehaviour,
     }
 
     /// <summary>
+    /// プレイヤーの必殺技発動可能フラグを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public bool GetCanUseSpSkill(Player player)
+    {
+        return player.GetCanUseSpSkill();
+    }
+
+    /// <summary>
     /// 必殺技を発動する状態にする
     /// </summary>
     public void ActivatingSpSkillState(Player player)
@@ -328,5 +336,17 @@ public class MultiBattleDataManager : MonoBehaviour,
     public void RegisterCardType(Player player, CardType cardType)
     {
         player.SetIntBattleCardType(cardType);
+    }
+
+    /// <summary>
+    /// 自身の選択ターンかどうかを返します
+    /// </summary>
+    /// <returns></returns>
+    public bool MySelectionTurn()
+    {
+        bool myTurn = _player.GetIsMyTurn();
+        bool selectionPhase = (_room.GetIntBattlePhase() == (int)SELECTION);
+        bool placeable = _player.GetIsFieldCardPlaced() == false;
+        return myTurn && selectionPhase && placeable;
     }
 }

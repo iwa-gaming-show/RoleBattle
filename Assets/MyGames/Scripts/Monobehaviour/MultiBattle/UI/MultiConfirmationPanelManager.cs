@@ -1,13 +1,10 @@
-﻿using Photon.Pun;
-using static BattlePhase;
-
-public class MultiConfirmationPanelManager : SuperConfirmationPanelManager
+﻿public class MultiConfirmationPanelManager : SuperConfirmationPanelManager
 {
-    IMultiBattleDataManager _multiBattleDataManager;
+    IMultiBattleDataManager _dataM;
 
     void Start()
     {
-        _multiBattleDataManager = ServiceLocator.Resolve<IMultiBattleDataManager>();
+        _dataM = ServiceLocator.Resolve<IMultiBattleDataManager>();
     }
 
     #region //override methods
@@ -17,7 +14,7 @@ public class MultiConfirmationPanelManager : SuperConfirmationPanelManager
     /// <returns></returns>
     protected override bool canActivateSpSkill()
     {
-        return (PhotonNetwork.LocalPlayer.GetCanUseSpSkill() && MySelectionTurn());
+        return (_dataM.GetCanUseSpSkill(_dataM.GetPlayerBy(true)) && MySelectionTurn());
     }
 
     /// <summary>
@@ -26,10 +23,7 @@ public class MultiConfirmationPanelManager : SuperConfirmationPanelManager
     /// <returns></returns>
     protected override bool MySelectionTurn()
     {
-        bool myTurn = PhotonNetwork.LocalPlayer.GetIsMyTurn();
-        bool selectionPhase = (PhotonNetwork.CurrentRoom.GetIntBattlePhase() == (int)SELECTION);
-        bool placeable = PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced() == false;
-        return myTurn && selectionPhase && placeable;
+        return _dataM.MySelectionTurn();
     }
     #endregion
 }
