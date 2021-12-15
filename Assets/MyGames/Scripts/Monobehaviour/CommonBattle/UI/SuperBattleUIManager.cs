@@ -28,7 +28,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
 
     [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
-    CardEntityList _cardEntityList;
+    protected CardEntityList _cardEntityList;
 
     [SerializeField]
     [Header("カードプレハブ")]
@@ -207,39 +207,9 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 相手のフィールドのカードを置き換えます
-    /// </summary>
-    /// <param name="cardType"></param>
-    public async UniTask ReplaceEnemyFieldCard(CardType cardType)
-    {
-        CardController replacingCard = CreateCardFor(cardType, false);
-        //元々フィールドに配置したカードは削除します
-        _enemyUI.DestroyFieldCard();
-        _enemyUI.SetFieldCard(replacingCard);
-        await UniTask.Yield();
-    }
-
-    /// <summary>
-    /// カードの種類に対応したカードを作成します
-    /// </summary>
-    /// <param name="cardType"></param>
-    /// <returns></returns>
-    CardController CreateCardFor(CardType cardType, bool isPlayer)
-    {
-        //cardTypeに対応したカードのindex番号を取得します
-        var cardEntities = _cardEntityList.GetCardEntityList
-            .Select((ce, i) => new { CardType = ce.CardType, Index = i });
-
-        int cardIndex = (cardEntities.Where(ce => ce.CardType == cardType)
-            .First().Index is int index) ? index : 0;
-
-        return CreateCard(cardIndex, isPlayer);
-    }
-
-    /// <summary>
     /// カードを生成する
     /// </summary>
-    CardController CreateCard(int cardIndex, bool isPlayer)
+    protected CardController CreateCard(int cardIndex, bool isPlayer)
     {
         CardController card = Instantiate(_cardPrefab, Vector3.zero, Quaternion.identity);
         card.Init(cardIndex, isPlayer);
