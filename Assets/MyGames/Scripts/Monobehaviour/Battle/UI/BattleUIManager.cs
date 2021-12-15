@@ -66,6 +66,10 @@ public class BattleUIManager : MonoBehaviour
     GameObject _battleResultUI;
 
     [SerializeField]
+    [Header("CanvasForDirectionのTransformを設定する")]
+    Transform _directionCanvasTransform;
+
+    [SerializeField]
     [Header("バトルの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _battleResultText;
 
@@ -182,7 +186,7 @@ public class BattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleRoundCountText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -299,8 +303,7 @@ public class BattleUIManager : MonoBehaviour
     public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
     {
         GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
-        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, AnnounceThePlayerTurn.transform
-            .parent);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -340,7 +343,6 @@ public class BattleUIManager : MonoBehaviour
     void TryToActivateSpSkill(bool isSpSkillActivating)
     {
         if (isSpSkillActivating == false) return;
-
         _confirmationPanelManager.SetIsSpSkillActivating(false);
 
         ActivateSpSkill(true).Forget();
@@ -437,7 +439,7 @@ public class BattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleOpenPhaseText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -481,7 +483,7 @@ public class BattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleJudgementResultText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -498,7 +500,7 @@ public class BattleUIManager : MonoBehaviour
     /// <param name="isAcitve"></param>
     public void ToggleBattleResultUI(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, _directionCanvasTransform);
     }
 
     /// <summary>

@@ -244,6 +244,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a0cbb82ab6848f790f7bdff568d3c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &982705023 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4708454731437355938, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+  m_PrefabInstance: {fileID: 8900892210001788668}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1114603078 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4708454732332859782, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
@@ -717,6 +722,10 @@ PrefabInstance:
       propertyPath: _announceThePlayerTurn
       value: 
       objectReference: {fileID: 1114603078}
+    - target: {fileID: 1326759447004024330, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: _directionCanvasTransform
+      value: 
+      objectReference: {fileID: 982705023}
     - target: {fileID: 1326759447004024330, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _spButtonIcons.Array.size
       value: 2

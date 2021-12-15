@@ -780,6 +780,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1512450301}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _directionCanvasTransform
+      value: 
+      objectReference: {fileID: 1346771253206073629}
+    - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _descriptionsOfSpSkill.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1087,6 +1091,11 @@ PrefabInstance:
     - {fileID: 1346771253206073636, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
     - {fileID: 5954796338845295647, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+--- !u!224 &1346771253206073629 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4238336880728382215, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1346771253206073630 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}

@@ -67,6 +67,10 @@ public class MultiBattleUIManager : MonoBehaviour
     GameObject _battleResultUI;
 
     [SerializeField]
+    [Header("CanvasForDirectionのTransformを設定する")]
+    Transform _directionCanvasTransform;
+
+    [SerializeField]
     [Header("バトルの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _battleResultText;
 
@@ -169,7 +173,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleRoundCountText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -286,8 +290,7 @@ public class MultiBattleUIManager : MonoBehaviour
     public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
     {
         GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
-        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, AnnounceThePlayerTurn.transform
-            .parent);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -365,10 +368,10 @@ public class MultiBattleUIManager : MonoBehaviour
     /// ランダムなカードをフィールドに移動します
     /// </summary>
     [PunRPC]
-    public void MoveRandomCardToField(bool isPlayer)
+    public async UniTask MoveRandomCardToField(bool isPlayer)
     {
         CardController movingCard = GetPlayerUI(isPlayer).GetRandomHandCard();
-        MoveToBattleField(isPlayer, movingCard).Forget();
+        await MoveToBattleField(isPlayer, movingCard);
     }
 
     /// <summary>
@@ -428,7 +431,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleOpenPhaseText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -472,7 +475,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <param name="isActive"></param>
     public void ToggleJudgementResultText(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
@@ -489,7 +492,7 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <param name="isAcitve"></param>
     public void ToggleBattleResultUI(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, _directionCanvasTransform);
     }
 
     /// <summary>
