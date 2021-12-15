@@ -187,7 +187,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         if (_isEnemyIconPlaced) return;
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIcon"))
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIconS"))
         {
             //相手のフィールドへアイコンを配置します
             if (go != _playerIcon)
@@ -264,7 +264,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void InitPlayerIcon()
     {
-        _playerIcon = PhotonNetwork.Instantiate("PlayerIcon", Vector3.zero, Quaternion.identity);
+        _playerIcon = PhotonNetwork.Instantiate("PlayerIconS", Vector3.zero, Quaternion.identity);
         _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
     }
 
