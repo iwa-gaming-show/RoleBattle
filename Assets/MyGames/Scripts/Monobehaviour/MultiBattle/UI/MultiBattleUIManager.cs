@@ -286,7 +286,8 @@ public class MultiBattleUIManager : MonoBehaviour
     public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
     {
         GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
-        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, AnnounceThePlayerTurn.transform
+            .parent);
     }
 
     /// <summary>
@@ -317,37 +318,44 @@ public class MultiBattleUIManager : MonoBehaviour
         if (movingCard == null) return;
         _confirmationPanelManager.DestroyMovingBattleCard();
         
-        MoveToBattleField(movingCard).Forget();
+        MoveToBattleField(true, movingCard).Forget();
     }
 
     /// <summary>
     /// 必殺技発動を試みます
     /// </summary>
-    void TryToActivateSpSkill(bool IsSpSkillActivating)
+    void TryToActivateSpSkill(bool isSpSkillActivating)
     {
-        if (IsSpSkillActivating == false) return;
+        if (isSpSkillActivating == false) return;
         _confirmationPanelManager.SetIsSpSkillActivating(false);
 
-        ActivateSpSkill().Forget();
+        ActivateSpSkill(true).Forget();
     }
 
     /// <summary>
     /// カードを移動する
     /// </summary>
-    async UniTask MoveToBattleField(CardController movingCard)
+    async UniTask MoveToBattleField(bool isPlayer, CardController movingCard)
     {
-        //すでにフィールドにカードが置かれているなら何もしない
-        if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
+        if (isPlayer)
+        {
+            //すでにフィールドにカードが置かれているなら何もしない
+            if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
 
-        RegisterCardType(movingCard.CardType);
-        //カードを配置済みにする
-        PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
-        PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
+            RegisterCardType(movingCard.CardType);
+            //カードを配置済みにする
+            PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
+            PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
 
-        //playerのカードを移動する、対戦相手の視点ではEnemyのカードを移動する
-        _photonView.RPC("RpcMoveEnemyCardToField", RpcTarget.Others);
-        await _playerUI.MoveToBattleField(movingCard);
+            //対戦相手のゲーム側でenemyのカードを移動させます
+            //演出用にランダムなカードを選び移動させます。
+            //※実際にフィールドに出すカードは異なります、カンニングを阻止する意味もあります。
+            _photonView.RPC("MoveRandomCardToField", RpcTarget.Others, false);
+        }
 
+        await GetPlayerUI(isPlayer).MoveToBattleField(movingCard);
+
+        if (isPlayer == false) return;
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
         PhotonNetwork.LocalPlayer.SetIsMyTurnEnd(true);
@@ -356,45 +364,30 @@ public class MultiBattleUIManager : MonoBehaviour
     /// <summary>
     /// ランダムなカードをフィールドに移動します
     /// </summary>
-    public void MoveRandomCardToField()
-    {
-        CardController movingCard = _playerUI.GetRandomHandCard();
-        MoveToBattleField(movingCard).Forget();
-    }
-
-    /// <summary>
-    /// 相手のカードをフィールドに移動します
-    /// </summary>
     [PunRPC]
-    void RpcMoveEnemyCardToField()
+    public void MoveRandomCardToField(bool isPlayer)
     {
-        //演出用にランダムなカードを選び移動させる。
-        //※実際にフィールドに出すカードは異なります、カンニングを阻止する意もあります。
-        CardController randomFieldCard = _enemyUI.GetRandomHandCard();
-        _enemyUI.MoveToBattleField(randomFieldCard).Forget();
+        CardController movingCard = GetPlayerUI(isPlayer).GetRandomHandCard();
+        MoveToBattleField(isPlayer, movingCard).Forget();
     }
 
     /// <summary>
     /// 必殺技を発動する
     /// </summary>
     /// <returns></returns>
-    async UniTask ActivateSpSkill()
-    {
-        PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
-        PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
-        PhotonNetwork.CurrentRoom.SetIsDuringDirecting(true);
-
-        _photonView.RPC("RpcActivateEnemySpSkill", RpcTarget.Others);
-        await _playerUI.ActivateDirectingOfSpSkill(true);
-    }
-
-    /// <summary>
-    /// 相手の必殺技を発動します
-    /// </summary>
     [PunRPC]
-    void RpcActivateEnemySpSkill()
+    async UniTask ActivateSpSkill(bool isPlayer)
     {
-        _enemyUI.ActivateDirectingOfSpSkill(false).Forget();
+        if (isPlayer)
+        {
+            PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
+            PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
+            PhotonNetwork.CurrentRoom.SetIsDuringDirecting(true);
+            //対戦相手側のenemyで必殺技演出を行います
+            _photonView.RPC("ActivateSpSkill", RpcTarget.Others, false);
+        }
+        
+        await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
 
     /// <summary>

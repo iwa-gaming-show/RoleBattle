@@ -61,6 +61,8 @@ MonoBehaviour:
   - RpcResetCountDown
   - RpcEndBattle
   - EndBattle
+  - MoveRandomCardToField
+  - ActivateSpSkill
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

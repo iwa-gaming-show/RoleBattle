@@ -337,9 +337,9 @@ public class BattleUIManager : MonoBehaviour
     /// <summary>
     /// 必殺技発動を試みます
     /// </summary>
-    void TryToActivateSpSkill(bool IsSpSkillActivating)
+    void TryToActivateSpSkill(bool isSpSkillActivating)
     {
-        if (IsSpSkillActivating == false) return;
+        if (isSpSkillActivating == false) return;
 
         _confirmationPanelManager.SetIsSpSkillActivating(false);
 
