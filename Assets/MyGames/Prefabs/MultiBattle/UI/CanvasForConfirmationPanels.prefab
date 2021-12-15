@@ -167,11 +167,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8611107628078517385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3320a9bd4b1f04908bbe3928f80d5fa4, type: 3}
+  m_Script: {fileID: 11500000, guid: 32eb6d994bcf145b69fbf8fd6643deff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasForConfirmationPanelsTransform: {fileID: 0}
-  _fieldConfirmationText: {fileID: 0}
+  _canvasForConfirmationPanelsTransform: {fileID: 8611107629311833283}
+  _fieldConfirmationText: {fileID: 8611107628076248853}
 --- !u!1 &8611107628291447760
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,10 +261,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8611107628291447760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05de3dffb206d4e73abbbd62839d400d, type: 3}
+  m_Script: {fileID: 11500000, guid: ebfaeab0fdc35488e983e7f5ea3b877f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasForConfirmationPanelsTransform: {fileID: 0}
+  _canvasForConfirmationPanelsTransform: {fileID: 8611107629311833283}
 --- !u!1 &8611107628623827922
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8611107629311833282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,9 +458,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47484cb223f4e47c8b4465b7182594dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _confirmationPanelToField: {fileID: 0}
-  _confirmationPanelToSp: {fileID: 0}
-  _inactiveUIWhenTimeOut: []
+  _confirmationPanelToField: {fileID: 6909055632671097509}
+  _confirmationPanelToSp: {fileID: 1362449601084345580}
+  _inactiveUIWhenTimeOut:
+  - {fileID: 8611107628078517385}
+  - {fileID: 8611107628291447760}
 --- !u!1 &8611107629373447202
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,14 +552,14 @@ PrefabInstance:
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6909055632671097509}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickYes
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ConfirmationPanelToField, Assembly-CSharp
+      value: ConfirmationPanelToField, App
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148515, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_Sprite
@@ -772,14 +774,14 @@ PrefabInstance:
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6909055632671097509}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickNo
       objectReference: {fileID: 0}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ConfirmationPanelToField, Assembly-CSharp
+      value: ConfirmationPanelToField, App
       objectReference: {fileID: 0}
     - target: {fileID: 7634768946474283904, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_IsActive
@@ -814,7 +816,7 @@ PrefabInstance:
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1362449601084345580}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -829,7 +831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ConfirmationPanelToSpecialSkill, Assembly-CSharp
+      value: ConfirmationPanelToSp, App
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -1044,7 +1046,7 @@ PrefabInstance:
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1362449601084345580}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1059,7 +1061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ConfirmationPanelToSpecialSkill, Assembly-CSharp
+      value: ConfirmationPanelToSp, App
       objectReference: {fileID: 0}
     - target: {fileID: 7634768944866024271, guid: b4d9e608f71644250af9e668fd2495d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

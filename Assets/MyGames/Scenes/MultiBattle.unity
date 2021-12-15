@@ -638,7 +638,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1175556500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05de3dffb206d4e73abbbd62839d400d, type: 3}
+  m_Script: {fileID: 11500000, guid: ebfaeab0fdc35488e983e7f5ea3b877f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1995176566
@@ -851,6 +851,10 @@ PrefabInstance:
     - target: {fileID: 4238336878983756486, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_Name
       value: BattleResultText
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336879348561729, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4238336879348561756, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_IsActive
@@ -1124,6 +1128,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2132003483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3320a9bd4b1f04908bbe3928f80d5fa4, type: 3}
+  m_Script: {fileID: 11500000, guid: 32eb6d994bcf145b69fbf8fd6643deff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
