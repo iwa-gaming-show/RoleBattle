@@ -509,7 +509,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     void JudgePlayerProgress()
     {
         //お互いにカードをフィールドに配置していたらバトルをします。
-        if (_multiBattleDataManager.IsBattle()) JudgeTheCard().Forget();
+        if (_multiBattleDataManager.IsEachPlayerFieldCardPlaced()) JudgeTheCard().Forget();
         else Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
     }
 

@@ -155,12 +155,6 @@ public interface IMultiBattleDataManager
     void SetPoint(Player player, int point);
 
     /// <summary>
-    /// お互いのプレイヤーがカードをフィールドに配置しているかどうか
-    /// </summary>
-    /// <returns></returns>
-    bool IsBattle();
-
-    /// <summary>
     /// 必殺技の発動中かどうかを取得する
     /// </summary>
     /// <param name="player"></param>

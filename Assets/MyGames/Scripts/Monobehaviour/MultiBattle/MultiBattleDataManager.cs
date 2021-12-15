@@ -253,15 +253,6 @@ public class MultiBattleDataManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// お互いのプレイヤーがカードをフィールドに配置しているかどうか
-    /// </summary>
-    /// <returns></returns>
-    public bool IsBattle()
-    {
-        return (_player.GetIsFieldCardPlaced() && _enemy.GetIsFieldCardPlaced());
-    }
-
-    /// <summary>
     /// 必殺技の発動中かどうかを取得する
     /// </summary>
     /// <param name="player"></param>
