@@ -135,6 +135,20 @@ public interface IMultiBattleDataManager
     Player GetOtherPlayer();
 
     /// <summary>
+    /// カードをフィールドに配置したかどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    bool GetIsFieldCardPlaced(Player player);
+
+    /// <summary>
+    /// カードをフィールドに配置したかどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isFieldCardPlaced"></param>
+    void SetIsFieldCardPlaced(Player player, bool isFieldCardPlaced);
+
+    /// <summary>
     /// お互いのプレイヤーがフィールドにカードを出しているか
     /// </summary>
     /// <returns></returns>
@@ -181,4 +195,14 @@ public interface IMultiBattleDataManager
     /// <param name="player"></param>
     /// <param name="cardType"></param>
     void SetIntBattleCardType(Player player, CardType cardType);
+
+    /// <summary>
+    /// 必殺技を発動する状態にする
+    /// </summary>
+    void ActivatingSpSkillState(Player player);
+
+    /// <summary>
+    /// カードタイプを登録します
+    /// </summary>
+    void RegisterCardType(Player player, CardType cardType);
 }

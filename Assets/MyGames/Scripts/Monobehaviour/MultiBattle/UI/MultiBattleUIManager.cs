@@ -14,7 +14,7 @@ using static BattlePhase;
 
 public class MultiBattleUIManager : SuperBattleUIManager
 {
-    IMultiBattleDataManager _multiBattleDataManager;
+    IMultiBattleDataManager _dataM;
     PhotonView _photonView;
 
 
@@ -26,7 +26,7 @@ public class MultiBattleUIManager : SuperBattleUIManager
     new void Start()
     {
         base.Start();
-        _multiBattleDataManager = ServiceLocator.Resolve<IMultiBattleDataManager>();
+        _dataM = ServiceLocator.Resolve<IMultiBattleDataManager>();
     }
 
     #region //override methods
@@ -38,12 +38,13 @@ public class MultiBattleUIManager : SuperBattleUIManager
         if (isPlayer)
         {
             //すでにフィールドにカードが置かれているなら何もしない
-            if (PhotonNetwork.LocalPlayer.GetIsFieldCardPlaced()) return;
+            if (_dataM.GetIsFieldCardPlaced(_dataM.GetPlayerBy(true))) return;
 
-            RegisterCardType(movingCard.CardType);
+            _dataM.RegisterCardType(_dataM.GetPlayerBy(true), movingCard.CardType);
+            //RegisterCardType(movingCard.CardType);
             //カードを配置済みにする
-            PhotonNetwork.LocalPlayer.SetIsFieldCardPlaced(true);
-            PhotonNetwork.CurrentRoom.SetIntBattlePhase(SELECTED);
+            _dataM.SetIsFieldCardPlaced(_dataM.GetPlayerBy(true), true);
+            _dataM.Room.SetIntBattlePhase(SELECTED);
 
             //対戦相手のゲーム側でenemyのカードを移動させます
             //演出用にランダムなカードを選び移動させます。
@@ -56,7 +57,7 @@ public class MultiBattleUIManager : SuperBattleUIManager
         if (isPlayer == false) return;
         await UniTask.Delay(TimeSpan.FromSeconds(TIME_BEFORE_CHANGING_TURN));
         //ターンを終了する
-        PhotonNetwork.LocalPlayer.SetIsMyTurnEnd(true);
+        _dataM.SetIsMyTurnEnd(_dataM.GetPlayerBy(true), true);
     }
 
     /// <summary>
@@ -68,10 +69,7 @@ public class MultiBattleUIManager : SuperBattleUIManager
     {
         if (isPlayer)
         {
-            PhotonNetwork.LocalPlayer.SetIsUsingSpInRound(true);
-            PhotonNetwork.LocalPlayer.SetCanUseSpSkill(false);
-            PhotonNetwork.CurrentRoom.SetIsDuringDirecting(true);
-            //対戦相手側のenemyで必殺技演出を行います
+            _dataM.ActivatingSpSkillState(_dataM.GetPlayerBy(true));
             _photonView.RPC("ActivateSpSkill", RpcTarget.Others, false);
         }
 
@@ -116,13 +114,5 @@ public class MultiBattleUIManager : SuperBattleUIManager
     public async UniTask RpcMoveRandomCardToField(bool isPlayer)
     {
         await MoveRandomCardToField(isPlayer);
-    }
-
-    /// <summary>
-    /// カードタイプを登録します
-    /// </summary>
-    void RegisterCardType(CardType cardType)
-    {
-        PhotonNetwork.LocalPlayer.SetIntBattleCardType(cardType);
     }
 }

@@ -224,6 +224,26 @@ public class MultiBattleDataManager : MonoBehaviour,
     }
 
     /// <summary>
+    /// カードをフィールドに配置したかどうかを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public bool GetIsFieldCardPlaced(Player player)
+    {
+        return player.GetIsFieldCardPlaced();
+    }
+
+    /// <summary>
+    /// カードをフィールドに配置したかどうかを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="isFieldCardPlaced"></param>
+    public void SetIsFieldCardPlaced(Player player, bool isFieldCardPlaced)
+    {
+        player.SetIsFieldCardPlaced(isFieldCardPlaced);
+    }
+
+    /// <summary>
     /// お互いのプレイヤーがフィールドにカードを出しているか
     /// </summary>
     /// <returns></returns>
@@ -288,6 +308,24 @@ public class MultiBattleDataManager : MonoBehaviour,
     /// <param name="player"></param>
     /// <param name="cardType"></param>
     public void SetIntBattleCardType(Player player, CardType cardType)
+    {
+        player.SetIntBattleCardType(cardType);
+    }
+
+    /// <summary>
+    /// 必殺技を発動する状態にする
+    /// </summary>
+    public void ActivatingSpSkillState(Player player)
+    {
+        player.SetIsUsingSpInRound(true);
+        player.SetCanUseSpSkill(false);
+        _room.SetIsDuringDirecting(true);
+    }
+
+    /// <summary>
+    /// カードタイプを登録します
+    /// </summary>
+    public void RegisterCardType(Player player, CardType cardType)
     {
         player.SetIntBattleCardType(cardType);
     }
