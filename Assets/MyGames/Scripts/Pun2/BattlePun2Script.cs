@@ -440,7 +440,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
         if (dataM.GetIsMyTurn(dataM.GetPlayerBy(true)) == false) return;
         //確認画面を全て閉じ、ランダムにカードを移動
         _multiBattleUIManager.InactiveUIIfCountDownTimeOut();
-        _multiBattleUIManager.MoveRandomCardToField(true);
+        _multiBattleUIManager.MoveRandomCardToField(true).Forget();
     }
 
     /// <summary>
