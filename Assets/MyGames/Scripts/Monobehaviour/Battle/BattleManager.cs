@@ -120,10 +120,7 @@ public class BattleManager : MonoBehaviour,
     public void EndBattle()
     {
         //勝敗を表示
-        _battleUIManager.ToggleBattleResultUI(true);
-        _battleUIManager.SetBattleResultText(
-            CommonAttribute.GetStringValue(_battleDataManager.JudgeBattleResult())
-        );
+        _battleUIManager.ShowBattleResultUI(true, CommonAttribute.GetStringValue(_battleDataManager.JudgeBattleResult()));
     }
 
     /// <summary>

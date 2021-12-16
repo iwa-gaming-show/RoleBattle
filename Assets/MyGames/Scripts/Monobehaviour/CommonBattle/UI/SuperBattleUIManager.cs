@@ -1,12 +1,6 @@
-using System;
 using UnityEngine;
-using TMPro;
-using DG.Tweening;
 using Cysharp.Threading.Tasks;
-using System.Linq;
 using UnityEngine.UI;
-using static UIStrings;
-using static WaitTimes;
 
 public abstract class SuperBattleUIManager : MonoBehaviour
 {
@@ -23,10 +17,6 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     Sprite[] _spButtonIcons;
 
     [SerializeField]
-    [Header("ラウンド数表示テキスト")]
-    TextMeshProUGUI _roundCountText;
-
-    [SerializeField]
     [Header("カードリストを設定する(ScriptableObjectを参照)")]
     protected CardEntityList _cardEntityList;
 
@@ -35,40 +25,8 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     CardController _cardPrefab;
 
     [SerializeField]
-    [Header("自分のターンであることを知らせるUI")]
-    GameObject _announceThePlayerTurn;
-
-    [SerializeField]
-    [Header("相手のターンであることを知らせるUI")]
-    GameObject _announceTheEnemyTurn;
-
-    [SerializeField]
-    [Header("カウントダウンのテキスト")]
-    TextMeshProUGUI _countDownText;
-
-    [SerializeField]
     [Header("開始時に非表示にするUIを設定します")]
     GameObject[] _hideUIs;
-
-    [SerializeField]
-    [Header("カードOPEN時のテキスト")]
-    TextMeshProUGUI _openPhaseText;
-
-    [SerializeField]
-    [Header("ラウンドの勝敗の結果表示のテキスト")]
-    TextMeshProUGUI _judgementResultText;
-
-    [SerializeField]
-    [Header("バトルの勝敗の結果表示用UI")]
-    GameObject _battleResultUI;
-
-    [SerializeField]
-    [Header("CanvasForDirectionのTransformを設定する")]
-    Transform _directionCanvasTransform;
-
-    [SerializeField]
-    [Header("バトルの勝敗の結果表示のテキスト")]
-    TextMeshProUGUI _battleResultText;
 
     [SerializeField]
     [Header("必殺技の詳細を記述するテキストを格納する")]
@@ -78,11 +36,17 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     [Header("必殺技の説明用のテキストを設定")]
     string _spSkillDescription;
 
+    [SerializeField]
+    [Header("CanvasForDirectionを設定します")]
+    BattleDirectionalityUI _battleDirectionalityUI;
+
     IConfirmationPanelManager _confirmationPanelManager;
+    IBattleDirectionalityUI _IdirectionalityUI;
 
     protected void Start()
     {
         _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
+        _IdirectionalityUI = _battleDirectionalityUI;
     }
 
     void Update()
@@ -151,31 +115,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask ShowRoundCountText(int roundCount, int maxRoundCount)
     {
-        ToggleRoundCountText(true);
-        SetRoundCountText(roundCount, maxRoundCount);
-
-        await UniTask.Delay(TimeSpan.FromSeconds(ROUND_COUNT_DISPLAY_TIME));
-        ToggleRoundCountText(false);
-    }
-
-    /// <summary>
-    /// ラウンド表示用のテキストを設定する
-    /// </summary>
-    void SetRoundCountText(int roundCount, int maxRoundCount)
-    {
-        if (roundCount == maxRoundCount)
-            _roundCountText.text = FINAL_ROUND;//最終ラウンド
-        else
-            _roundCountText.text = ROUND_PREFIX + roundCount.ToString();
-    }
-
-    /// <summary>
-    /// ラウンド数表示用テキストの切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleRoundCountText(bool isActive)
-    {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_roundCountText.gameObject, isActive, _directionCanvasTransform);
+        await _IdirectionalityUI.ShowRoundCountText(roundCount, maxRoundCount);
     }
 
     /// <summary>
@@ -250,30 +190,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask ShowThePlayerTurnText(bool isPlayer)
     {
-        ToggleAnnounceTurnFor(true, isPlayer);
-        await UniTask.Delay(TimeSpan.FromSeconds(ANNOUNCEMENT_TIME_TO_TURN_TEXT));
-        ToggleAnnounceTurnFor(false, isPlayer);
-    }
-
-    /// <summary>
-    /// プレイヤーのターン時に表示するUIの切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleAnnounceTurnFor(bool isActive, bool isPlayer)
-    {
-        GameObject AnnounceThePlayerTurn = GetAnnounceThePlayerTurnBy(isPlayer);
-        CanvasForObjectPool._instance.ToggleUIGameObject(AnnounceThePlayerTurn, isActive, _directionCanvasTransform);
-    }
-
-    /// <summary>
-    /// プレイヤーのターンのアナウンス用のゲームオブジェクトを取得する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <returns></returns>
-    GameObject GetAnnounceThePlayerTurnBy(bool isPlayer)
-    {
-        if (isPlayer) return _announceThePlayerTurn;
-        return _announceTheEnemyTurn;
+        await _IdirectionalityUI.ShowThePlayerTurnText(isPlayer);
     }
 
     /// <summary>
@@ -281,7 +198,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// </summary>
     public void ShowCountDownText(int countDownTime)
     {
-        _countDownText.text = countDownTime.ToString();
+        _IdirectionalityUI.ShowCountDownText(countDownTime);
     }
 
     /// <summary>
@@ -322,31 +239,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask AnnounceToOpenTheCard()
     {
-        RectTransform textRectTransform = _openPhaseText.rectTransform;
-        float screenEdgeX = UIUtil.GetScreenEdgeXFor(textRectTransform.sizeDelta.x);
-
-        //右端→真ん中→左端へ移動する
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, screenEdgeX, 0)
-            .OnStart(() => ToggleOpenPhaseText(true)));
-
-        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, 0f, 0.25f));
-
-        sequence.Append(UIUtil.MoveAnchorPosXByDOT(textRectTransform, -screenEdgeX, 0.4f).SetDelay(1f)
-            .OnComplete(() => ToggleOpenPhaseText(false)));
-
-        await sequence
-            .Play()
-            .AsyncWaitForCompletion();
-    }
-
-    /// <summary>
-    /// カードOPEN時のテキストの表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleOpenPhaseText(bool isActive)
-    {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_openPhaseText.gameObject, isActive, _directionCanvasTransform);
+        await _IdirectionalityUI.AnnounceToOpenTheCard();
     }
 
     /// <summary>
@@ -354,8 +247,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// </summary>
     public void HideUIAtStart()
     {
-        CanvasForObjectPool._instance
-            .ToggleUIGameObject(_battleResultUI, false, transform);
+        _IdirectionalityUI.HideUIAtStart();
     }
 
     /// <summary>
@@ -377,20 +269,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// </summary>
     public async UniTask ShowJudgementResultText(string result)
     {
-        ToggleJudgementResultText(true);
-        _judgementResultText.text = result + JUDGEMENT_RESULT_SUFFIX;
-
-        await UniTask.Delay(TimeSpan.FromSeconds(JUDGMENT_RESULT_DISPLAY_TIME));
-        ToggleJudgementResultText(false);
-    }
-
-    /// <summary>
-    /// ラウンドの勝敗の結果の表示の切り替え
-    /// </summary>
-    /// <param name="isActive"></param>
-    public void ToggleJudgementResultText(bool isActive)
-    {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_judgementResultText.gameObject, isActive, _directionCanvasTransform);
+        await _IdirectionalityUI.ShowJudgementResultText(result);
     }
 
     /// <summary>
@@ -402,21 +281,12 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// バトル結果の表示の切り替え
+    /// バトル結果の表示
     /// </summary>
     /// <param name="isAcitve"></param>
-    public void ToggleBattleResultUI(bool isActive)
+    public void ShowBattleResultUI(bool isActive, string resultText)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_battleResultUI, isActive, _directionCanvasTransform);
-    }
-
-    /// <summary>
-    /// バトルの勝敗のテキストを表示する
-    /// </summary>
-    /// <returns></returns>
-    public void SetBattleResultText(string text)
-    {
-        _battleResultText.text = text;
+        _IdirectionalityUI.ShowBattleResultUI(isActive, resultText);
     }
 
     /// <summary>

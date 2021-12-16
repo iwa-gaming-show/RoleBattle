@@ -1317,6 +1317,7 @@ GameObject:
   - component: {fileID: 4708454731437355937}
   - component: {fileID: 4708454731437355936}
   - component: {fileID: 4708454731437355939}
+  - component: {fileID: 5756943757519184101}
   m_Layer: 5
   m_Name: CanvasForDirection
   m_TagString: Untagged
@@ -1411,6 +1412,26 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5756943757519184101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4708454731437355941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f70dcb344e244709fd2deca1d03ea2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roundCountText: {fileID: 4708454730988268298}
+  _openPhaseText: {fileID: 4708454730809605092}
+  _announceThePlayerTurn: {fileID: 4708454732332859782}
+  _announceTheEnemyTurn: {fileID: 1983631998101756306}
+  _countDownText: {fileID: 4708454731254776860}
+  _battleResultUI: {fileID: 4708454730430509303}
+  _judgementResultText: {fileID: 4708454732277533583}
+  _battleResultText: {fileID: 4708454731571761761}
 --- !u!1 &4708454731571761763
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,25 +2119,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a0cbb82ab6848f790f7bdff568d3c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerUI: {fileID: 0}
-  _enemyUI: {fileID: 0}
-  _spButtonIcons: []
-  _roundCountText: {fileID: 4708454730988268298}
+  _playerUI: {fileID: 2300787795313970702}
+  _enemyUI: {fileID: 8069012153811301062}
+  _spButtonIcons:
+  - {fileID: 21300000, guid: 5204c4a5f9b80744192b880dd0d3345f, type: 3}
+  - {fileID: 21300000, guid: f0712dd86bb641b4a9894bab9b6bf218, type: 3}
   _cardEntityList: {fileID: 11400000, guid: c5cfa7899108440e58c36bbd2ee1c038, type: 2}
   _cardPrefab: {fileID: 253313022774580221, guid: 3442b8d0bdac94287bc8735e334d3fde, type: 3}
-  _announceThePlayerTurn: {fileID: 4708454732332859782}
-  _announceTheEnemyTurn: {fileID: 1983631998101756306}
-  _countDownText: {fileID: 4708454731254776860}
   _hideUIs: []
-  _openPhaseText: {fileID: 4708454730809605092}
-  _judgementResultText: {fileID: 4708454732277533583}
-  _battleResultUI: {fileID: 4708454730430509303}
-  _battleResultText: {fileID: 4708454731571761761}
   _descriptionsOfSpSkill:
   - {fileID: 4708454732080510725}
   - {fileID: 1955755403170543451}
   - {fileID: 1955755403370578583}
   _spSkillDescription: "\u3053\u306E\u30E9\u30A6\u30F3\u30C9\u306E\u9593\u3001\u30D0\u30C8\u30EB\u306B\u52DD\u3063\u305F\u6642\u306B\u7372\u5F97\u3067\u304D\u308B\u30DD\u30A4\u30F3\u30C8\u30922\u500D\u306B\u3059\u308B"
+  _battleDirectionalityUI: {fileID: 5756943757519184101}
 --- !u!1 &4708454732476685945
 GameObject:
   m_ObjectHideFlags: 0
