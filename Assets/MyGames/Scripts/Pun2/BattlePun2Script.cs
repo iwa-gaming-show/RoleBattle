@@ -76,6 +76,12 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public void RetryBattle()
     {
         _multiBattleDataManager.InitPlayerData();
+
+        if (_multiBattleDataManager.IsMasterClient())
+        {
+            _multiBattleDataManager.InitRoomData();
+        }
+        
         _photonView.RPC("RpcStartBattle", RpcTarget.AllViaServer, true);
     }
 
@@ -275,6 +281,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     void RpcPrepareBattle()
     {
         SearchEnemy();
+        _multiBattleDataManager.InitRoomData();
         RpcStartBattle(true);
     }
 
@@ -291,7 +298,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         IMultiBattleDataManager dataM = _multiBattleDataManager;
         //1ラウンド目に行う処理
-        if (isFirstBattle) dataM.InitRoomData();
         if (isFirstBattle) _multiBattleUIManager.InitSpSkillDescriptions();
         dataM.ResetPlayerState();
         _multiBattleUIManager.HideUIAtStart();
@@ -466,8 +472,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public void EndBattle()
     {
         //勝敗を表示
-        _multiBattleUIManager.ToggleBattleResultUI(true);
-        _multiBattleUIManager.SetBattleResultText(CommonAttribute.GetStringValue(JudgeBattleResult()));
+        _multiBattleUIManager.ShowBattleResultUI(true, CommonAttribute.GetStringValue(JudgeBattleResult()));
     }
 
     /// <summary>
