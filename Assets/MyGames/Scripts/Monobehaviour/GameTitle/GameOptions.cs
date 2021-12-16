@@ -1,14 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// プレイヤーの選択したオプションのメニュー
-/// </summary>
-public enum GameOptionMenu
-{
-    PLAYER,
-    AUDIO
-}
-
 public class GameOptions : MonoBehaviour
 {
     GameOptionMenu _selectedMenu;

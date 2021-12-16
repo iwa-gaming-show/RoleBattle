@@ -1,4 +1,3 @@
-using System;
 /// <summary>
 /// バトルの段階
 /// </summary>
