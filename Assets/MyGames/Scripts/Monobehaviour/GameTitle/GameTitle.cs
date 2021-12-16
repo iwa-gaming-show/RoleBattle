@@ -5,7 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class GameTitle : MonoBehaviour
 {
+    [SerializeField]
+    [Header("OptionCanvasを設定")]
+    GameObject _optionCanvas;
+
     bool isFirstClick;
+
+    void Start()
+    {
+        //最初はオプションをオフにする
+        _optionCanvas.SetActive(false);
+    }
 
     /// <summary>
     /// CPUバトルを開始する
@@ -22,6 +32,15 @@ public class GameTitle : MonoBehaviour
     {
         ClickToLoadScene(SceneType.MultiBattle);
     }
+
+    /// <summary>
+    /// オプション画面を表示する
+    /// </summary>
+    public void OnClickToOptionWindowToggle(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, isActive, transform);
+    }
+
 
     void ClickToLoadScene(SceneType scene)
     {
