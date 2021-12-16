@@ -36,9 +36,9 @@ public class GameTitle : MonoBehaviour
     /// <summary>
     /// オプション画面を表示する
     /// </summary>
-    public void OnClickToOptionWindowToggle(bool isActive)
+    public void OnClickToOptionWindowShow()
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
     }
 
 
