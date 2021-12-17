@@ -16,8 +16,40 @@ MonoBehaviour:
   - _name: "\u30CA\u30A4\u30C8"
     _description: 
     _icons:
-    - _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-      _sizes: 0
-    - _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
-      _sizes: 1
+    - _size: 0
+      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
+    - _size: 0
+      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+    _voices: []
+  - _name: "\u30A6\u30A3\u30B6\u30FC\u30C9"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
+    - _size: 0
+      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+    _voices: []
+  - _name: "\u30C9\u30E9\u30B4\u30F3"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
+    - _size: 0
+      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+    _voices: []
+  - _name: "\u30C9\u30E9\u30B4\u30F3"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
+    - _size: 0
+      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+    _voices: []
+  - _name: "\u30C9\u30E9\u30B4\u30F3"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
+    - _size: 0
+      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
     _voices: []
