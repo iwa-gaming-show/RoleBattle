@@ -2705,7 +2705,7 @@ PrefabInstance:
       objectReference: {fileID: 323382761}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickToCharaSelePanelShow
+      value: OnClickToShowCharaSelePanel
       objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2903,7 +2903,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 135100696}
         m_TargetAssemblyTypeName: GameTitle, App
-        m_MethodName: OnClickCpuBattleStart
+        m_MethodName: OnClickToStartCpuBattle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3113,7 +3113,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 135100696}
         m_TargetAssemblyTypeName: GameTitle, App
-        m_MethodName: OnClickMultiBattleStart
+        m_MethodName: OnClickToStartMultiBattle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3575,8 +3575,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 457410763}
-        m_TargetAssemblyTypeName: GameOption, App
-        m_MethodName: OnClickToPlayerOptionShow
+        m_TargetAssemblyTypeName: GameOptions, App
+        m_MethodName: OnClickToShowPlayerOption
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3708,8 +3708,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 457410763}
-        m_TargetAssemblyTypeName: GameOption, App
-        m_MethodName: OnClickToOptionWindowClose
+        m_TargetAssemblyTypeName: GameOptions, App
+        m_MethodName: OnClickToCloseOptionWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4459,8 +4459,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 457410763}
-        m_TargetAssemblyTypeName: GameOption, App
-        m_MethodName: OnClickToAudioOptionShow
+        m_TargetAssemblyTypeName: GameOptions, App
+        m_MethodName: OnClickToShowAudioOption
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4593,7 +4593,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 135100696}
         m_TargetAssemblyTypeName: GameTitle, App
-        m_MethodName: OnClickToOptionWindowShow
+        m_MethodName: OnClickToShowOptionWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -20,7 +20,7 @@ public class GameTitle : MonoBehaviour
     /// <summary>
     /// CPUバトルを開始する
     /// </summary>
-    public void OnClickCpuBattleStart()
+    public void OnClickToStartCpuBattle()
     {
         ClickToLoadScene(SceneType.Battle);
     }
@@ -28,7 +28,7 @@ public class GameTitle : MonoBehaviour
     /// <summary>
     /// マルチバトルを開始する
     /// </summary>
-    public void OnClickMultiBattleStart()
+    public void OnClickToStartMultiBattle()
     {
         ClickToLoadScene(SceneType.MultiBattle);
     }
@@ -36,7 +36,7 @@ public class GameTitle : MonoBehaviour
     /// <summary>
     /// オプション画面を表示する
     /// </summary>
-    public void OnClickToOptionWindowShow()
+    public void OnClickToShowOptionWindow()
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
     }

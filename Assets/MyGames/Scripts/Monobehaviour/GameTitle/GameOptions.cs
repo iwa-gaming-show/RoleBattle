@@ -24,7 +24,7 @@ public class GameOptions : MonoBehaviour
     /// <summary>
     /// playerOptionを表示する
     /// </summary>
-    public void OnClickToPlayerOptionShow()
+    public void OnClickToShowPlayerOption()
     {
         if (_selectedMenu == GameOptionMenu.PLAYER) return;
         _selectedMenu = GameOptionMenu.PLAYER;
@@ -36,7 +36,7 @@ public class GameOptions : MonoBehaviour
     /// <summary>
     /// audioOptionを表示する
     /// </summary>
-    public void OnClickToAudioOptionShow()
+    public void OnClickToShowAudioOption()
     {
         if (_selectedMenu == GameOptionMenu.AUDIO) return;
         _selectedMenu = GameOptionMenu.AUDIO;
@@ -48,7 +48,7 @@ public class GameOptions : MonoBehaviour
     /// <summary>
     /// オプション画面を閉じる
     /// </summary>
-    public void OnClickToOptionWindowClose()
+    public void OnClickToCloseOptionWindow()
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, false, transform);
     }
