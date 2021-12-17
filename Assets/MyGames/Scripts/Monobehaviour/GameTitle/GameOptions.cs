@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameOptions : MonoBehaviour
+public class GameOptions : MonoBehaviour, IToggleable
 {
     GameOptionMenu _selectedMenu;
 
@@ -29,8 +29,8 @@ public class GameOptions : MonoBehaviour
         if (_selectedMenu == GameOptionMenu.PLAYER) return;
         _selectedMenu = GameOptionMenu.PLAYER;
 
-        _IplayerOption.Show();
-        _IaudioOption.Close();
+        _IplayerOption.ToggleUI(true);
+        _IaudioOption.ToggleUI(false);
     }
 
     /// <summary>
@@ -41,15 +41,23 @@ public class GameOptions : MonoBehaviour
         if (_selectedMenu == GameOptionMenu.AUDIO) return;
         _selectedMenu = GameOptionMenu.AUDIO;
 
-        _IplayerOption.Close();
-        _IaudioOption.Show();
+        _IaudioOption.ToggleUI(true);
+        _IplayerOption.ToggleUI(false);
     }
 
     /// <summary>
-    /// オプション画面を閉じる
+    /// オプション画面の表示切り替え
     /// </summary>
-    public void OnClickToCloseOptionWindow()
+    public void OnClickToToggleOptionWindow(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, false, transform);
+        ToggleUI(isActive);
+    }
+
+    /// <summary>
+    /// オプション画面の表示切り替え
+    /// </summary>
+    public void ToggleUI(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, transform);
     }
 }

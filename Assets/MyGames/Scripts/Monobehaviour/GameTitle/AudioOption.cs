@@ -9,14 +9,8 @@ public class AudioOption : MonoBehaviour,
     [Header("SettingCanvasのTransformを設定する")]
     Transform _settingCanvasTransform;
 
-    public void Show()
+    public void ToggleUI(bool isActive)
     {
-        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, true, _settingCanvasTransform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, _settingCanvasTransform);
     }
-
-    public void Close()
-    {
-        CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, false, _settingCanvasTransform);
-    }
-
 }

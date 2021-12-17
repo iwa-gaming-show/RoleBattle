@@ -1,12 +1,4 @@
-public interface IGameOption
+public interface IGameOption: IToggleable
 {
-    /// <summary>
-    /// 表示する
-    /// </summary>
-    void Show();
-
-    /// <summary>
-    /// 閉じる
-    /// </summary>
-    void Close();
+    
 }
