@@ -13,43 +13,30 @@ MonoBehaviour:
   m_Name: SelectableCharacterList
   m_EditorClassIdentifier: 
   _selectableCharacterList:
-  - _name: "\u30CA\u30A4\u30C8"
+  - _id: 1
+    _name: "\u30CA\u30A4\u30C8"
     _description: 
     _icons:
     - _size: 0
       _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-    - _size: 0
+    - _size: 1
       _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
     _voices: []
-  - _name: "\u30A6\u30A3\u30B6\u30FC\u30C9"
+  - _id: 2
+    _name: "\u30C9\u30E9\u30B4\u30F3"
     _description: 
     _icons:
     - _size: 0
-      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-    - _size: 0
+      _icon: {fileID: 21300000, guid: d7146e0a7693e4c3b942cfec4437a391, type: 3}
+    - _size: 1
       _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
     _voices: []
-  - _name: "\u30C9\u30E9\u30B4\u30F3"
+  - _id: 3
+    _name: "\u30C9\u30E9\u30B4\u30F3"
     _description: 
     _icons:
     - _size: 0
-      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-    - _size: 0
-      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
-    _voices: []
-  - _name: "\u30C9\u30E9\u30B4\u30F3"
-    _description: 
-    _icons:
-    - _size: 0
-      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-    - _size: 0
-      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
-    _voices: []
-  - _name: "\u30C9\u30E9\u30B4\u30F3"
-    _description: 
-    _icons:
-    - _size: 0
-      _icon: {fileID: 21300000, guid: ac685f9fed51c4ca08bc619d070a6572, type: 3}
-    - _size: 0
+      _icon: {fileID: 21300000, guid: e9d4143c19529834981ac6821a04aecd, type: 3}
+    - _size: 1
       _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
     _voices: []

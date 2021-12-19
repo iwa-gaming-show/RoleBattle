@@ -14,6 +14,10 @@ public class SelectableCharacterList : ScriptableObject
 public class SelectableCharacter
 {
     [SerializeField]
+    [Tooltip("id")]
+    int _id;
+
+    [SerializeField]
     [Tooltip("キャラクター名")]
     string _name = "キャラクター名";
 
@@ -28,6 +32,33 @@ public class SelectableCharacter
     [SerializeField]
     [Tooltip("シチュエーションと音声")]
     List<Voices> _voices;
+
+    #region //プロパティ
+    public int Id => _id;
+    public string Name => _name;
+    public string Description => _description;
+    public List<Icons> Icons => _icons;
+    public List<Voices> Voices => _voices;
+    #endregion
+
+    /// <summary>
+    /// サイズによるアイコン画像を探します
+    /// </summary>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    public Sprite FindIconImageBy(CharacterIconSizes size)
+    {
+        try
+        {
+            Icons icons = _icons.Find(icon => icon.Size == size);
+            return icons.Icon;
+        }
+        catch
+        {
+            Debug.Log("画像が見つかりませんでした");
+            return null;
+        }
+    }
 }
 
 [System.Serializable]
@@ -40,6 +71,11 @@ public class Icons
     [SerializeField]
     [Tooltip("アイコン")]
     Sprite _icon;
+
+    #region //プロパティ
+    public CharacterIconSizes Size => _size;
+    public Sprite Icon => _icon;
+    #endregion
 }
 
 [System.Serializable]
@@ -52,4 +88,9 @@ public class Voices
     [SerializeField]
     [Tooltip("音声")]
     string _audio;
+
+    #region //プロパティ
+    public CharacterVoiceSituations Situation => _situation;
+    public string Audio => _audio;
+    #endregion
 }
