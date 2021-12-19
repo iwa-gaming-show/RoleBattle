@@ -33,6 +33,7 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     void Start()
     {
         ViewSelectableCharacterIcons(GameManager._instance.SelectableCharacterList);
+        InitSelectedCharacterWindow(GameManager._instance.GetPlayerCharacter());//選択済みキャラの初期化
     }
 
     /// <summary>
@@ -56,7 +57,7 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     }
 
     /// <summary>
-    /// 選択可能なキャラクターのアイコンを表示する
+    /// 選択可能なキャラクターのアイコンを一覧表示する
     /// </summary>
     void ViewSelectableCharacterIcons(SelectableCharacterList seleCharaList)
     {
@@ -96,5 +97,13 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
         //UIに反映する
         _selectedCharacterName.text = _selectedCharacter.Name;
         _selectedCharacterImage.sprite = _selectedCharacter.FindIconImageBy(M_SIZE);
+    }
+
+    /// <summary>
+    /// 選択済みキャラクターの情報をUIに表示します
+    /// </summary>
+    void InitSelectedCharacterWindow(SelectableCharacter selectedCharacter)
+    {
+        ViewSelectedCharacter(selectedCharacter);
     }
 }

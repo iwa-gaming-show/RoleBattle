@@ -27,4 +27,9 @@ public static class InitializationData
     /// 必殺技発動によって獲得できるボーナスの倍率、獲得ポイントに掛けて使用する
     /// </summary>
     public static readonly int SPECIAL_SKILL_MAGNIFICATION_BONUS = 2;
+
+    /// <summary>
+    /// キャラクター未選択プレイヤーはフェンサーのidを使用する
+    /// </summary>
+    public static readonly int CHARACTER_ID_FOR_UNSELECTED_PLAYER = 1;
 }

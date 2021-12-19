@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static InitializationData;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,5 +26,20 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// プレイヤーのキャラクターを取得します
+    /// </summary>
+    /// <returns></returns>
+    public SelectableCharacter GetPlayerCharacter()
+    {
+        int searchId;
+        if (PlayerPrefs.HasKey("SelectedCharacterId"))
+            searchId = PlayerPrefs.GetInt("SelectedCharacterId");
+        else
+            searchId = CHARACTER_ID_FOR_UNSELECTED_PLAYER;//未選択時はフェンサーのidを指定する
+
+        return _selectableCharacterList.FindCharacterById(searchId);
     }
 }

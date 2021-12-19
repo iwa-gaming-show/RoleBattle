@@ -8,6 +8,24 @@ public class SelectableCharacterList : ScriptableObject
     List<SelectableCharacter> _selectableCharacterList = new List<SelectableCharacter>();
 
     public List<SelectableCharacter> GetSelectableCharacterList => _selectableCharacterList;
+
+    /// <summary>
+    /// idからキャラクターを取得します
+    /// </summary>
+    /// <param name="characterId"></param>
+    /// <returns></returns>
+    public SelectableCharacter FindCharacterById(int characterId)
+    {
+        try
+        {
+            return _selectableCharacterList.Find(target => target.Id == characterId);
+        }
+        catch
+        {
+            Debug.Log("キャラクターが見つかりませんでした。");
+            return null;
+        }
+    }
 }
 
 [System.Serializable]
