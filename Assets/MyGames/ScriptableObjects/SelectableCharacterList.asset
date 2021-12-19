@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectableCharacterList:
   - _id: 1
-    _name: "\u30CA\u30A4\u30C8"
+    _name: "\u30D5\u30A7\u30F3\u30B5\u30FC"
     _description: 
     _icons:
     - _size: 0
@@ -23,20 +23,47 @@ MonoBehaviour:
       _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
     _voices: []
   - _id: 2
-    _name: "\u30C9\u30E9\u30B4\u30F3"
+    _name: "\u30E1\u30A4\u30C9\u30E9\u30F3\u30C1\u30E3\u30FC"
     _description: 
     _icons:
     - _size: 0
-      _icon: {fileID: 21300000, guid: d7146e0a7693e4c3b942cfec4437a391, type: 3}
+      _icon: {fileID: 21300000, guid: 4d7052165ae3b4a64b118816158da91e, type: 3}
     - _size: 1
-      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+      _icon: {fileID: 21300000, guid: 7ae67c4bc7c294cc3b0ebad7d13b7d5a, type: 3}
     _voices: []
   - _id: 3
-    _name: "\u30C9\u30E9\u30B4\u30F3"
+    _name: "\u30CD\u30AF\u30ED\u30DE\u30F3\u30B5\u30FC"
     _description: 
     _icons:
     - _size: 0
-      _icon: {fileID: 21300000, guid: e9d4143c19529834981ac6821a04aecd, type: 3}
+      _icon: {fileID: 21300000, guid: 4a71420d7b5f947459ac2b35e71df470, type: 3}
     - _size: 1
-      _icon: {fileID: 21300000, guid: d224bd65eddbc48a4a1ca4d19171a5bc, type: 3}
+      _icon: {fileID: 21300000, guid: cdee00a426b7b464a97077055af5562d, type: 3}
+    _voices: []
+  - _id: 4
+    _name: "\u30D7\u30EA\u59EB"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: 817cd27db77ed4778b1e188e7b635c5f, type: 3}
+    - _size: 1
+      _icon: {fileID: 21300000, guid: 836afa54f9ede4349be4c14d18902103, type: 3}
+    _voices: []
+  - _id: 5
+    _name: "\u30C9\u30EA\u30EB\u30E9\u30F3\u30B5\u30FC"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: 471d8177c6a6d414eaaa335ee7bc8377, type: 3}
+    - _size: 1
+      _icon: {fileID: 21300000, guid: e2ecac4b6c85a49c78cc3ef9725176a5, type: 3}
+    _voices: []
+  - _id: 6
+    _name: "\u30B8\u30E3\u30C3\u30AF"
+    _description: 
+    _icons:
+    - _size: 0
+      _icon: {fileID: 21300000, guid: 67164787ee13e4b4c8d64437e4be707e, type: 3}
+    - _size: 1
+      _icon: {fileID: 21300000, guid: bbd7a266d477941e2bd96fe212e124af, type: 3}
     _voices: []

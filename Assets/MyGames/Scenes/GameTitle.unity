@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.3882353}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1635,7 +1635,7 @@ RectTransform:
   - {fileID: 1968816128}
   - {fileID: 1369877149}
   m_Father: {fileID: 813170605}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -2269,8 +2269,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 956108019}
   - {fileID: 540936164}
+  - {fileID: 956108019}
   - {fileID: 434521598}
   - {fileID: 349288219}
   m_Father: {fileID: 323382759}
@@ -5127,7 +5127,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 633038ccba6d64686bde88ba574d8d2e, type: 3}
     m_FontSize: 32
-    m_FontStyle: 3
+    m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40

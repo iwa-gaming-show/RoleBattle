@@ -85,7 +85,6 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
         ViewSelectedCharacter(selectedCharacter);
     }
 
-
     /// <summary>
     /// 選択したキャラクターを表示します
     /// </summary>
