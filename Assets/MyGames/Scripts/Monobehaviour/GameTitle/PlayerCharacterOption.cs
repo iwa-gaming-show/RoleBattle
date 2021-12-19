@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using static CharacterIconSizes;
 
-public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
+public class PlayerCharacterOption : MonoBehaviour,
+    ISelectedCharacterObserver,
+    IGameOption
 {
     [SerializeField]
     [Header("CharaSeleWrapperを設定する")]
@@ -42,7 +44,7 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     /// <param name="isActive"></param>
     public void OnClickToToggleCharaSelePanel(bool isActive)
     {
-        ToggleCharaSelePanel(isActive, CanvasForObjectPool._instance);
+        ToggleUI(isActive);
     }
 
     /// <summary>
@@ -50,10 +52,10 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     /// </summary>
     /// <param name="isActive"></param>
     /// <param name="pool"></param>
-    void ToggleCharaSelePanel(bool isActive, CanvasForObjectPool pool)
+    public void ToggleUI(bool isActive)
     {
-        pool.ToggleUIGameObject(_charaSeleWrapper, isActive, transform);
-        pool.ToggleUIGameObject(_charaSelePanel, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_charaSeleWrapper, isActive, transform);
+        CanvasForObjectPool._instance.ToggleUIGameObject(_charaSelePanel, isActive, transform);
     }
 
     /// <summary>
@@ -82,7 +84,7 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     void ISelectedCharacterObserver.Update(SelectableCharacter selectedCharacter)
     {
         //パネルを閉じ、選択したキャラを保持し、UIに反映する
-        ToggleCharaSelePanel(false, CanvasForObjectPool._instance);
+        ToggleUI(false);
         ViewSelectedCharacter(selectedCharacter);
     }
 
@@ -105,5 +107,19 @@ public class PlayerCharacterOption : MonoBehaviour, ISelectedCharacterObserver
     void InitSelectedCharacterWindow(SelectableCharacter selectedCharacter)
     {
         ViewSelectedCharacter(selectedCharacter);
+    }
+
+    /// <summary>
+    /// 変更を保存する
+    /// </summary>
+    /// <returns>保存の成功フラグ</returns>
+    public bool Save()
+    {
+        //未選択なら保存扱いにして何もしない
+        if (_selectedCharacter == null) return true;
+
+        PlayerPrefs.SetInt("SelectedCharacterId", _selectedCharacter.Id);
+        PlayerPrefs.Save();
+        return true;
     }
 }

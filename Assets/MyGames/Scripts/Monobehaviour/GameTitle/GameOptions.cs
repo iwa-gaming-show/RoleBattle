@@ -60,4 +60,17 @@ public class GameOptions : MonoBehaviour, IToggleable
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, transform);
     }
+
+    /// <summary>
+    /// 設定を保存する
+    /// </summary>
+    public void OnClickToSave()
+    {
+        _IplayerOption.Save();
+        _IaudioOption.Save();
+        //todo
+        //IGameOptionにSaveメソッドを実装、trueが返ってきたら保存完了
+        //保存しましたとダイアログを表示する
+        Debug.Log("保存しました");
+    }
 }

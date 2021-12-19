@@ -967,6 +967,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _settingCanvasTransform: {fileID: 1211168034}
+  _playerCharacterOption: {fileID: 813170608}
 --- !u!1 &324335295
 GameObject:
   m_ObjectHideFlags: 0
@@ -5153,6 +5154,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 457410760}
     m_Modifications:
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 457410763}
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToSave
+      objectReference: {fileID: 0}
+    - target: {fileID: 8190501147415148514, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameOptions, App
+      objectReference: {fileID: 0}
     - target: {fileID: 8190501147415148516, guid: dd60fd400c8f64ba4963ccc7fd06d125, type: 3}
       propertyPath: m_Name
       value: SaveButton
