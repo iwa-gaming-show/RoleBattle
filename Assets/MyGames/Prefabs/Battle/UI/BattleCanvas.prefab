@@ -2460,6 +2460,7 @@ MonoBehaviour:
   _handPanel: {fileID: 4708454732005998268}
   _battleField: {fileID: 4708454730910578886}
   _spProduction: {fileID: 1955755402409544162}
+  _playerIconPrefab: {fileID: 0}
 --- !u!1 &7883391421112756527
 GameObject:
   m_ObjectHideFlags: 0
@@ -2583,6 +2584,7 @@ MonoBehaviour:
   _handPanel: {fileID: 4708454732476685926}
   _battleField: {fileID: 4708454732097221069}
   _spProduction: {fileID: 1955755401951558702}
+  _playerIconPrefab: {fileID: 0}
 --- !u!1001 &1983631996636268596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3247,6 +3249,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6517825270007629983, guid: 5bf67ce593617447fb2aaaee50d438c8, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6517825270007630050, guid: 5bf67ce593617447fb2aaaee50d438c8, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6517825270007630051, guid: 5bf67ce593617447fb2aaaee50d438c8, type: 3}
