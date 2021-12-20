@@ -29,7 +29,12 @@ public static class InitializationData
     public static readonly int SPECIAL_SKILL_MAGNIFICATION_BONUS = 2;
 
     /// <summary>
-    /// キャラクター未選択プレイヤーはフェンサーのidを使用する
+    /// キャラクター未選択プレイヤーは初期表示用キャラのidを使用する
     /// </summary>
     public static readonly int CHARACTER_ID_FOR_UNSELECTED_PLAYER = 1;
+
+    /// <summary>
+    /// ネーム未編集のプレイヤーは未設定だとわかる名前にする
+    /// </summary>
+    public static readonly string PLAYER_NAME_FOR_UNEDITED_PLAYER = "Unknown";
 }

@@ -29,6 +29,18 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// プレイヤー名を取得します
+    /// </summary>
+    /// <returns></returns>
+    public string GetPlayerName()
+    {
+        if (PlayerPrefs.HasKey("PlayerName"))
+            return PlayerPrefs.GetString("PlayerName");
+
+        return PLAYER_NAME_FOR_UNEDITED_PLAYER;
+    }
+
+    /// <summary>
     /// プレイヤーのキャラクターを取得します
     /// </summary>
     /// <returns></returns>
