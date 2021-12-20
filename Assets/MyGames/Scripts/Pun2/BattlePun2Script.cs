@@ -13,6 +13,7 @@ using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
+using static CharacterIconSizes;
 using UnityEngine.SceneManagement;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks,
@@ -198,7 +199,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
             //相手のフィールドへアイコンを配置します
             if (go != _playerIcon)
             {
-                _multiBattleUIManager.PlacePlayerIconBy(false, go);
+                _multiBattleUIManager.PlacePlayerIconBy(false, go, S_SIZE);
                 _isEnemyIconPlaced = true;
             }
         }
@@ -271,7 +272,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     void InitPlayerIcon()
     {
         _playerIcon = PhotonNetwork.Instantiate("PlayerIconS", Vector3.zero, Quaternion.identity);
-        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon);
+        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon, S_SIZE);
     }
 
     /// <summary>

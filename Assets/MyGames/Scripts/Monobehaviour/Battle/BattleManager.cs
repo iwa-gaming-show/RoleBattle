@@ -32,7 +32,6 @@ public class BattleManager : MonoBehaviour,
     #endregion
 
     int _countDownTime;
-    GameObject _playerIcon;
     bool _isFirstClick;
 
     //CancellationToken _token;
@@ -47,16 +46,22 @@ public class BattleManager : MonoBehaviour,
     void Start()
     {
         //_token = this.GetCancellationTokenOnDestroy();
-        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
-        _battleDataManager.CreatePlayerData();
-        _battleDataManager.InitPlayerData();
-        StartBattle(true).Forget();
+        Init();
     }
 
     void Update()
     {
         ChangeTurn();
         CheckActivatingSpSkill();
+    }
+
+    void Init()
+    {
+        _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
+        _battleDataManager.CreatePlayerData();
+        _battleDataManager.InitPlayerData();
+        _battleUIManager.InitPlayerCharacter();
+        StartBattle(true).Forget();
     }
 
     /// <summary>

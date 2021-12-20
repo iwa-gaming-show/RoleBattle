@@ -26,6 +26,15 @@ public class SelectableCharacterList : ScriptableObject
             return null;
         }
     }
+
+    /// <summary>
+    /// ランダムなプレイヤーのキャラクターを取得します
+    /// </summary>
+    /// <returns></returns>
+    public SelectableCharacter GetRandomPlayerCharacter()
+    {
+        return _selectableCharacterList[Random.Range(0, _selectableCharacterList.Count)];
+    }
 }
 
 [System.Serializable]

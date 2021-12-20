@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using static UIStrings;
-using static WaitTimes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Random = UnityEngine.Random;
+using static UIStrings;
+using static WaitTimes;
+using static CharacterIconSizes;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     [Header("プレイヤーアイコンの配置場所を設定する")]
     Transform _playerIconField;
+
+    [SerializeField]
+    [Header("Sp発動時のプレイヤーアイコンの配置場所を設定する")]
+    Transform _playerIconFieldOfSpSkill;
 
     [SerializeField]
     [Header("カードを加える手札の設置場所を設定する")]
@@ -79,9 +84,16 @@ public class PlayerUI : MonoBehaviour
     /// <summary>
     /// プレイヤーアイコンを配置する
     /// </summary>
-    public void PlacePlayerIcon(GameObject targetGo)
+    public void PlacePlayerIcon(GameObject targetGo, CharacterIconSizes size)
     {
-        targetGo.transform.SetParent(_playerIconField, false);
+        Transform settingTransform;
+
+        if (size == S_SIZE)
+            settingTransform = _playerIconField;
+        else
+            settingTransform = _playerIconFieldOfSpSkill;
+
+        targetGo.transform.SetParent(settingTransform, false);
     }
 
     /// <summary>
