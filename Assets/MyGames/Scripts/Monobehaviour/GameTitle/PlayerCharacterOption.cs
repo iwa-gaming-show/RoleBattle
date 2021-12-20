@@ -6,7 +6,8 @@ using static CharacterIconSizes;
 
 public class PlayerCharacterOption : MonoBehaviour,
     ISelectedCharacterObserver,
-    IGameOption
+    IGameOption,
+    IToggleable
 {
     [SerializeField]
     [Header("CharaSeleWrapperを設定する")]

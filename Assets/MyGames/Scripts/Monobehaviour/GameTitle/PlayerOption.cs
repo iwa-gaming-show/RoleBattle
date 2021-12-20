@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerOption : MonoBehaviour,
-    IGameOption
+    IGameOption,
+    IToggleable
 {
     [SerializeField]
     [Header("SettingCanvasのTransformを設定する")]
@@ -13,11 +14,17 @@ public class PlayerOption : MonoBehaviour,
     [Header("CharacterOptionを設定する")]
     PlayerCharacterOption _playerCharacterOption;
 
+    [SerializeField]
+    [Header("PlayerNameを設定する")]
+    EditPlayerNameField _editPlayerNameField;
+
     IGameOption _IplayerCharacterOption;
+    IGameOption _IEditPlayerNameField;
 
     void Start()
     {
         _IplayerCharacterOption = _playerCharacterOption;
+        _IEditPlayerNameField = _editPlayerNameField;
     }
 
     /// <summary>
@@ -25,8 +32,10 @@ public class PlayerOption : MonoBehaviour,
     /// </summary>
     public bool Save()
     {
-        //todo プレイヤー名の保存
-        return _IplayerCharacterOption.Save();
+        return (
+            _IEditPlayerNameField.Save()
+            && _IplayerCharacterOption.Save()
+        );
     }
 
     /// <summary>

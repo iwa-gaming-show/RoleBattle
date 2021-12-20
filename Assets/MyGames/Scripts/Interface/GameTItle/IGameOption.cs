@@ -1,4 +1,4 @@
-public interface IGameOption: IToggleable
+public interface IGameOption
 {
     /// <summary>
     /// 変更を保存する

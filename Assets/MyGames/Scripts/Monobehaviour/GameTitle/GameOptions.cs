@@ -14,11 +14,20 @@ public class GameOptions : MonoBehaviour, IToggleable
 
     IGameOption _IplayerOption;
     IGameOption _IaudioOption;
+    IToggleable _ItoggleablePlayerOp;
+    IToggleable _ItoggleableAudioOp;
 
     void Start()
     {
+        InitSetInterface();
+    }
+
+    void InitSetInterface()
+    {
         _IplayerOption = _playerOption;
         _IaudioOption = _audioOption;
+        _ItoggleablePlayerOp = _playerOption;
+        _ItoggleableAudioOp = _audioOption;
     }
 
     /// <summary>
@@ -29,8 +38,8 @@ public class GameOptions : MonoBehaviour, IToggleable
         if (_selectedMenu == GameOptionMenu.PLAYER) return;
         _selectedMenu = GameOptionMenu.PLAYER;
 
-        _IplayerOption.ToggleUI(true);
-        _IaudioOption.ToggleUI(false);
+        _ItoggleablePlayerOp.ToggleUI(true);
+        _ItoggleableAudioOp.ToggleUI(false);
     }
 
     /// <summary>
@@ -41,8 +50,8 @@ public class GameOptions : MonoBehaviour, IToggleable
         if (_selectedMenu == GameOptionMenu.AUDIO) return;
         _selectedMenu = GameOptionMenu.AUDIO;
 
-        _IaudioOption.ToggleUI(true);
-        _IplayerOption.ToggleUI(false);
+        _ItoggleableAudioOp.ToggleUI(true);
+        _ItoggleablePlayerOp.ToggleUI(false);
     }
 
     /// <summary>

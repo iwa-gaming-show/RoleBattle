@@ -951,6 +951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _settingCanvasTransform: {fileID: 1211168034}
   _playerCharacterOption: {fileID: 813170608}
+  _editPlayerNameField: {fileID: 33623317}
 --- !u!1 &324335295
 GameObject:
   m_ObjectHideFlags: 0

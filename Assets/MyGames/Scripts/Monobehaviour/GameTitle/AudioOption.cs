@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioOption : MonoBehaviour,
-    IGameOption
+    IGameOption,
+    IToggleable
 {
     [SerializeField]
     [Header("SettingCanvasのTransformを設定する")]

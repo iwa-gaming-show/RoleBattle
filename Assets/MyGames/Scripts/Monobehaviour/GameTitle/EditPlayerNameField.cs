@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using static InitializationData;
 
-public class EditPlayerNameField : MonoBehaviour
+public class EditPlayerNameField : MonoBehaviour,
+    IGameOption
 {
     [SerializeField]
     [Header("表示用フィールド設定")]
@@ -117,5 +118,20 @@ public class EditPlayerNameField : MonoBehaviour
     void ToggleEditInputField(bool isActive)
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(_editInputField.gameObject, isActive, transform);
+    }
+
+    /// <summary>
+    /// 変更を保存する
+    /// </summary>
+    /// <returns>保存の成功フラグ</returns>
+    public bool Save()
+    {
+        //未編集なら保存扱いにして何もしない
+        if (_playerName.text == PLAYER_NAME_FOR_UNEDITED_PLAYER) return true;
+        if (_playerName.text == PlayerPrefs.GetString("PlayerName")) return true;
+
+        PlayerPrefs.SetString("PlayerName", _playerName.text);
+        PlayerPrefs.Save();
+        return true;
     }
 }
