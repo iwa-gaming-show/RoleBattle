@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1207789959063799655, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
+      propertyPath: _selectableCharacterList
+      value: 
+      objectReference: {fileID: 11400000, guid: e58f896e173354709b06423c8f9f65f7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
 --- !u!224 &80111653 stripped
@@ -421,7 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battlePrefabList:
-  - {fileID: 8335895121979626883, guid: e5adbbf95b97f459ca576be6c61529a1, type: 3}
+  - {fileID: 8335895121979626883, guid: 78d35cbdb21b64557ac55cb3c7da7eec, type: 3}
 --- !u!4 &1502668388
 Transform:
   m_ObjectHideFlags: 0

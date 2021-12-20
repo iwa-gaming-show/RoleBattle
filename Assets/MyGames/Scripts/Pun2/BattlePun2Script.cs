@@ -42,7 +42,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     int _countDownTime;
     bool _canChangeTurn;
     bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
-    GameObject _playerIcon;//todo あとでスクリプト名になる可能性あり
     PunTurnManager _punTurnManager;
     PhotonView _photonView;
     IMultiBattleDataManager _multiBattleDataManager;
@@ -197,7 +196,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIconS"))
         {
             //相手のフィールドへアイコンを配置します
-            if (go != _playerIcon)
+            if (go != _multiBattleUIManager.PlayerIcon.gameObject)
             {
                 _multiBattleUIManager.PlacePlayerIconBy(false, go, S_SIZE);
                 _isEnemyIconPlaced = true;
@@ -271,8 +270,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void InitPlayerIcon()
     {
-        _playerIcon = PhotonNetwork.Instantiate("PlayerIconS", Vector3.zero, Quaternion.identity);
-        _multiBattleUIManager.PlacePlayerIconBy(true, _playerIcon, S_SIZE);
+        _multiBattleUIManager.SetPlayerCharacter(GameManager._instance.GetPlayerCharacter(), true);
     }
 
     /// <summary>

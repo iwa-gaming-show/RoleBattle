@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerIcon : MonoBehaviour
+public class PlayerIcon : MonoBehaviour,
+    IPlayerIcon
 {
     Image _iconImage;
+    public Image IconImage => _iconImage;
 
     void Awake()
     {

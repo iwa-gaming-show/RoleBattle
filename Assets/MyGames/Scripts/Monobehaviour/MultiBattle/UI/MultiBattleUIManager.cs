@@ -2,20 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using System.Linq;
-using UnityEngine.UI;
-using static UIStrings;
 using static WaitTimes;
 using static BattlePhase;
+using static CharacterIconSizes;
 
 public class MultiBattleUIManager : SuperBattleUIManager
 {
     IMultiBattleDataManager _dataM;
     PhotonView _photonView;
+    PlayerIcon _playerIcon;
+
+    public PlayerIcon PlayerIcon => _playerIcon;
 
 
     void Awake()
@@ -74,6 +74,19 @@ public class MultiBattleUIManager : SuperBattleUIManager
         }
 
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
+    }
+
+    /// <summary>
+    /// プレイヤーのキャラクターを設定する
+    /// </summary>
+    public override void SetPlayerCharacter(SelectableCharacter selectableCharacter, bool isPlayer)
+    {
+        GameObject iconPrefab = PhotonNetwork.Instantiate("MultiPlayerIconS", Vector3.zero, Quaternion.identity);
+        PlayerIcon playerIcon = iconPrefab?.GetComponent<PlayerIcon>();
+        playerIcon.SetPlayerCharacterIcon(selectableCharacter.FindIconImageBy(S_SIZE));
+
+        _playerIcon = playerIcon;
+        PlacePlayerIconBy(isPlayer, playerIcon.gameObject, S_SIZE);
     }
     #endregion
 
