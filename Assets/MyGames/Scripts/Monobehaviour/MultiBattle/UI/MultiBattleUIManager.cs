@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using System.Linq;
 using static WaitTimes;
 using static BattlePhase;
-using static CharacterIconSizes;
 
 public class MultiBattleUIManager : SuperBattleUIManager
 {
     IMultiBattleDataManager _dataM;
     PhotonView _photonView;
-    PlayerIcon _playerIcon;
 
-    public PlayerIcon PlayerIcon => _playerIcon;
-
-
-    void Awake()
+    new void Awake()
     {
+        base.Awake();
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -75,20 +68,15 @@ public class MultiBattleUIManager : SuperBattleUIManager
 
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
+    #endregion
 
     /// <summary>
-    /// プレイヤーのキャラクターを設定する
+    /// プレイヤーキャラクターの初期化処理
     /// </summary>
-    public override void SetPlayerCharacter(SelectableCharacter selectableCharacter, bool isPlayer)
+    public void InitPlayerCharacter(bool isPlayer, SelectableCharacter selectableCharacter)
     {
-        GameObject iconPrefab = PhotonNetwork.Instantiate("MultiPlayerIconS", Vector3.zero, Quaternion.identity);
-        PlayerIcon playerIcon = iconPrefab?.GetComponent<PlayerIcon>();
-        playerIcon.SetPlayerCharacterIcon(selectableCharacter.FindIconImageBy(S_SIZE));
-
-        _playerIcon = playerIcon;
-        PlacePlayerIconBy(isPlayer, playerIcon.gameObject, S_SIZE);
+        GetPlayerUI(isPlayer).SetPlayerCharacter(selectableCharacter);
     }
-    #endregion
 
     /// <summary>
     /// 相手のフィールドのカードを置き換えます

@@ -59,6 +59,7 @@ public class MultiBattleDataManager : MonoBehaviour,
     /// </summary>
     public void InitPlayerData()
     {
+        _player.SetIsSelectedCharacterId(GameManager._instance.GetPlayerCharacter().Id);
         _player.SetPoint(INITIAL_POINT);
         _player.SetCanUseSpSkill(true);
         _player.SetIsMyTurn(false);

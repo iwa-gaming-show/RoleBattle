@@ -43,10 +43,14 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     IConfirmationPanelManager _confirmationPanelManager;
     IBattleDirectionalityUI _IdirectionalityUI;
 
+    protected void Awake()
+    {
+        _IdirectionalityUI = _battleDirectionalityUI;
+    }
+
     protected void Start()
     {
         _confirmationPanelManager = ServiceLocator.Resolve<IConfirmationPanelManager>();
-        _IdirectionalityUI = _battleDirectionalityUI;
     }
 
     void Update()

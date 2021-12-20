@@ -13,7 +13,6 @@ using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
-using static CharacterIconSizes;
 using UnityEngine.SceneManagement;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks,
@@ -41,7 +40,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
 
     int _countDownTime;
     bool _canChangeTurn;
-    bool _isEnemyIconPlaced;//エネミーのアイコンが設置されているか
     PunTurnManager _punTurnManager;
     PhotonView _photonView;
     IMultiBattleDataManager _multiBattleDataManager;
@@ -179,29 +177,10 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
 
         _multiBattleUIManager.ShowPointBy(isPlayer, targetPlayer.GetPoint());
         _multiBattleUIManager.SetSpButtonImageBy(isPlayer, targetPlayer.GetCanUseSpSkill());
-        CheckEnemyIcon();
         CheckPlayerTurnEnd(_multiBattleDataManager);
         ChangeTurn();
         CheckToNextRound(_multiBattleDataManager);
         CheckRetryingBattle(_multiBattleDataManager);
-    }
-
-    /// <summary>
-    /// 対戦相手のアイコンを調べます
-    /// </summary>
-    void CheckEnemyIcon()
-    {
-        if (_isEnemyIconPlaced) return;
-
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("PlayerIconS"))
-        {
-            //相手のフィールドへアイコンを配置します
-            if (go != _multiBattleUIManager.PlayerIcon.gameObject)
-            {
-                _multiBattleUIManager.PlacePlayerIconBy(false, go, S_SIZE);
-                _isEnemyIconPlaced = true;
-            }
-        }
     }
 
     /// <summary>
@@ -270,7 +249,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void InitPlayerIcon()
     {
-        _multiBattleUIManager.SetPlayerCharacter(GameManager._instance.GetPlayerCharacter(), true);
+        _multiBattleUIManager.InitPlayerCharacter(true, GameManager._instance.GetPlayerCharacter());
     }
 
     /// <summary>
@@ -327,6 +306,11 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// </summary>
     void SetEnemyInfo(Player player)
     {
+        //UIに対戦相手のキャラidに紐づいたキャラデータを設定します
+        _multiBattleUIManager.InitPlayerCharacter(
+            false,
+            GameManager._instance.FindCharacterById(player.GetIsSelectedCharacterId())
+         );
         _multiBattleUIManager.ShowPointBy(false, player.GetPoint());
         _multiBattleUIManager.SetSpButtonImageBy(false, player.GetCanUseSpSkill());
         _multiBattleDataManager.SetEnemy(player);

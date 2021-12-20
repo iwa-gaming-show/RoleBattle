@@ -56,6 +56,16 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// idからキャラクターを取得します
+    /// </summary>
+    /// <param name="characterId"></param>
+    /// <returns></returns>
+    public SelectableCharacter FindCharacterById(int characterId)
+    {
+        return _selectableCharacterList.FindCharacterById(characterId);
+    }
+
+    /// <summary>
     /// ランダムなプレイヤーのキャラクターを取得します
     /// </summary>
     /// <returns></returns>

@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using static WaitTimes;
 using static BattlePhase;
-using static CharacterIconSizes;
 
 public class BattleUIManager : SuperBattleUIManager
 {

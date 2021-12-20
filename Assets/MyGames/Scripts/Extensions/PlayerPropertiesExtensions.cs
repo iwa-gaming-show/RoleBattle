@@ -1,5 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Realtime;
+using static InitializationData;
 
 public static class PlayerPropertiesExtensions
 {
@@ -13,6 +14,29 @@ public static class PlayerPropertiesExtensions
     static readonly string IsCardJudgedKey = "IsCardJudged";
     static readonly string IsRetryingBattleKey = "IsRetryingBattle";
     static readonly string BattleCardTypeKey = "BattleCardType";
+    static readonly string IsSelectedCharacterIdKey = "IsSelectedCharacterId";
+
+    /// <summary>
+    /// 選択したキャラクターのIDを取得する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public static int GetIsSelectedCharacterId(this Player player)
+    {
+        return (player.CustomProperties[IsSelectedCharacterIdKey] is int characterId) ? characterId : CHARACTER_ID_FOR_UNSELECTED_PLAYER;
+    }
+
+    /// <summary>
+    /// 選択したキャラクターのIDを設定する
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="cardType"></param>
+    public static void SetIsSelectedCharacterId(this Player player, int characterId)
+    {
+        propsToSet[IsSelectedCharacterIdKey] = characterId;
+        player.SetCustomProperties(propsToSet);
+        propsToSet.Clear();
+    }
 
     /// <summary>
     /// プレイヤーのポイントを取得する
