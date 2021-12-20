@@ -21,14 +21,6 @@ public class PlayerUI : MonoBehaviour
     Image _spButtonImage;
 
     [SerializeField]
-    [Header("プレイヤーアイコンの配置場所を設定する")]
-    Transform _playerIconField;
-
-    [SerializeField]
-    [Header("Sp発動時のプレイヤーアイコンの配置場所を設定する")]
-    Transform _playerIconFieldOfSpSkill;
-
-    [SerializeField]
     [Header("カードを加える手札の設置場所を設定する")]
     Transform _handPanel;
 
@@ -39,6 +31,14 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     [Header("必殺技の演出を設定する")]
     GameObject _spProduction;
+
+    [SerializeField]
+    [Header("ポイントフィールドのキャラクターアイコンを設定します")]
+    PlayerIcon _playerIconSPrefab;
+
+    [SerializeField]
+    [Header("Sp発動時のキャラクターアイコンを設定します")]
+    PlayerIcon _playerIconMPrefab;
 
     int _cachePoint;
     Sprite _cacheSpButtonSprite;
@@ -82,18 +82,12 @@ public class PlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーアイコンを配置する
+    /// プレイヤーのキャラクターを設定する
     /// </summary>
-    public void PlacePlayerIcon(GameObject targetGo, CharacterIconSizes size)
+    public void SetPlayerCharacter(SelectableCharacter selectableCharacter)
     {
-        Transform settingTransform;
-
-        if (size == S_SIZE)
-            settingTransform = _playerIconField;
-        else
-            settingTransform = _playerIconFieldOfSpSkill;
-
-        targetGo.transform.SetParent(settingTransform, false);
+        _playerIconSPrefab.SetPlayerCharacterIcon(selectableCharacter.FindIconImageBy(S_SIZE));
+        _playerIconMPrefab.SetPlayerCharacterIcon(selectableCharacter.FindIconImageBy(M_SIZE));
     }
 
     /// <summary>

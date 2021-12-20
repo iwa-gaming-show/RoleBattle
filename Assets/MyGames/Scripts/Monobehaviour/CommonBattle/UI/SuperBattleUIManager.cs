@@ -66,11 +66,6 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public abstract UniTask ActivateSpSkill(bool isPlayer);
-
-    /// <summary>
-    /// プレイヤーのキャラクターを設定する
-    /// </summary>
-    public abstract void SetPlayerCharacter(SelectableCharacter selectableCharacter, bool isPlayer);
     #endregion
 
     /// <summary>
@@ -101,17 +96,6 @@ public abstract class SuperBattleUIManager : MonoBehaviour
         else setSprite = _spButtonIcons[1];//使用済み
 
         GetPlayerUI(isPlayer).SetSpButtonSprite(setSprite);
-    }
-
-    /// <summary>
-    /// プレイヤーアイコンを配置する
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <param name="targetGo"></param>
-    /// <param name="size"></param>
-    public void PlacePlayerIconBy(bool isPlayer, GameObject targetGo, CharacterIconSizes size)
-    {
-        GetPlayerUI(isPlayer).PlacePlayerIcon(targetGo, size);
     }
 
     /// <summary>

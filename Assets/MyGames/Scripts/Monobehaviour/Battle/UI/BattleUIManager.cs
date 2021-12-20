@@ -8,13 +8,6 @@ using static CharacterIconSizes;
 public class BattleUIManager : SuperBattleUIManager
 {
     IBattleDataManager _battleDataManager;
-    [SerializeField]
-    [Header("Sサイズプレイヤーのアイコンのプレハブを設定する")]
-    PlayerIcon _playerIconSPrefab;
-
-    [SerializeField]
-    [Header("Mサイズプレイヤーのアイコンのプレハブを設定する")]
-    PlayerIcon _playerIconMPrefab;
 
     new void Start()
     {
@@ -55,18 +48,6 @@ public class BattleUIManager : SuperBattleUIManager
         SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
-
-    /// <summary>
-    /// プレイヤーのキャラクターを設定する
-    /// </summary>
-    public override void SetPlayerCharacter(SelectableCharacter selectableCharacter, bool isPlayer)
-    {
-        PlayerIcon iconS = CreatePlayerIconBy(_playerIconSPrefab, selectableCharacter.FindIconImageBy(S_SIZE));
-        PlayerIcon iconM = CreatePlayerIconBy(_playerIconMPrefab, selectableCharacter.FindIconImageBy(M_SIZE));
-        //自身のアイコンを配置
-        PlacePlayerIconBy(isPlayer, iconS.gameObject, S_SIZE);
-        PlacePlayerIconBy(isPlayer, iconM.gameObject, M_SIZE);
-    }
     #endregion
 
     /// <summary>
@@ -74,20 +55,8 @@ public class BattleUIManager : SuperBattleUIManager
     /// </summary>
     public void InitPlayerCharacter()
     {
-        SetPlayerCharacter(GameManager._instance.GetPlayerCharacter(), true);//playerの設定
-        SetPlayerCharacter(GameManager._instance.GetRandomPlayerCharacter(), false);//enemyの設定
-    }
-
-    /// <summary>
-    /// プレイヤーのアイコンを作成します
-    /// </summary>
-    /// <param name="size"></param>
-    /// <param name="selectableCharacter"></param>
-    PlayerIcon CreatePlayerIconBy(PlayerIcon iconPrefab, Sprite characterSprite)
-    {
-        PlayerIcon icon = Instantiate(iconPrefab);
-        icon.SetPlayerCharacterIcon(characterSprite);
-        return icon;
+        _playerUI.SetPlayerCharacter(GameManager._instance.GetPlayerCharacter());//playerの設定
+        _enemyUI.SetPlayerCharacter(GameManager._instance.GetRandomPlayerCharacter());//enemyの設定
     }
 
     /// <summary>
