@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static CharacterIconSizes;
 using static SEType;
+using static PlayerPrefsKey;
 
 public class PlayerCharacterOption : MonoBehaviour,
     ISelectedCharacterObserver,
@@ -121,7 +122,7 @@ public class PlayerCharacterOption : MonoBehaviour,
         //未選択なら保存扱いにして何もしない
         if (_selectedCharacter == null) return true;
 
-        PlayerPrefs.SetInt("SelectedCharacterId", _selectedCharacter.Id);
+        PlayerPrefs.SetInt(SELECTED_CHARACTER_ID, _selectedCharacter.Id);
         PlayerPrefs.Save();
         return true;
     }

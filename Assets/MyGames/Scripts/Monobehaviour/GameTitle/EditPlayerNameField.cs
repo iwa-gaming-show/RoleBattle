@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static InitializationData;
 using static SEType;
+using static PlayerPrefsKey;
 
 public class EditPlayerNameField : MonoBehaviour,
     IGameOption
@@ -130,9 +131,9 @@ public class EditPlayerNameField : MonoBehaviour,
     {
         //未編集なら保存扱いにして何もしない
         if (_playerName.text == PLAYER_NAME_FOR_UNEDITED_PLAYER) return true;
-        if (_playerName.text == PlayerPrefs.GetString("PlayerName")) return true;
+        if (_playerName.text == PlayerPrefs.GetString(PLAYER_NAME)) return true;
 
-        PlayerPrefs.SetString("PlayerName", _playerName.text);
+        PlayerPrefs.SetString(PLAYER_NAME , _playerName.text);
         PlayerPrefs.Save();
         return true;
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static InitializationData;
+using static PlayerPrefsKey;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,11 +49,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetAudioVolume()
     {
-        if (PlayerPrefs.HasKey("SEVolume"))
-            _seVolume = PlayerPrefs.GetFloat("SEVolume");
+        if (PlayerPrefs.HasKey(SE_VOLUME))
+            _seVolume = PlayerPrefs.GetFloat(SE_VOLUME);
 
-        if (PlayerPrefs.HasKey("BgmVolume"))
-            _bgmVolume = PlayerPrefs.GetFloat("BgmVolume");
+        if (PlayerPrefs.HasKey(BGM_VOLUME))
+            _bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME);
     }
 
     #region// seを再生します
@@ -81,8 +82,8 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public string GetPlayerName()
     {
-        if (PlayerPrefs.HasKey("PlayerName"))
-            return PlayerPrefs.GetString("PlayerName");
+        if (PlayerPrefs.HasKey(PLAYER_NAME))
+            return PlayerPrefs.GetString(PLAYER_NAME);
 
         return PLAYER_NAME_FOR_UNEDITED_PLAYER;
     }
@@ -94,8 +95,8 @@ public class GameManager : MonoBehaviour
     public SelectableCharacter GetPlayerCharacter()
     {
         int searchId;
-        if (PlayerPrefs.HasKey("SelectedCharacterId"))
-            searchId = PlayerPrefs.GetInt("SelectedCharacterId");
+        if (PlayerPrefs.HasKey(SELECTED_CHARACTER_ID))
+            searchId = PlayerPrefs.GetInt(SELECTED_CHARACTER_ID);
         else
             searchId = CHARACTER_ID_FOR_UNSELECTED_PLAYER;//未選択時はフェンサーのidを指定する
 

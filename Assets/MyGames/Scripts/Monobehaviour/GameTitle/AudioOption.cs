@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static SEType;
+using static PlayerPrefsKey;
 
 public class AudioOption : MonoBehaviour,
     IGameOption,
@@ -46,9 +47,9 @@ public class AudioOption : MonoBehaviour,
     public bool Save()
     {
         //未編集なら保存扱いにして何もしない
-        if (_seValue == PlayerPrefs.GetFloat("SEVolume")) return true;
+        if (_seValue == PlayerPrefs.GetFloat(SE_VOLUME)) return true;
 
-        PlayerPrefs.SetFloat("SEVolume", _seValue);
+        PlayerPrefs.SetFloat(SE_VOLUME, _seValue);
         PlayerPrefs.Save();
         GameManager._instance.SetAudioVolume();//設定した値を反映するため
         return true;
