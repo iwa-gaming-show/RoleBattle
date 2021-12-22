@@ -38,10 +38,14 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToShowOptionWindow()
     {
+        GameManager._instance.PlayerSE(SEType.OPTION_CLICK);
         CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
     }
 
-
+    /// <summary>
+    /// シーンを読み込みます
+    /// </summary>
+    /// <param name="scene"></param>
     void ClickToLoadScene(SceneType scene)
     {
         if (isFirstClick) return;

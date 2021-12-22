@@ -12,6 +12,13 @@ public class GameManager : MonoBehaviour
     [Header("キャラクターリストのスクリプタブルオブジェクトを設定")]
     SelectableCharacterList _selectableCharacterList;
 
+    [SerializeField]
+    [Header("SEリストのスクリプタブルオブジェクトを設定")]
+    SEList _seList;
+
+    AudioSource _seSudioSource;
+    AudioSource _bgmSudioSource;
+
     public SelectableCharacterList SelectableCharacterList => _selectableCharacterList;
 
     private void Awake()
@@ -21,11 +28,23 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            _seSudioSource = gameObject.AddComponent<AudioSource>();
+            _bgmSudioSource = gameObject.AddComponent<AudioSource>();
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// SEを再生します
+    /// </summary>
+    public void PlayerSE(SEType _seType)
+    {
+        AudioClip _seClip = _seList.FindSEClipByType(_seType);
+        if (_seClip != null)
+            _seSudioSource.PlayOneShot(_seClip);
     }
 
     /// <summary>
