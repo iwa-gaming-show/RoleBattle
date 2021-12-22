@@ -38,7 +38,7 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToShowOptionWindow()
     {
-        GameManager._instance.PlayerSE(SEType.OPTION_CLICK);
+        GameManager._instance.PlaySE(SEType.OPTION_CLICK);
         CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
     }
 

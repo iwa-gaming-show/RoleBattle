@@ -16,10 +16,15 @@ public class GameManager : MonoBehaviour
     [Header("SEリストのスクリプタブルオブジェクトを設定")]
     SEList _seList;
 
+
     AudioSource _seSudioSource;
     AudioSource _bgmSudioSource;
+    float _seVolume = 1.0f;
+    float _bgmVolume = 1.0f;
 
     public SelectableCharacterList SelectableCharacterList => _selectableCharacterList;
+    public float SEVolume => _seVolume;
+    public float BgmVolume => _bgmVolume;
 
     private void Awake()
     {
@@ -30,6 +35,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             _seSudioSource = gameObject.AddComponent<AudioSource>();
             _bgmSudioSource = gameObject.AddComponent<AudioSource>();
+            SetAudioVolume();
         }
         else
         {
@@ -38,14 +44,36 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// SEを再生します
+    /// 音量を設定します
     /// </summary>
-    public void PlayerSE(SEType _seType)
+    public void SetAudioVolume()
     {
-        AudioClip _seClip = _seList.FindSEClipByType(_seType);
-        if (_seClip != null)
-            _seSudioSource.PlayOneShot(_seClip);
+        if (PlayerPrefs.HasKey("SEVolume"))
+            _seVolume = PlayerPrefs.GetFloat("SEVolume");
+
+        if (PlayerPrefs.HasKey("BgmVolume"))
+            _bgmVolume = PlayerPrefs.GetFloat("BgmVolume");
     }
+
+    #region// seを再生します
+    public void PlaySE(SEType seType)
+    {
+        AudioClip seClip = _seList.FindSEClipByType(seType);
+        PlayerOneShotForSE(seClip, _seVolume);
+    }
+
+    public void PlaySE(SEType seType, float volume)
+    {
+        AudioClip seClip = _seList.FindSEClipByType(seType);
+        PlayerOneShotForSE(seClip, volume);
+    }
+
+    void PlayerOneShotForSE(AudioClip seClip, float volume)
+    {
+        if (seClip == null) return;
+        _seSudioSource.PlayOneShot(seClip, volume);
+    }
+    #endregion
 
     /// <summary>
     /// プレイヤー名を取得します

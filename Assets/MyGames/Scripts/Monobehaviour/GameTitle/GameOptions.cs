@@ -1,4 +1,5 @@
 using UnityEngine;
+using static SEType;
 
 public class GameOptions : MonoBehaviour, IToggleable
 {
@@ -38,6 +39,7 @@ public class GameOptions : MonoBehaviour, IToggleable
         if (_selectedMenu == GameOptionMenu.PLAYER) return;
         _selectedMenu = GameOptionMenu.PLAYER;
 
+        GameManager._instance.PlaySE(OPTION_CLICK);
         _ItoggleablePlayerOp.ToggleUI(true);
         _ItoggleableAudioOp.ToggleUI(false);
     }
@@ -50,6 +52,7 @@ public class GameOptions : MonoBehaviour, IToggleable
         if (_selectedMenu == GameOptionMenu.AUDIO) return;
         _selectedMenu = GameOptionMenu.AUDIO;
 
+        GameManager._instance.PlaySE(OPTION_CLICK);
         _ItoggleableAudioOp.ToggleUI(true);
         _ItoggleablePlayerOp.ToggleUI(false);
     }
@@ -59,6 +62,7 @@ public class GameOptions : MonoBehaviour, IToggleable
     /// </summary>
     public void OnClickToToggleOptionWindow(bool isActive)
     {
+        GameManager._instance.PlaySE(OPTION_CLICK);
         ToggleUI(isActive);
     }
 
@@ -80,6 +84,7 @@ public class GameOptions : MonoBehaviour, IToggleable
         //todo
         //IGameOptionにSaveメソッドを実装、trueが返ってきたら保存完了
         //保存しましたとダイアログを表示する
+        GameManager._instance.PlaySE(SAVE_CLICK);
         Debug.Log("保存しました");
     }
 }

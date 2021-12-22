@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static InitializationData;
+using static SEType;
 
 public class EditPlayerNameField : MonoBehaviour,
     IGameOption
@@ -88,6 +89,7 @@ public class EditPlayerNameField : MonoBehaviour,
     /// </summary>
     public void OnClickToShowEditField()
     {
+        GameManager._instance.PlaySE(OPTION_CLICK);
         ActivateEditOrView(true);
     }
 

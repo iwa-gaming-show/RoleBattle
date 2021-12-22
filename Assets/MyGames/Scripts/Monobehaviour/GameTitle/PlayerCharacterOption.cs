@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static CharacterIconSizes;
+using static SEType;
 
 public class PlayerCharacterOption : MonoBehaviour,
     ISelectedCharacterObserver,
@@ -45,6 +46,7 @@ public class PlayerCharacterOption : MonoBehaviour,
     /// <param name="isActive"></param>
     public void OnClickToToggleCharaSelePanel(bool isActive)
     {
+        GameManager._instance.PlaySE(OPTION_CLICK);
         ToggleUI(isActive);
     }
 

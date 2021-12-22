@@ -93,7 +93,7 @@ namespace Photon.Realtime
 
         /// <summary>
         /// Adds a given scripting define symbol to all build target groups
-        /// You can see all scripting define symbols ( not the internal ones, only the one for this project), in the PlayerSettings inspector
+        /// You can see all scripting define symbols ( not the internal ones, only the one for this project), in the PlaySEttings inspector
         /// </summary>
         /// <param name="defineSymbol">Define symbol.</param>
         public static void AddScriptingDefineSymbolToAllBuildTargetGroups(string defineSymbol)
