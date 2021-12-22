@@ -24,6 +24,9 @@ public class AudioOption : MonoBehaviour,
     //入力内容を保持
     float _seValue;
     float _bgmValue;
+    bool _isEdited;
+
+    public bool IsEdited => _isEdited;
 
     void Start()
     {
@@ -48,6 +51,7 @@ public class AudioOption : MonoBehaviour,
     {
         //未編集なら保存扱いにして何もしない
         if (_seValue == PlayerPrefs.GetFloat(SE_VOLUME)) return true;
+        if (_isEdited == false) return true;
 
         PlayerPrefs.SetFloat(SE_VOLUME, _seValue);
         PlayerPrefs.Save();
@@ -62,6 +66,7 @@ public class AudioOption : MonoBehaviour,
     {
         _seValue = ConvertToSE(_seSlider);
         GameManager._instance.PlaySE(OPTION_CLICK, _seValue);
+        _isEdited = true;
     }
 
     /// <summary>
