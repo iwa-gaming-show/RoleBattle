@@ -13,7 +13,6 @@ using static BattleResult;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
-using UnityEngine.SceneManagement;
 
 public class BattlePun2Script : MonoBehaviourPunCallbacks,
     IPunTurnManagerCallbacks,
