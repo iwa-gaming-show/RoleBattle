@@ -369,6 +369,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1983631998101756306, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
   m_PrefabInstance: {fileID: 8900892210001788668}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1268741414 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1871062866361243517, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+  m_PrefabInstance: {fileID: 8900892210001788668}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f803a33ab028b49ce8887d950843fe00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1303979748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -702,6 +713,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: e1ed256217a9d48759c051b452eb53cc, type: 2}
     - target: {fileID: 1207789959063799655, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
+      propertyPath: _bgmList
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d9fe6f89e6ef46f7adec34e39adc315, type: 2}
+    - target: {fileID: 1207789959063799655, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
       propertyPath: _selectableCharacterList
       value: 
       objectReference: {fileID: 11400000, guid: e58f896e173354709b06423c8f9f65f7, type: 2}
@@ -907,6 +922,22 @@ PrefabInstance:
       propertyPath: _descriptionsOfSpSkill.Array.data[2]
       value: 
       objectReference: {fileID: 8900892210001788669}
+    - target: {fileID: 1955755401951558701, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755401951558701, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755401951558701, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755401951558701, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -240
+      objectReference: {fileID: 0}
     - target: {fileID: 1955755401951558702, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -927,6 +958,22 @@ PrefabInstance:
       propertyPath: m_OverrideSorting
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544161, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544161, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544161, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955755402409544162, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1955755402763808309, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Name
       value: PlayerIconFIeld
@@ -942,7 +989,7 @@ PrefabInstance:
     - target: {fileID: 2300787795313970702, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _playerIconMPrefab
       value: 
-      objectReference: {fileID: 1600432476}
+      objectReference: {fileID: 1268741414}
     - target: {fileID: 2300787795313970702, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _playerIconSPrefab
       value: 
@@ -1151,6 +1198,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 0P
       objectReference: {fileID: 0}
+    - target: {fileID: 8069012153811301062, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: _playerIconMPrefab
+      value: 
+      objectReference: {fileID: 1600432476}
     - target: {fileID: 8069012153811301062, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: _playerIconFieldOfSpSkill
       value: 

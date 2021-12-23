@@ -43,3 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e101744175d14d2cbfa5cf80e32a92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _selectableCharacterList: {fileID: 11400000, guid: e58f896e173354709b06423c8f9f65f7, type: 2}
+  _seList: {fileID: 11400000, guid: e1ed256217a9d48759c051b452eb53cc, type: 2}
+  _bgmList: {fileID: 11400000, guid: 4d9fe6f89e6ef46f7adec34e39adc315, type: 2}
+  _seVolume: 1
+  _bgmVolume: 1
