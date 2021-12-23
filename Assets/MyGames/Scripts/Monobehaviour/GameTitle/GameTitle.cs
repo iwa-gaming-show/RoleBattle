@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using static SEType;
+using static BgmType;
 using static SceneType;
 
 public class GameTitle : MonoBehaviour
@@ -20,6 +21,7 @@ public class GameTitle : MonoBehaviour
     void Start()
     {
         Fade._instance.StartFadeIn().Forget();
+        GameManager._instance.PlayBgm(BgmType.GAME_TITLE);
         //最初はオプションをオフにする
         _optionCanvas.SetActive(false);
     }
@@ -31,7 +33,7 @@ public class GameTitle : MonoBehaviour
     {
         if (_isFirstClick) return;
         _isFirstClick = true;
-        GameManager._instance.PlaySE(BATTLE);
+        GameManager._instance.PlaySE(SEType.BATTLE);
         GameManager._instance.ClickToLoadScene(Battle);
     }
 
@@ -42,7 +44,7 @@ public class GameTitle : MonoBehaviour
     {
         if (_isFirstClick) return;
         _isFirstClick = true;
-        GameManager._instance.PlaySE(BATTLE);
+        GameManager._instance.PlaySE(SEType.BATTLE);
         GameManager._instance.ClickToLoadScene(MultiBattle);
     }
 

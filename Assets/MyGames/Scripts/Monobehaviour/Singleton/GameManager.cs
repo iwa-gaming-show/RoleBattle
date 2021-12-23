@@ -19,10 +19,21 @@ public class GameManager : MonoBehaviour
     [Header("SEリストのスクリプタブルオブジェクトを設定")]
     SEList _seList;
 
-    AudioSource _seSudioSource;
-    AudioSource _bgmSudioSource;
+    [SerializeField]
+    [Header("BGMリストのスクリプタブルオブジェクトを設定")]
+    BgmList _bgmList;
+
+    [SerializeField]
+    [Header("SEの音量を設定")]
+    [Range(0, 1.0f)]
     float _seVolume = 1.0f;
+    [SerializeField]
+    [Header("Bgmの音量を設定")]
+    [Range(0, 1.0f)]
     float _bgmVolume = 1.0f;
+
+    AudioSource _seAudioSource;
+    AudioSource _bgmAudioSource;
 
 
     public SelectableCharacterList SelectableCharacterList => _selectableCharacterList;
@@ -36,8 +47,8 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            _seSudioSource = gameObject.AddComponent<AudioSource>();
-            _bgmSudioSource = gameObject.AddComponent<AudioSource>();
+            _seAudioSource = gameObject.AddComponent<AudioSource>();
+            _bgmAudioSource = gameObject.AddComponent<AudioSource>();
             SetAudioVolume();
         }
         else
@@ -66,11 +77,32 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetAudioVolume()
     {
+        SetSE();
+        SetBgm();
+    }
+
+    /// <summary>
+    /// SEの設定をします
+    /// </summary>
+    void SetSE()
+    {
         if (PlayerPrefs.HasKey(SE_VOLUME))
             _seVolume = PlayerPrefs.GetFloat(SE_VOLUME);
 
+        _seAudioSource.playOnAwake = false;
+    }
+
+    /// <summary>
+    /// Bgmの設定をします
+    /// </summary>
+    void SetBgm()
+    {
         if (PlayerPrefs.HasKey(BGM_VOLUME))
             _bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME);
+
+        _bgmAudioSource.playOnAwake = false;
+        _bgmAudioSource.volume = _bgmVolume;
+        _bgmAudioSource.loop = true;
     }
 
     #region// seを再生します
@@ -89,9 +121,23 @@ public class GameManager : MonoBehaviour
     void PlayerOneShotForSE(AudioClip seClip, float volume)
     {
         if (seClip == null) return;
-        _seSudioSource.PlayOneShot(seClip, volume);
+        _seAudioSource.PlayOneShot(seClip, volume);
     }
     #endregion
+
+    /// <summary>
+    /// BGMを再生します
+    /// </summary>
+    public void PlayBgm(BgmType bgmType)
+    {
+        AudioClip bgmClip = _bgmList.FindBgmClipByType(bgmType);
+
+        //流れているbgmを停止
+        _bgmAudioSource.Stop();
+        //曲を設定し、再生
+        _bgmAudioSource.clip = bgmClip;
+        _bgmAudioSource.Play();
+    }
 
     /// <summary>
     /// プレイヤー名を取得します

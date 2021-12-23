@@ -64,6 +64,7 @@ public class BattleManager : MonoBehaviour,
     async UniTask PrepareBattle()
     {
         await Fade._instance.StartFadeIn();
+        GameManager._instance.PlayBgm(BgmType.BATTLE);
         await StartBattle(true);
     }
 

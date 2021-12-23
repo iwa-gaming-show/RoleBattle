@@ -261,6 +261,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     {
         SearchEnemy();
         _multiBattleDataManager.InitRoomData();
+        GameManager._instance.PlayBgm(BgmType.BATTLE);
         RpcStartBattle(true);
     }
 
