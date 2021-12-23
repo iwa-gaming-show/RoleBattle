@@ -48,12 +48,35 @@ public class AudioOption : MonoBehaviour,
     public bool Save()
     {
         //未編集なら保存扱いにして何もしない
-        if (_seValue == PlayerPrefs.GetFloat(SE_VOLUME)) return true;
         if (_isEdited == false) return true;
 
+        bool isSESaved = SaveSEVolume();
+        bool isBgmSaved = SaveBgmVolume();
+
+        return (isSESaved && isBgmSaved);  
+    }
+
+    /// <summary>
+    /// SEの音量を保存する
+    /// </summary>
+    /// <returns>saved</returns>
+    bool SaveSEVolume()
+    {
+        if (_seValue == PlayerPrefs.GetFloat(SE_VOLUME)) return true;
         PlayerPrefs.SetFloat(SE_VOLUME, _seValue);
         PlayerPrefs.Save();
-        GameManager._instance.SetAudioVolume();//設定した値を反映するため
+        return true;
+    }
+
+    /// <summary>
+    /// Bgmの音量を保存する
+    /// </summary>
+    /// <returns></returns>
+    bool SaveBgmVolume()
+    {
+        if (_bgmValue == PlayerPrefs.GetFloat(BGM_VOLUME)) return true;
+        PlayerPrefs.SetFloat(BGM_VOLUME, _bgmValue);
+        PlayerPrefs.Save();
         return true;
     }
 

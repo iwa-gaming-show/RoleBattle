@@ -991,6 +991,14 @@ PrefabInstance:
       propertyPath: m_text
       value: <i>BATTLE!</i>
       objectReference: {fileID: 0}
+    - target: {fileID: 4708454730988268298, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_text
+      value: <i>Round</i>
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708454730988268300, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4708454731235429174, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

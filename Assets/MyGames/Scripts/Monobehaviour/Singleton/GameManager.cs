@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 音量を設定します
     /// </summary>
-    public void SetAudioVolume()
+    void SetAudioVolume()
     {
         SetSE();
         SetBgm();

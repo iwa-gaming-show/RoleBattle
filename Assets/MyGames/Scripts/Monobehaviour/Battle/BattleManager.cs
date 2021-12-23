@@ -141,6 +141,7 @@ public class BattleManager : MonoBehaviour,
     {
         _battleDataManager.InitPlayerData();
         StartBattle(true).Forget();
+        _isFirstClick = false;
     }
 
     /// <summary>
