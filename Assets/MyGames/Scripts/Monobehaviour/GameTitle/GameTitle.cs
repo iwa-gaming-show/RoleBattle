@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using static SEType;
 using static SceneType;
 
@@ -11,7 +10,7 @@ public class GameTitle : MonoBehaviour
     [Header("OptionCanvasを設定")]
     GameObject _optionCanvas;
 
-    bool isFirstClick;
+    bool _isFirstClick;
 
     void Start()
     {
@@ -24,8 +23,10 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartCpuBattle()
     {
+        if (_isFirstClick) return;
+        _isFirstClick = true;
         GameManager._instance.PlaySE(BATTLE);
-        ClickToLoadScene(Battle);
+        GameManager._instance.ClickToLoadScene(Battle);
     }
 
     /// <summary>
@@ -33,8 +34,10 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartMultiBattle()
     {
+        if (_isFirstClick) return;
+        _isFirstClick = true;
         GameManager._instance.PlaySE(BATTLE);
-        ClickToLoadScene(MultiBattle);
+        GameManager._instance.ClickToLoadScene(MultiBattle);
     }
 
     /// <summary>
@@ -44,17 +47,5 @@ public class GameTitle : MonoBehaviour
     {
         GameManager._instance.PlaySE(OPTION_CLICK);
         CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
-    }
-
-    /// <summary>
-    /// シーンを読み込みます
-    /// </summary>
-    /// <param name="scene"></param>
-    void ClickToLoadScene(SceneType scene)
-    {
-        if (isFirstClick) return;
-        isFirstClick = true;
-
-        SceneManager.LoadScene(CommonAttribute.GetStringValue(scene));
     }
 }

@@ -107,7 +107,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     public override void OnDisconnected(DisconnectCause cause)
     {
         //タイトルへ
-        SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
+        GameManager._instance.ClickToLoadScene(SceneType.GameTitle);
     }
 
     /// <summary>

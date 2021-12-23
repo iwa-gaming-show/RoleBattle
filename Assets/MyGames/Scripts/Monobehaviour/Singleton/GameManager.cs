@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static InitializationData;
 using static PlayerPrefsKey;
 
@@ -42,6 +43,15 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// シーンを読み込みます
+    /// </summary>
+    /// <param name="scene"></param>
+    public void ClickToLoadScene(SceneType scene)
+    {
+        SceneManager.LoadScene(CommonAttribute.GetStringValue(scene));
     }
 
     /// <summary>

@@ -88,7 +88,7 @@ public class BattleManager : MonoBehaviour,
         _isFirstClick = true;
 
         GameManager._instance.PlaySE(TO_TITLE);
-        SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
+        GameManager._instance.ClickToLoadScene(SceneType.GameTitle);
     }
 
     /// <summary>
