@@ -105,25 +105,36 @@ public class GameManager : MonoBehaviour
         _bgmAudioSource.loop = true;
     }
 
-    #region// seを再生します
+    /// <summary>
+    /// seの音量を設定します
+    /// </summary>
+    /// <param name="seVolume"></param>
+    public void SetSEVolume(float seVolume)
+    {
+        _seVolume = seVolume;
+    }
+
+    /// <summary>
+    /// bgmの音量を設定します
+    /// </summary>
+    /// <param name="bgmValue"></param>
+    public void SetBgmVolume(float bgmValue)
+    {
+        _bgmVolume = bgmValue;
+        _bgmAudioSource.volume = _bgmVolume;
+    }
+
+    /// <summary>
+    /// SEを再生します
+    /// </summary>
+    /// <param name="seType"></param>
     public void PlaySE(SEType seType)
     {
         AudioClip seClip = _seList.FindSEClipByType(seType);
-        PlayerOneShotForSE(seClip, _seVolume);
-    }
-
-    public void PlaySE(SEType seType, float volume)
-    {
-        AudioClip seClip = _seList.FindSEClipByType(seType);
-        PlayerOneShotForSE(seClip, volume);
-    }
-
-    void PlayerOneShotForSE(AudioClip seClip, float volume)
-    {
         if (seClip == null) return;
-        _seAudioSource.PlayOneShot(seClip, volume);
+
+        _seAudioSource.PlayOneShot(seClip, _seVolume);
     }
-    #endregion
 
     /// <summary>
     /// BGMを再生します
@@ -131,6 +142,7 @@ public class GameManager : MonoBehaviour
     public void PlayBgm(BgmType bgmType)
     {
         AudioClip bgmClip = _bgmList.FindBgmClipByType(bgmType);
+        if (bgmClip == null) return;
 
         //流れているbgmを停止
         _bgmAudioSource.Stop();

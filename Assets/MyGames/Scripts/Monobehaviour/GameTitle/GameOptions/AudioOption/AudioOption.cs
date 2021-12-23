@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static SEType;
@@ -41,7 +39,7 @@ public class AudioOption : MonoBehaviour,
         _seValue = gm.SEVolume;
         _seSlider.value = ConvertToSlider(gm.SEVolume, _seSlider);
         _bgmValue = gm.BgmVolume;
-        _bgmSlider.value = gm.BgmVolume;
+        _bgmSlider.value = ConvertToSlider(gm.BgmVolume, _bgmSlider);
     }
 
     /// <summary>
@@ -64,30 +62,41 @@ public class AudioOption : MonoBehaviour,
     /// </summary>
     public void OnInputToSetSEVolume()
     {
-        _seValue = ConvertToSE(_seSlider);
-        GameManager._instance.PlaySE(OPTION_CLICK, _seValue);
+        _seValue = ConvertToAudio(_seSlider);
+        GameManager._instance.SetSEVolume(_seValue);
+        GameManager._instance.PlaySE(OPTION_CLICK);
         _isEdited = true;
     }
 
     /// <summary>
-    /// SEの値をスライダー用に変換します
+    /// 入力でBgmを設定します
     /// </summary>
-    /// <param name="seVolume"></param>
-    /// <returns></returns>
-    float ConvertToSlider(float seVolume, Slider slider)
+    public void OnInputToSetBgmVolume()
     {
-        return seVolume * slider.maxValue;//スライドを1~10の整数値で動かしたいため変換する
+        _bgmValue = ConvertToAudio(_bgmSlider);
+        GameManager._instance.SetBgmVolume(_bgmValue);
+        _isEdited = true;
     }
 
     /// <summary>
-    /// スライドの値をSE用に変換します
+    /// オーディオの値をスライダー用に変換します
+    /// </summary>
+    /// <param name="seVolume"></param>
+    /// <returns></returns>
+    float ConvertToSlider(float audioVolume, Slider slider)
+    {
+        return audioVolume * slider.maxValue;//スライドを1~10の整数値で動かしたいため変換する
+    }
+
+    /// <summary>
+    /// スライドの値をオーディオ用に変換します
     /// </summary>
     /// <param name="slideValue"></param>
     /// <returns></returns>
-    float ConvertToSE(Slider slider)
+    float ConvertToAudio(Slider slider)
     {
         //スライド中は音がうるさいので整数値(1 ~ 10)でスライドさせる。
-        //seのvolume値に合わせるため最大値で割って小数点に変換する例: 1 / 10 = 0.1f
+        //オーディオのvolume値に合わせるため最大値で割って小数点に変換する。例: 1 / 10 = 0.1f
         return slider.value / slider.maxValue;
     }
 
