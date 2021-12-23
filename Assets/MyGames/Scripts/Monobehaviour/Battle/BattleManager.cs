@@ -9,6 +9,7 @@ using static BattlePhase;
 using static CardJudgement;
 using static CardType;
 using static WaitTimes;
+using static SEType;
 using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour,
@@ -85,6 +86,7 @@ public class BattleManager : MonoBehaviour,
         if (_isFirstClick) return;
         _isFirstClick = true;
 
+        GameManager._instance.PlaySE(TO_TITLE);
         SceneManager.LoadScene(CommonAttribute.GetStringValue(SceneType.GameTitle));
     }
 

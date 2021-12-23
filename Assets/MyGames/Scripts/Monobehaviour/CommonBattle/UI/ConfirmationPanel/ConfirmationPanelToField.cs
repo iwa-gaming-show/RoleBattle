@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UIStrings;
+using static SEType;
 
 /// <summary>
 /// フィールドへ送るカードの確認UI

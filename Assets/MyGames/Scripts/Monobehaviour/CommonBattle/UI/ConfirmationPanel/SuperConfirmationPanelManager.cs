@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using static SEType;
 
 public abstract class SuperConfirmationPanelManager : MonoBehaviour,
     IConfirmationPanelManager
@@ -59,6 +60,7 @@ public abstract class SuperConfirmationPanelManager : MonoBehaviour,
         //すでに確認画面が表示されているなら何もしない
         if (IsActiveConfirmationPanel()) return;
 
+        GameManager._instance.PlaySE(STANDARD_CLICK);
         //カードを選択し、確認画面を表示しYesならフィールドへ移動します
         ViewConfirmationPanelFor(_confirmationPanelToField);
         _confirmationPanelToField.SetFieldConfirmationText(selectedCard);
@@ -82,6 +84,7 @@ public abstract class SuperConfirmationPanelManager : MonoBehaviour,
         //すでに確認画面が表示されているなら何もしない
         if (IsActiveConfirmationPanel()) return;
 
+        GameManager._instance.PlaySE(STANDARD_CLICK);
         //確認画面を表示しYesなら必殺技を発動します
         ViewConfirmationPanelFor(_confirmationPanelToSp);
         await WaitFieldConfirmationButton(_confirmationPanelToSp);
@@ -121,6 +124,7 @@ public abstract class SuperConfirmationPanelManager : MonoBehaviour,
     async UniTask WaitFieldConfirmationButton(IRequiredConfirmation confirmationPanel)
     {
         await UniTask.WaitUntil(() => confirmationPanel.IsConfirmed);
+        GameManager._instance.PlaySE(STANDARD_CLICK);
     }
 
     /// <summary>

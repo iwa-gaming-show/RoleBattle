@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static SEType;
+using static SceneType;
 
 public class GameTitle : MonoBehaviour
 {
@@ -22,7 +24,8 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartCpuBattle()
     {
-        ClickToLoadScene(SceneType.Battle);
+        GameManager._instance.PlaySE(BATTLE_CLICK);
+        ClickToLoadScene(Battle);
     }
 
     /// <summary>
@@ -30,7 +33,8 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartMultiBattle()
     {
-        ClickToLoadScene(SceneType.MultiBattle);
+        GameManager._instance.PlaySE(BATTLE_CLICK);
+        ClickToLoadScene(MultiBattle);
     }
 
     /// <summary>
@@ -38,7 +42,7 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToShowOptionWindow()
     {
-        GameManager._instance.PlaySE(SEType.OPTION_CLICK);
+        GameManager._instance.PlaySE(OPTION_CLICK);
         CanvasForObjectPool._instance.ToggleUIGameObject(_optionCanvas, true, transform);
     }
 
