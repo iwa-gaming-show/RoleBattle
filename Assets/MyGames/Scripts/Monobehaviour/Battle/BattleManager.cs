@@ -34,19 +34,12 @@ public class BattleManager : MonoBehaviour,
 
     int _countDownTime;
     bool _isFirstClick;
-
-    //CancellationToken _token;
     IBattleDataManager _battleDataManager;
 
-
-    #region プロパティ
-    //public CancellationToken Token => _token;
-    #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        //_token = this.GetCancellationTokenOnDestroy();
         Init();
     }
 
@@ -62,7 +55,16 @@ public class BattleManager : MonoBehaviour,
         _battleDataManager.CreatePlayerData();
         _battleDataManager.InitPlayerData();
         _battleUIManager.InitPlayerCharacter();
-        StartBattle(true).Forget();
+        PrepareBattle().Forget();
+    }
+
+    /// <summary>
+    /// バトルの準備をします
+    /// </summary>
+    async UniTask PrepareBattle()
+    {
+        await Fade._instance.StartFadeIn();
+        await StartBattle(true);
     }
 
     /// <summary>
