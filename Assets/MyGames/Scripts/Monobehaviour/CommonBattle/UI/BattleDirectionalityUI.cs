@@ -2,9 +2,9 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 using static UIStrings;
 using static WaitTimes;
-using DG.Tweening;
 
 public class BattleDirectionalityUI : MonoBehaviour,
     IBattleDirectionalityUI

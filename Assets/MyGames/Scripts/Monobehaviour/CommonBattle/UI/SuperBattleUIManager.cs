@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
+using static SEType;
 
 public abstract class SuperBattleUIManager : MonoBehaviour
 {
@@ -184,6 +185,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask ShowThePlayerTurnText(bool isPlayer)
     {
+        if (isPlayer) GameManager._instance.PlaySE(MY_TURN);
         await _IdirectionalityUI.ShowThePlayerTurnText(isPlayer);
     }
 
@@ -233,6 +235,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask AnnounceToOpenTheCard()
     {
+        GameManager._instance.PlaySE(BATTLE);
         await _IdirectionalityUI.AnnounceToOpenTheCard();
     }
 

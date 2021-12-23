@@ -74,7 +74,7 @@ public class BattleManager : MonoBehaviour,
         if (_isFirstClick) return;
         _isFirstClick = true;
 
-        GameManager._instance.PlaySE(BATTLE_CLICK);
+        GameManager._instance.PlaySE(BATTLE);
         RetryBattle();
     }
 

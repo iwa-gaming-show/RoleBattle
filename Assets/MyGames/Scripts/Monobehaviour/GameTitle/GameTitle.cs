@@ -24,7 +24,7 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartCpuBattle()
     {
-        GameManager._instance.PlaySE(BATTLE_CLICK);
+        GameManager._instance.PlaySE(BATTLE);
         ClickToLoadScene(Battle);
     }
 
@@ -33,7 +33,7 @@ public class GameTitle : MonoBehaviour
     /// </summary>
     public void OnClickToStartMultiBattle()
     {
-        GameManager._instance.PlaySE(BATTLE_CLICK);
+        GameManager._instance.PlaySE(BATTLE);
         ClickToLoadScene(MultiBattle);
     }
 

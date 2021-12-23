@@ -5,7 +5,8 @@ public enum SEType
 {
     OPTION_CLICK,
     SAVE_CLICK,
-    BATTLE_CLICK,
+    BATTLE,
     STANDARD_CLICK,
-    TO_TITLE
+    TO_TITLE,
+    MY_TURN
 }
