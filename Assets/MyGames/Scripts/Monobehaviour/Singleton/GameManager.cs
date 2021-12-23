@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 using static InitializationData;
 using static PlayerPrefsKey;
 
@@ -18,11 +19,11 @@ public class GameManager : MonoBehaviour
     [Header("SEリストのスクリプタブルオブジェクトを設定")]
     SEList _seList;
 
-
     AudioSource _seSudioSource;
     AudioSource _bgmSudioSource;
     float _seVolume = 1.0f;
     float _bgmVolume = 1.0f;
+
 
     public SelectableCharacterList SelectableCharacterList => _selectableCharacterList;
     public float SEVolume => _seVolume;
@@ -51,6 +52,12 @@ public class GameManager : MonoBehaviour
     /// <param name="scene"></param>
     public void ClickToLoadScene(SceneType scene)
     {
+        LoadScene(scene).Forget();
+    }
+
+    async UniTask LoadScene(SceneType scene)
+    {
+        await Fade._instance.StartFadeOut();
         SceneManager.LoadScene(CommonAttribute.GetStringValue(scene));
     }
 

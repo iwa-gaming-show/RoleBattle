@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 using static SEType;
 using static SceneType;
 
@@ -10,10 +11,15 @@ public class GameTitle : MonoBehaviour
     [Header("OptionCanvasを設定")]
     GameObject _optionCanvas;
 
+    [SerializeField]
+    [Header("最初からフェードインが完了しているか")]
+    bool _isFirstFadeComplete;
+
     bool _isFirstClick;
 
     void Start()
     {
+        Fade._instance.StartFadeIn().Forget();
         //最初はオプションをオフにする
         _optionCanvas.SetActive(false);
     }

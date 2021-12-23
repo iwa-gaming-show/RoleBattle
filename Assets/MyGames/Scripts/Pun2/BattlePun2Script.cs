@@ -52,8 +52,9 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
         _photonView = GetComponent<PhotonView>();
     }
 
-    void Start()
+    async UniTask Start()
     {
+        await Fade._instance.StartFadeIn();
         PhotonNetwork.ConnectUsingSettings();
         _multiBattleDataManager = ServiceLocator.Resolve<IMultiBattleDataManager>();
     }
