@@ -21,6 +21,8 @@ public class PlayerOption : MonoBehaviour,
     IGameOption _IplayerCharacterOption;
     IGameOption _IEditPlayerNameField;
 
+    public bool IsEdited => (_IplayerCharacterOption.IsEdited || _IEditPlayerNameField.IsEdited);
+
     void Start()
     {
         _IplayerCharacterOption = _playerCharacterOption;

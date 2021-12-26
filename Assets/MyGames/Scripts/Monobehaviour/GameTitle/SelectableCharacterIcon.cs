@@ -6,7 +6,8 @@ using static CharacterIconSizes;
 using UnityEngine.EventSystems;
 
 public class SelectableCharacterIcon : MonoBehaviour,
-    IPointerClickHandler
+    IPointerClickHandler,
+    ISelectedCharacterSubject
 {
     Image _iconImage;
     SelectableCharacter _selectableCharacter;

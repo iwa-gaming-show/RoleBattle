@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static InitializationData;
@@ -20,6 +18,10 @@ public class EditPlayerNameField : MonoBehaviour,
     [SerializeField]
     [Header("編集用テキストフィールドを設定")]
     InputField _editInputField;
+
+    bool _isEdited;
+
+    public bool IsEdited => _isEdited;
 
     // Start is called before the first frame update
     void Start()
@@ -82,6 +84,7 @@ public class EditPlayerNameField : MonoBehaviour,
     {
         //プレイヤー名を設定し、編集画面を閉じる
         _playerName.text = input;
+        _isEdited = true;
         ActivateEditOrView(false);
     }
 
@@ -102,7 +105,7 @@ public class EditPlayerNameField : MonoBehaviour,
     {
         //編集フィールドがアクティブなら表示フィールドは閉じます
         ToggleEditInputField(isActivateEditField);
-        ToggleViewField(!isActivateEditField);
+        ToggleViewField(isActivateEditField == false);
     }
 
     /// <summary>
@@ -132,6 +135,7 @@ public class EditPlayerNameField : MonoBehaviour,
         //未編集なら保存扱いにして何もしない
         if (_playerName.text == PLAYER_NAME_FOR_UNEDITED_PLAYER) return true;
         if (_playerName.text == PlayerPrefs.GetString(PLAYER_NAME)) return true;
+        if (_isEdited == false) return true;
 
         PlayerPrefs.SetString(PLAYER_NAME , _playerName.text);
         PlayerPrefs.Save();

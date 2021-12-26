@@ -4,7 +4,9 @@ using Cysharp.Threading.Tasks;
 using static SEType;
 using static WaitTimes;
 
-public class GameOptions : MonoBehaviour, IToggleable
+public class GameOptions : MonoBehaviour,
+    IToggleable,
+    IEditDialogObserver
 {
     GameOptionMenu _selectedMenu;
 
@@ -20,10 +22,16 @@ public class GameOptions : MonoBehaviour, IToggleable
     [Header("保存通知のダイアログを設定する")]
     GameObject _savedDialog;
 
+    [SerializeField]
+    [Header("編集通知のダイアログを設定する")]
+    EditedDialog _editedDialog;
+
     IGameOption _IplayerOption;
     IGameOption _IaudioOption;
     IToggleable _ItoggleablePlayerOp;
     IToggleable _ItoggleableAudioOp;
+    IToggleable _ItoggleableEditDialog;
+    IEditDialogSubject _IeditDialogSubject;
 
     void Start()
     {
@@ -36,6 +44,9 @@ public class GameOptions : MonoBehaviour, IToggleable
         _IaudioOption = _audioOption;
         _ItoggleablePlayerOp = _playerOption;
         _ItoggleableAudioOp = _audioOption;
+        _ItoggleableEditDialog = _editedDialog;
+        _IeditDialogSubject = _editedDialog;
+        _IeditDialogSubject.AddObserver(this);
     }
 
     /// <summary>
@@ -70,7 +81,43 @@ public class GameOptions : MonoBehaviour, IToggleable
     public void OnClickToToggleOptionWindow(bool isActive)
     {
         GameManager._instance.PlaySE(OPTION_CLICK);
-        ToggleUI(isActive);
+
+        if (isActive == false && CheckEdited())
+            ViewEditedDialog();
+        else
+            ToggleUI(isActive);
+    }
+
+    /// <summary>
+    /// 編集通知のダイアログを表示します
+    /// </summary>
+    void ViewEditedDialog()
+    {
+        _ItoggleableEditDialog.ToggleUI(true);
+    }
+
+    /// <summary>
+    /// 編集通知ダイアログの応答を受け取ります
+    /// </summary>
+    /// <param name="isSaved"></param>
+    void IEditDialogObserver.Update(bool isSaved)
+    {
+        Debug.Log("保存するか:" + isSaved);
+        _ItoggleableEditDialog.ToggleUI(false);
+        //各子クラスのisEditedをfalseにする。
+        if (isSaved)
+        {
+            Save();
+        }
+    }
+
+    /// <summary>
+    /// 編集をしたか確認します
+    /// </summary>
+    /// <returns></returns>
+    bool CheckEdited()
+    {
+        return (_IplayerOption.IsEdited || _IaudioOption.IsEdited);
     }
 
     /// <summary>
@@ -85,6 +132,14 @@ public class GameOptions : MonoBehaviour, IToggleable
     /// 設定を保存する
     /// </summary>
     public void OnClickToSave()
+    {
+        Save();
+    }
+
+    /// <summary>
+    /// 設定を保存します
+    /// </summary>
+    void Save()
     {
         bool isPlayerOptionSaved = _IplayerOption.Save();
         bool isAudioOptionSaved = _IaudioOption.Save();

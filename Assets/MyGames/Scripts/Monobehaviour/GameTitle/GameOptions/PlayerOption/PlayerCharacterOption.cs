@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static CharacterIconSizes;
@@ -31,8 +29,10 @@ public class PlayerCharacterOption : MonoBehaviour,
     [Header("選択したキャラクターを表示するImageUIを設定")]
     Image _selectedCharacterImage;
 
-
+    bool _isEdited;
     SelectableCharacter _selectedCharacter;//選択したキャラクターを保持する
+
+    public bool IsEdited => _isEdited;
 
     // Start is called before the first frame update
     void Start()
@@ -77,7 +77,8 @@ public class PlayerCharacterOption : MonoBehaviour,
     void CreateCharacterIcon(SelectableCharacter target)
     {
         SelectableCharacterIcon characterIcon = Instantiate(_characterIconPrefab, _charaSelePanel.transform, false);
-        characterIcon?.AddObserver(this);
+        ISelectedCharacterSubject subject = characterIcon.GetComponent<ISelectedCharacterSubject>();
+        subject?.AddObserver(this);
         characterIcon?.SetSelectableCharacter(target);
     }
 
@@ -90,6 +91,7 @@ public class PlayerCharacterOption : MonoBehaviour,
         //パネルを閉じ、選択したキャラを保持し、UIに反映する
         ToggleUI(false);
         ViewSelectedCharacter(selectedCharacter);
+        _isEdited = true;
     }
 
     /// <summary>
@@ -121,6 +123,7 @@ public class PlayerCharacterOption : MonoBehaviour,
     {
         //未選択なら保存扱いにして何もしない
         if (_selectedCharacter == null) return true;
+        if (_isEdited == false) return true;
 
         PlayerPrefs.SetInt(SELECTED_CHARACTER_ID, _selectedCharacter.Id);
         PlayerPrefs.Save();
