@@ -6347,5 +6347,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3519984261200562413, guid: 464c84978e57440cf934a2a2c54befc0, type: 3}
+      propertyPath: _optionCanvasTransform
+      value: 
+      objectReference: {fileID: 457410760}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 464c84978e57440cf934a2a2c54befc0, type: 3}
