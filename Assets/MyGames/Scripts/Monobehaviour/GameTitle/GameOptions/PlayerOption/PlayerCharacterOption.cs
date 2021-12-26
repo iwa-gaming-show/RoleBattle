@@ -5,9 +5,7 @@ using static SEType;
 using static PlayerPrefsKey;
 
 public class PlayerCharacterOption : MonoBehaviour,
-    ISelectedCharacterObserver,
-    IGameOption,
-    IToggleable
+    IPlayerCharacterOption
 {
     [SerializeField]
     [Header("CharaSeleWrapperを設定する")]
@@ -128,5 +126,10 @@ public class PlayerCharacterOption : MonoBehaviour,
         PlayerPrefs.SetInt(SELECTED_CHARACTER_ID, _selectedCharacter.Id);
         PlayerPrefs.Save();
         return true;
+    }
+
+    public void SetEdited(bool isEdited)
+    {
+        _isEdited = isEdited;
     }
 }

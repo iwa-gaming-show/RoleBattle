@@ -4,8 +4,7 @@ using static SEType;
 using static PlayerPrefsKey;
 
 public class AudioOption : MonoBehaviour,
-    IGameOption,
-    IToggleable
+    IAudioOption
 {
     [SerializeField]
     [Header("SettingCanvasのTransformを設定する")]
@@ -132,5 +131,10 @@ public class AudioOption : MonoBehaviour,
     public void ToggleUI(bool isActive)
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, _settingCanvasTransform);
+    }
+
+    public void SetEdited(bool isEdited)
+    {
+        _isEdited = isEdited;
     }
 }

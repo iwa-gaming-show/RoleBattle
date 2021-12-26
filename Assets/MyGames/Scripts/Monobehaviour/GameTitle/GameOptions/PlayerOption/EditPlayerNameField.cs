@@ -5,7 +5,7 @@ using static SEType;
 using static PlayerPrefsKey;
 
 public class EditPlayerNameField : MonoBehaviour,
-    IGameOption
+    IEditPlayerNameField
 {
     [SerializeField]
     [Header("表示用フィールド設定")]
@@ -140,5 +140,10 @@ public class EditPlayerNameField : MonoBehaviour,
         PlayerPrefs.SetString(PLAYER_NAME , _playerName.text);
         PlayerPrefs.Save();
         return true;
+    }
+
+    public void SetEdited(bool isEdited)
+    {
+        _isEdited = isEdited;
     }
 }

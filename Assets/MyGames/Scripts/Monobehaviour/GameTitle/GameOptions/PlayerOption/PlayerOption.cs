@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerOption : MonoBehaviour,
-    IGameOption,
-    IToggleable
+    IPlayerOption
 {
     [SerializeField]
     [Header("SettingCanvasのTransformを設定する")]
@@ -18,8 +15,8 @@ public class PlayerOption : MonoBehaviour,
     [Header("PlayerNameを設定する")]
     EditPlayerNameField _editPlayerNameField;
 
-    IGameOption _IplayerCharacterOption;
-    IGameOption _IEditPlayerNameField;
+    IPlayerCharacterOption _IplayerCharacterOption;
+    IEditPlayerNameField _IEditPlayerNameField;
 
     public bool IsEdited => (_IplayerCharacterOption.IsEdited || _IEditPlayerNameField.IsEdited);
 
@@ -47,5 +44,11 @@ public class PlayerOption : MonoBehaviour,
     public void ToggleUI(bool isActive)
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(gameObject, isActive, _settingCanvasTransform);
+    }
+
+    public void SetEdited(bool isEdited)
+    {
+        _IplayerCharacterOption.SetEdited(isEdited);
+        _IEditPlayerNameField.SetEdited(isEdited);
     }
 }
