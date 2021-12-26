@@ -35,10 +35,9 @@ public class AudioOption : MonoBehaviour,
     /// </summary>
     void InitAudioOption(GameManager gm)
     {
-        _seValue = gm.SEVolume;
         _seSlider.value = ConvertToSlider(gm.SEVolume, _seSlider);
-        _bgmValue = gm.BgmVolume;
         _bgmSlider.value = ConvertToSlider(gm.BgmVolume, _bgmSlider);
+        _isEdited = false;//sliderのvalueに値をセットすると、OnInputイベントが発生するが初期化時は編集フラグは降ろしておきたい
     }
 
     /// <summary>
@@ -82,7 +81,7 @@ public class AudioOption : MonoBehaviour,
     }
 
     /// <summary>
-    /// 入力でSEを設定します
+    /// 入力でSEを設定します※slider.valueに値をセットした場合も呼ばれます
     /// </summary>
     public void OnInputToSetSEVolume()
     {
@@ -93,7 +92,7 @@ public class AudioOption : MonoBehaviour,
     }
 
     /// <summary>
-    /// 入力でBgmを設定します
+    /// 入力でBgmを設定します※slider.valueに値をセットした場合も呼ばれます
     /// </summary>
     public void OnInputToSetBgmVolume()
     {

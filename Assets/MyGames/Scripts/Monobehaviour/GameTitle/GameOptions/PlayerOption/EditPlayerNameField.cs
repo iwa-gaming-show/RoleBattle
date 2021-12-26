@@ -133,9 +133,9 @@ public class EditPlayerNameField : MonoBehaviour,
     public bool Save()
     {
         //未編集なら保存扱いにして何もしない
+        if (_isEdited == false) return true;
         if (_playerName.text == PLAYER_NAME_FOR_UNEDITED_PLAYER) return true;
         if (_playerName.text == PlayerPrefs.GetString(PLAYER_NAME)) return true;
-        if (_isEdited == false) return true;
 
         PlayerPrefs.SetString(PLAYER_NAME , _playerName.text);
         PlayerPrefs.Save();
