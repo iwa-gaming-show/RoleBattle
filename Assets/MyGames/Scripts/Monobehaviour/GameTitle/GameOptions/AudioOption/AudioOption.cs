@@ -62,6 +62,7 @@ public class AudioOption : MonoBehaviour,
     /// <returns>saved</returns>
     bool SaveSEVolume()
     {
+        //未編集なら保存扱いにして何もしない
         if (_seValue == PlayerPrefs.GetFloat(SE_VOLUME)) return true;
         PlayerPrefs.SetFloat(SE_VOLUME, _seValue);
         PlayerPrefs.Save();
@@ -74,6 +75,7 @@ public class AudioOption : MonoBehaviour,
     /// <returns></returns>
     bool SaveBgmVolume()
     {
+        //未編集なら保存扱いにして何もしない
         if (_bgmValue == PlayerPrefs.GetFloat(BGM_VOLUME)) return true;
         PlayerPrefs.SetFloat(BGM_VOLUME, _bgmValue);
         PlayerPrefs.Save();

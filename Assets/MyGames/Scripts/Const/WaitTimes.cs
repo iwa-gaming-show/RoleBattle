@@ -37,4 +37,9 @@ public static class WaitTimes
     /// 必殺技演出の表示時間
     /// </summary>
     public static readonly float SPECIAL_SKILL_PRODUCTION_DISPLAY_TIME = 2f;
+
+    /// <summary>
+    /// 保存通知のダイアログの表示時間
+    /// </summary>
+    public static readonly float SAVED_DIALOG_DISPLAY_TIME = 1f;
 }

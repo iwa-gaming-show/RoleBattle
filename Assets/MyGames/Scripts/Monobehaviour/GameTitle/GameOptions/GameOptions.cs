@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 using static SEType;
+using static WaitTimes;
 
 public class GameOptions : MonoBehaviour, IToggleable
 {
@@ -12,6 +15,10 @@ public class GameOptions : MonoBehaviour, IToggleable
     [SerializeField]
     [Header("AudioOptionのUIを設定")]
     AudioOption _audioOption;
+
+    [SerializeField]
+    [Header("保存通知のダイアログを設定する")]
+    GameObject _savedDialog;
 
     IGameOption _IplayerOption;
     IGameOption _IaudioOption;
@@ -79,12 +86,48 @@ public class GameOptions : MonoBehaviour, IToggleable
     /// </summary>
     public void OnClickToSave()
     {
-        _IplayerOption.Save();
-        _IaudioOption.Save();
-        //todo
-        //IGameOptionにSaveメソッドを実装、trueが返ってきたら保存完了
-        //保存しましたとダイアログを表示する
+        bool isPlayerOptionSaved = _IplayerOption.Save();
+        bool isAudioOptionSaved = _IaudioOption.Save();
+
+        if (isPlayerOptionSaved && isAudioOptionSaved)
+        {
+            SaveComplete().Forget();
+        }
+        else
+        {
+            //todo 保存無効時の処理
+            Debug.Log("保存ができませんでした");
+        }
+    }
+
+    /// <summary>
+    /// 保存を完了する
+    /// </summary>
+    async UniTask SaveComplete()
+    {
         GameManager._instance.PlaySE(SAVE_CLICK);
-        Debug.Log("保存しました");
+        await ViewSavedDialog();
+        ToggleUI(false);
+    }
+
+    /// <summary>
+    /// 保存通知のダイアログを表示する
+    /// </summary>
+    /// <returns></returns>
+    async UniTask ViewSavedDialog()
+    {
+        ToggleDisplaySavedDialog(true);
+        await UniTask.Delay(TimeSpan.FromSeconds(SAVED_DIALOG_DISPLAY_TIME));
+        ToggleDisplaySavedDialog(false);
+        await UniTask.Yield();
+    }
+
+    /// <summary>
+    /// 保存通知のダイアログの表示を切り替える
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleDisplaySavedDialog(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_savedDialog, isActive, transform);
     }
 }
