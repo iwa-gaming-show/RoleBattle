@@ -142,6 +142,16 @@ public class EditPlayerNameField : MonoBehaviour,
         return true;
     }
 
+    /// <summary>
+    /// 保存しない場合
+    /// </summary>
+    /// <returns></returns>
+    public void DoNotSave()
+    {
+        //設定を未編集時に初期化します
+        InitPlayerName(GameManager._instance.GetPlayerName());
+    }
+
     public void SetEdited(bool isEdited)
     {
         _isEdited = isEdited;

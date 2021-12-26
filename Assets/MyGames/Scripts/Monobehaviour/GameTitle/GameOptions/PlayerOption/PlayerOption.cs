@@ -38,6 +38,16 @@ public class PlayerOption : MonoBehaviour,
     }
 
     /// <summary>
+    /// 保存しない場合
+    /// </summary>
+    /// <returns></returns>
+    public void DoNotSave()
+    {
+        _IEditPlayerNameField.DoNotSave();
+        _IplayerCharacterOption.DoNotSave();
+    }
+
+    /// <summary>
     /// UIの表示の切り替えを行います
     /// </summary>
     /// <param name="isActive"></param>

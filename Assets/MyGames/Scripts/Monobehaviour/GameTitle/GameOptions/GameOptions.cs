@@ -6,7 +6,8 @@ using static WaitTimes;
 
 public class GameOptions : MonoBehaviour,
     IToggleable,
-    IEditDialogObserver
+    IEditDialogObserver,
+    IGameOption
 {
     GameOptionMenu _selectedMenu;
 
@@ -103,7 +104,7 @@ public class GameOptions : MonoBehaviour,
         if (isSaved)
             Save();
         else
-            ToggleUI(false);
+            DoNotSave();
 
         ///編集フラグをリセット
         _IplayerOption.SetEdited(false);
@@ -138,7 +139,7 @@ public class GameOptions : MonoBehaviour,
     /// <summary>
     /// 設定を保存します
     /// </summary>
-    void Save()
+    public bool Save()
     {
         bool isPlayerOptionSaved = _IplayerOption.Save();
         bool isAudioOptionSaved = _IaudioOption.Save();
@@ -146,12 +147,24 @@ public class GameOptions : MonoBehaviour,
         if (isPlayerOptionSaved && isAudioOptionSaved)
         {
             SaveComplete().Forget();
+            return true;
         }
         else
         {
             //todo 保存無効時の処理
             Debug.Log("保存ができませんでした");
+            return false;
         }
+    }
+
+    /// <summary>
+    /// 保存しない場合
+    /// </summary>
+    public void DoNotSave()
+    {
+        _IplayerOption.DoNotSave();
+        _IaudioOption.DoNotSave();
+        ToggleUI(false);
     }
 
     /// <summary>

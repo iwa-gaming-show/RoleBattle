@@ -27,16 +27,16 @@ public class AudioOption : MonoBehaviour,
 
     void Start()
     {
-        InitAudioOption(GameManager._instance);
+        InitAudioOption(GameManager._instance.SEVolume, GameManager._instance.BgmVolume);
     }
 
     /// <summary>
     /// サウンドの初期設定をします
     /// </summary>
-    void InitAudioOption(GameManager gm)
+    void InitAudioOption(float seVolume, float bgmVolume)
     {
-        _seSlider.value = ConvertToSlider(gm.SEVolume, _seSlider);
-        _bgmSlider.value = ConvertToSlider(gm.BgmVolume, _bgmSlider);
+        _seSlider.value = ConvertToSlider(seVolume, _seSlider);
+        _bgmSlider.value = ConvertToSlider(bgmVolume, _bgmSlider);
         _isEdited = false;//sliderのvalueに値をセットすると、OnInputイベントが発生するが初期化時は編集フラグは降ろしておきたい
     }
 
@@ -52,6 +52,16 @@ public class AudioOption : MonoBehaviour,
         bool isBgmSaved = SaveBgmVolume();
 
         return (isSESaved && isBgmSaved);  
+    }
+
+    /// <summary>
+    /// 保存しない場合
+    /// </summary>
+    /// <returns></returns>
+    public void DoNotSave()
+    {
+        //設定を未編集時に初期化します
+        InitAudioOption(PlayerPrefs.GetFloat(SE_VOLUME), PlayerPrefs.GetFloat(BGM_VOLUME));
     }
 
     /// <summary>
