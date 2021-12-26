@@ -26,12 +26,9 @@ public class GameOptions : MonoBehaviour,
     [Header("編集通知のダイアログを設定する")]
     EditedDialog _editedDialog;
 
-    IGameOption _IplayerOption;
-    IGameOption _IaudioOption;
-    IToggleable _ItoggleablePlayerOp;
-    IToggleable _ItoggleableAudioOp;
-    IToggleable _ItoggleableEditDialog;
-    IEditDialogSubject _IeditDialogSubject;
+    IPlayerOption _IplayerOption;
+    IAudioOption _IaudioOption;
+    IEditDialog _IeditDialog;
 
     void Start()
     {
@@ -42,11 +39,8 @@ public class GameOptions : MonoBehaviour,
     {
         _IplayerOption = _playerOption;
         _IaudioOption = _audioOption;
-        _ItoggleablePlayerOp = _playerOption;
-        _ItoggleableAudioOp = _audioOption;
-        _ItoggleableEditDialog = _editedDialog;
-        _IeditDialogSubject = _editedDialog;
-        _IeditDialogSubject.AddObserver(this);
+        _IeditDialog = _editedDialog;
+        _IeditDialog.AddObserver(this);
     }
 
     /// <summary>
@@ -58,8 +52,8 @@ public class GameOptions : MonoBehaviour,
         _selectedMenu = GameOptionMenu.PLAYER;
 
         GameManager._instance.PlaySE(OPTION_CLICK);
-        _ItoggleablePlayerOp.ToggleUI(true);
-        _ItoggleableAudioOp.ToggleUI(false);
+        _IplayerOption.ToggleUI(true);
+        _IaudioOption.ToggleUI(false);
     }
 
     /// <summary>
@@ -71,8 +65,8 @@ public class GameOptions : MonoBehaviour,
         _selectedMenu = GameOptionMenu.AUDIO;
 
         GameManager._instance.PlaySE(OPTION_CLICK);
-        _ItoggleableAudioOp.ToggleUI(true);
-        _ItoggleablePlayerOp.ToggleUI(false);
+        _IplayerOption.ToggleUI(false);
+        _IaudioOption.ToggleUI(true);
     }
 
     /// <summary>
@@ -82,6 +76,7 @@ public class GameOptions : MonoBehaviour,
     {
         GameManager._instance.PlaySE(OPTION_CLICK);
 
+        //編集後に閉じた場合
         if (isActive == false && CheckEdited())
             ViewEditedDialog();
         else
@@ -93,7 +88,7 @@ public class GameOptions : MonoBehaviour,
     /// </summary>
     void ViewEditedDialog()
     {
-        _ItoggleableEditDialog.ToggleUI(true);
+        _IeditDialog.ToggleUI(true);
     }
 
     /// <summary>
@@ -102,13 +97,17 @@ public class GameOptions : MonoBehaviour,
     /// <param name="isSaved"></param>
     void IEditDialogObserver.Update(bool isSaved)
     {
-        Debug.Log("保存するか:" + isSaved);
-        _ItoggleableEditDialog.ToggleUI(false);
-        //各子クラスのisEditedをfalseにする。
+        _IeditDialog.ToggleUI(false);
+
+        //保存する場合
         if (isSaved)
-        {
             Save();
-        }
+        else
+            ToggleUI(false);
+
+        ///編集フラグをリセット
+        _IplayerOption.SetEdited(false);
+        _IaudioOption.SetEdited(false);
     }
 
     /// <summary>
