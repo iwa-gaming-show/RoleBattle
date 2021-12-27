@@ -66,6 +66,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
         //二重送信防止
         if (_multiBattleDataManager.Player.GetIsRetryingBattle()) return;
         _multiBattleDataManager.Player.SetIsRetryingBattle(true);
+        Loading._instance.ToggleUI(true);
     }
 
     /// <summary>
@@ -267,6 +268,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     [PunRPC]
     void RpcStartBattle(bool isFirstBattle)
     {
+        Loading._instance.ToggleUI(false);
         StartBattle(isFirstBattle).Forget();
     }
 

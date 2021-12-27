@@ -27,16 +27,12 @@ public class Fade : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            _canvasGroup = GetComponent<CanvasGroup>();
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    void Start()
-    {
-        _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     /// <summary>
