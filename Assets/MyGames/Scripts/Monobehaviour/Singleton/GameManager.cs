@@ -133,7 +133,16 @@ public class GameManager : MonoBehaviour
         AudioClip seClip = _seList.FindSEClipByType(seType);
         if (seClip == null) return;
 
-        _seAudioSource.PlayOneShot(seClip, _seVolume);
+        PlayOneShot(seClip);
+    }
+
+    /// <summary>
+    /// 音声を一度だけ再生します
+    /// </summary>
+    /// <param name="clip"></param>
+    void PlayOneShot(AudioClip clip)
+    {
+        _seAudioSource.PlayOneShot(clip, _seVolume);
     }
 
     /// <summary>
@@ -195,5 +204,18 @@ public class GameManager : MonoBehaviour
     public SelectableCharacter GetRandomPlayerCharacter()
     {
         return _selectableCharacterList.GetRandomPlayerCharacter();
+    }
+
+    /// <summary>
+    /// キャラクターのボイスを再生します
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="situation"></param>
+    public void PlayVoiceBy(SelectableCharacter character, CharacterVoiceSituations situation)
+    {
+        AudioClip voice = character?.FindAudioBy(situation);
+        if (voice == null) return;
+
+        PlayOneShot(voice);
     }
 }

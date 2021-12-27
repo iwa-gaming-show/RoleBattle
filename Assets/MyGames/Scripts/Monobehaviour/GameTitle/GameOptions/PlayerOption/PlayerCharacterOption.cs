@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using static CharacterIconSizes;
+using static CharacterVoiceSituations;
 using static SEType;
 using static PlayerPrefsKey;
 
@@ -88,6 +89,7 @@ public class PlayerCharacterOption : MonoBehaviour,
     {
         //パネルを閉じ、選択したキャラを保持し、UIに反映する
         ToggleUI(false);
+        GameManager._instance.PlayVoiceBy(selectedCharacter, GLEETING);
         ViewSelectedCharacter(selectedCharacter);
         _isEdited = true;
     }

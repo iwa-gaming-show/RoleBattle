@@ -86,6 +86,25 @@ public class SelectableCharacter
             return null;
         }
     }
+
+    /// <summary>
+    /// シチュエーションによる音声を探します
+    /// </summary>
+    /// <param name="situation"></param>
+    /// <returns></returns>
+    public AudioClip FindAudioBy(CharacterVoiceSituations situation)
+    {
+        try
+        {
+            Voices voice = _voices.Find(voice => voice.Situation == situation);
+            return voice.Audio;
+        }
+        catch
+        {
+            Debug.Log("音声が見つかりませんでした");
+            return null;
+        }
+    }
 }
 
 [System.Serializable]
@@ -114,10 +133,10 @@ public class Voices
 
     [SerializeField]
     [Tooltip("音声")]
-    string _audio;
+    AudioClip _audio;
 
     #region //プロパティ
     public CharacterVoiceSituations Situation => _situation;
-    public string Audio => _audio;
+    public AudioClip Audio => _audio;
     #endregion
 }
