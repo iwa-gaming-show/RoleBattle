@@ -61,12 +61,19 @@ public class MultiBattleUIManager : SuperBattleUIManager
     [PunRPC]
     public override async UniTask ActivateSpSkill(bool isPlayer)
     {
+        //seを再生するキャラクターを取得
+        int characterId = _dataM.GetPlayerBy(isPlayer).GetIsSelectedCharacterId();
+        SelectableCharacter selectedCharacter = GameManager._instance.FindCharacterById(characterId);
+
         if (isPlayer)
         {
             _dataM.ActivatingSpSkillState(_dataM.GetPlayerBy(true));
             _photonView.RPC("ActivateSpSkill", RpcTarget.Others, false);
         }
+        //seを再生
         GameManager._instance.PlaySE(SP_SKILL);
+        GameManager._instance.PlayVoiceBy(selectedCharacter, CharacterVoiceSituations.SP_SKILL);
+
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
     #endregion
