@@ -1,7 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
 using static BattlePhase;
-using static SEType;
 using static WaitTimes;
 
 public class BattleUIManager : SuperBattleUIManager
@@ -45,7 +44,8 @@ public class BattleUIManager : SuperBattleUIManager
     {
         _battleDataManager.ActivatingSpSkillState(isPlayer);
         SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
-        GameManager._instance.PlaySE(SP_SKILL);
+        GameManager._instance.PlaySE(SEType.SP_SKILL);
+        GameManager._instance.PlayVoiceBy(_battleDataManager.GetSelectedCharacterBy(isPlayer), CharacterVoiceSituations.SP_SKILL);
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
     #endregion
@@ -55,8 +55,8 @@ public class BattleUIManager : SuperBattleUIManager
     /// </summary>
     public void InitPlayerCharacter()
     {
-        _playerUI.SetPlayerCharacter(GameManager._instance.GetPlayerCharacter());//playerの設定
-        _enemyUI.SetPlayerCharacter(GameManager._instance.GetRandomPlayerCharacter());//enemyの設定
+        _playerUI.SetPlayerCharacter(_battleDataManager.GetSelectedCharacterBy(true));//playerの設定
+        _enemyUI.SetPlayerCharacter(_battleDataManager.GetSelectedCharacterBy(false));//enemyの設定
     }
 
     /// <summary>

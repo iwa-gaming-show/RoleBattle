@@ -161,6 +161,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// キャラクターのボイスを再生します
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="situation"></param>
+    public void PlayVoiceBy(SelectableCharacter character, CharacterVoiceSituations situation)
+    {
+        AudioClip voice = character?.FindAudioBy(situation);
+        if (voice == null) return;
+
+        PlayOneShot(voice);
+    }
+
+    /// <summary>
     /// プレイヤー名を取得します
     /// </summary>
     /// <returns></returns>
@@ -204,18 +217,5 @@ public class GameManager : MonoBehaviour
     public SelectableCharacter GetRandomPlayerCharacter()
     {
         return _selectableCharacterList.GetRandomPlayerCharacter();
-    }
-
-    /// <summary>
-    /// キャラクターのボイスを再生します
-    /// </summary>
-    /// <param name="character"></param>
-    /// <param name="situation"></param>
-    public void PlayVoiceBy(SelectableCharacter character, CharacterVoiceSituations situation)
-    {
-        AudioClip voice = character?.FindAudioBy(situation);
-        if (voice == null) return;
-
-        PlayOneShot(voice);
     }
 }

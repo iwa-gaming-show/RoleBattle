@@ -13,6 +13,7 @@ public class PlayerData
     bool _isCardJudged;
     bool _isRetryingBattle;
     CardType _battleCardType;
+    SelectableCharacter _selectedCharacter;
 
 
     public int Point => _point;
@@ -22,6 +23,7 @@ public class PlayerData
     public bool IsUsingSpInRound => _isUsingSpInRound;
     public bool CanUseSpSkill => _canUseSpSkill;
     public CardType BattleCardType => _battleCardType;
+    public SelectableCharacter SelectedCharacter => _selectedCharacter;
 
     public PlayerData(int point)
     {
@@ -35,6 +37,16 @@ public class PlayerData
     public void SetPoint(int point)
     {
         _point = point;
+    }
+
+    /// <summary>
+    /// 選択キャラクターを保持します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    public void SetSelectedCharacter(bool isPlayer, GameManager gm)
+    {
+        if (isPlayer) _selectedCharacter = gm.GetPlayerCharacter();
+        else _selectedCharacter = gm.GetRandomPlayerCharacter();
     }
 
     /// <summary>

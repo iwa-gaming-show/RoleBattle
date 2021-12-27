@@ -52,6 +52,13 @@ public interface IBattleDataManager
     bool GetPlayerTurnEndBy(bool isPlayer);
 
     /// <summary>
+    /// プレイヤーの選択したキャラクターのデータを取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    SelectableCharacter GetSelectedCharacterBy(bool isPlayer);
+
+    /// <summary>
     /// プレイヤーの状態をリセットする
     /// </summary>
     void ResetPlayerState();

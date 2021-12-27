@@ -24,6 +24,8 @@ MonoBehaviour:
     _voices:
     - _situation: 0
       _audio: {fileID: 8300000, guid: 366084f9262354664a3d8135ce262d88, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: a95049189c17142dabc78b57b57354f0, type: 3}
   - _id: 2
     _name: "\u30E1\u30A4\u30C9\u30E9\u30F3\u30C1\u30E3\u30FC"
     _description: 
@@ -35,6 +37,8 @@ MonoBehaviour:
     _voices:
     - _situation: 0
       _audio: {fileID: 8300000, guid: f10c650013161484583fadc5cc2758c8, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: 8d8abc81d43ca4d47b054915bc370441, type: 3}
   - _id: 3
     _name: "\u30CD\u30AF\u30ED\u30DE\u30F3\u30B5\u30FC"
     _description: 
@@ -46,6 +50,8 @@ MonoBehaviour:
     _voices:
     - _situation: 0
       _audio: {fileID: 8300000, guid: 8a6afba3979c24573bdb73f25b934bef, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: 8412019c656524da49477687f8d1897d, type: 3}
   - _id: 4
     _name: "\u30D7\u30EA\u59EB"
     _description: 
@@ -54,7 +60,11 @@ MonoBehaviour:
       _icon: {fileID: 21300000, guid: 817cd27db77ed4778b1e188e7b635c5f, type: 3}
     - _size: 1
       _icon: {fileID: 21300000, guid: 836afa54f9ede4349be4c14d18902103, type: 3}
-    _voices: []
+    _voices:
+    - _situation: 0
+      _audio: {fileID: 8300000, guid: 9a42dcc1a01a1490f8fdb31cebd8914b, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: d858c330db08a45e6968bf2191806f0c, type: 3}
   - _id: 5
     _name: "\u30C9\u30EA\u30EB\u30E9\u30F3\u30B5\u30FC"
     _description: 
@@ -66,6 +76,8 @@ MonoBehaviour:
     _voices:
     - _situation: 0
       _audio: {fileID: 8300000, guid: 3ecc3dd1cde5b4da99d671bfc54d24f4, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: d2f0cc2f3865549c8bc918a255d214a6, type: 3}
   - _id: 6
     _name: "\u30B8\u30E3\u30C3\u30AF"
     _description: 
@@ -77,3 +89,5 @@ MonoBehaviour:
     _voices:
     - _situation: 0
       _audio: {fileID: 8300000, guid: ece64d26d29dd4422a6e9f42f24fb1eb, type: 3}
+    - _situation: 1
+      _audio: {fileID: 8300000, guid: 60018bda014754557850f83d82a888cd, type: 3}

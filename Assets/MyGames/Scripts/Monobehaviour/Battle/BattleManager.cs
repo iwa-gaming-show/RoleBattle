@@ -10,7 +10,6 @@ using static CardJudgement;
 using static CardType;
 using static WaitTimes;
 using static SEType;
-using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour,
     IBattleAdvanceable,
