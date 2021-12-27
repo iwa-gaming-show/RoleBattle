@@ -108,6 +108,14 @@ public class PlayerCharacterOption : MonoBehaviour,
     }
 
     /// <summary>
+    /// クリックでボイスを再生します
+    /// </summary>
+    public void OnClickToPlayCharacterVoice()
+    {
+        GameManager._instance.PlayRandomVoiceBy(_selectedCharacter);
+    }
+
+    /// <summary>
     /// 選択済みキャラクターの情報をUIに表示します
     /// </summary>
     void InitSelectedCharacterWindow(SelectableCharacter selectedCharacter)

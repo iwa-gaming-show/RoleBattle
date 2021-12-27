@@ -167,7 +167,18 @@ public class GameManager : MonoBehaviour
     /// <param name="situation"></param>
     public void PlayVoiceBy(SelectableCharacter character, CharacterVoiceSituations situation)
     {
-        AudioClip voice = character?.FindAudioBy(situation);
+        AudioClip voice = character?.FindVoiceBy(situation);
+        if (voice == null) return;
+
+        PlayOneShot(voice);
+    }
+
+    /// <summary>
+    /// ランダムにボイスを再生します
+    /// </summary>
+    public void PlayRandomVoiceBy(SelectableCharacter character)
+    {
+        AudioClip voice = character?.GetRandomVoice();
         if (voice == null) return;
 
         PlayOneShot(voice);

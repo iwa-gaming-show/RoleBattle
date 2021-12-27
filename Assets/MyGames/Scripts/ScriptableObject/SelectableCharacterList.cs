@@ -92,7 +92,7 @@ public class SelectableCharacter
     /// </summary>
     /// <param name="situation"></param>
     /// <returns></returns>
-    public AudioClip FindAudioBy(CharacterVoiceSituations situation)
+    public AudioClip FindVoiceBy(CharacterVoiceSituations situation)
     {
         try
         {
@@ -102,6 +102,23 @@ public class SelectableCharacter
         catch
         {
             Debug.Log("音声が見つかりませんでした");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// ランダムに音声を取得します
+    /// </summary>
+    /// <returns></returns>
+    public AudioClip GetRandomVoice()
+    {
+        try
+        {
+            return _voices[Random.Range(0, _voices.Count)]?.Audio;
+        }
+        catch
+        {
+            Debug.Log("キーに対応した音声が見つかりませんした");
             return null;
         }
     }
