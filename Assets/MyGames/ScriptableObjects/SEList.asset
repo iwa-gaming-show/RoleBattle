@@ -25,3 +25,5 @@ MonoBehaviour:
     _seClip: {fileID: 8300000, guid: 340cfbc65a755410dafffc8c6bab7b49, type: 3}
   - _seType: 5
     _seClip: {fileID: 8300000, guid: 89e6bc608da7b47d4914f3d9c2484e48, type: 3}
+  - _seType: 6
+    _seClip: {fileID: 8300000, guid: e2b374cb728bf4c8390ffed94d831c92, type: 3}

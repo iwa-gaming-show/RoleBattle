@@ -1,8 +1,8 @@
 using System;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using static WaitTimes;
 using static BattlePhase;
+using static SEType;
+using static WaitTimes;
 
 public class BattleUIManager : SuperBattleUIManager
 {
@@ -45,6 +45,7 @@ public class BattleUIManager : SuperBattleUIManager
     {
         _battleDataManager.ActivatingSpSkillState(isPlayer);
         SetSpButtonImageBy(isPlayer, _battleDataManager.GetCanUseSpSkillBy(isPlayer));
+        GameManager._instance.PlaySE(SP_SKILL);
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
     #endregion

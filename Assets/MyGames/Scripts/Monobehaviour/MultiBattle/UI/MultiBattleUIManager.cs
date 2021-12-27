@@ -2,8 +2,9 @@
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using System.Linq;
-using static WaitTimes;
 using static BattlePhase;
+using static SEType;
+using static WaitTimes;
 
 public class MultiBattleUIManager : SuperBattleUIManager
 {
@@ -65,7 +66,7 @@ public class MultiBattleUIManager : SuperBattleUIManager
             _dataM.ActivatingSpSkillState(_dataM.GetPlayerBy(true));
             _photonView.RPC("ActivateSpSkill", RpcTarget.Others, false);
         }
-
+        GameManager._instance.PlaySE(SP_SKILL);
         await GetPlayerUI(isPlayer).ActivateDirectingOfSpSkill(isPlayer);
     }
     #endregion

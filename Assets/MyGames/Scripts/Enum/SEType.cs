@@ -8,5 +8,6 @@ public enum SEType
     BATTLE,
     STANDARD_CLICK,
     TO_TITLE,
-    MY_TURN
+    MY_TURN,
+    SP_SKILL
 }
