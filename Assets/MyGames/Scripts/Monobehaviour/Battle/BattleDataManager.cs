@@ -74,15 +74,7 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
         GetPlayerDataBy(isPlayer).SetPoint(INITIAL_POINT);
         GetPlayerDataBy(isPlayer).SetCanUseSpSkill(true);
         GetPlayerDataBy(isPlayer).SetIsMyTurn(false);
-    }
-
-    /// <summary>
-    /// エネミーが必殺技を使用するラウンドを設定します
-    /// </summary>
-    /// <param name="spSkillRound"></param>
-    public void SetEnemySpSkillRound(int spSkillRound)
-    {
-        _enemySpSkillRound = spSkillRound;
+        GetPlayerDataBy(isPlayer).SetSelectedCharacter(isPlayer, GameManager._instance);
     }
 
     /// <summary>
@@ -102,6 +94,86 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
         GetPlayerDataBy(isPlayer).SetIsUsingSpInRound(true);
         GetPlayerDataBy(isPlayer).SetCanUseSpSkill(false);
         _isDuringDirectingSpSkill = true;
+    }
+
+    /// <summary>
+    /// プレイヤーごとに状態をリセットする
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    void ResetStateBy(bool isPlayer)
+    {
+        GetPlayerDataBy(isPlayer).SetIsMyTurnEnd(false);
+        GetPlayerDataBy(isPlayer).SetIsUsingSpInRound(false);
+        GetPlayerDataBy(isPlayer).SetIsFieldCardPlaced(false);
+    }
+
+    /// <summary>
+    /// バトルの結果を取得する
+    /// </summary>
+    public BattleResult JudgeBattleResult()
+    {
+        int playerPoint = _player.Point;
+        int enemyPoint = _enemy.Point;
+
+        if (playerPoint > enemyPoint) return BATTLE_WIN;
+        if (playerPoint == enemyPoint) return BATTLE_DRAW;
+        return BATTLE_LOSE;
+    }
+
+    /// <summary>
+    /// プレイヤーのフィールドに配置したカードの種類を設定します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <param name="cardType"></param>
+    public void RegisterCardTypeBy(bool isPlayer, CardType cardType)
+    {
+        GetPlayerDataBy(isPlayer).SetCardType(cardType);
+    }
+
+    /// <summary>
+    /// ポイントを加算します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    public void AddPointTo(bool isPlayer)
+    {
+        // 獲得ポイント含めたこれまでの取得ポイント
+        int totalPoint = GetPlayerDataBy(isPlayer).Point + EarnPoint(GetPlayerDataBy(isPlayer).IsUsingSpInRound);
+
+        GetPlayerDataBy(isPlayer).SetPoint(totalPoint);
+    }
+
+    /// <summary>
+    /// 獲得ポイント
+    /// </summary>
+    /// <returns></returns>
+    public int EarnPoint(bool isUsingSpSkillInRound)
+    {
+        int earnPoint = _earnedPoint;
+        //このラウンドの間必殺技を使用していた場合
+        if (isUsingSpSkillInRound)
+            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
+
+        return earnPoint;
+    }
+
+    /// <summary>
+    /// ラウンドの増加
+    /// </summary>
+    public void AddRoundCount()
+    {
+        _roundCount++;
+    }
+
+    /// <summary>
+    /// 自身の選択ターンかどうかを返します
+    /// </summary>
+    /// <returns></returns>
+    public bool MySelectionTurn()
+    {
+        bool myTurn = GetPlayerTurnBy(true);
+        bool selectionPhase = (_battlePhase == SELECTION);
+        bool placeable = (GetIsFieldCardPlacedBy(true) == false);
+        return myTurn && selectionPhase && placeable;
     }
 
     /// <summary>
@@ -141,17 +213,6 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     }
 
     /// <summary>
-    /// プレイヤーごとに状態をリセットする
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    void ResetStateBy(bool isPlayer)
-    {
-        GetPlayerDataBy(isPlayer).SetIsMyTurnEnd(false);
-        GetPlayerDataBy(isPlayer).SetIsUsingSpInRound(false);
-        GetPlayerDataBy(isPlayer).SetIsFieldCardPlaced(false);
-    }
-
-    /// <summary>
     /// プレイヤーのデータを取得します
     /// </summary>
     /// <param name="isPlayer"></param>
@@ -160,6 +221,25 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     {
         if (isPlayer) return _player;
         return _enemy;
+    }
+
+    /// <summary>
+    /// エネミーが必殺技を使用するラウンドを設定します
+    /// </summary>
+    /// <param name="spSkillRound"></param>
+    public void SetEnemySpSkillRound(int spSkillRound)
+    {
+        _enemySpSkillRound = spSkillRound;
+    }
+
+    /// <summary>
+    /// プレイヤーの選択したキャラクターのデータを取得します
+    /// </summary>
+    /// <param name="isPlayer"></param>
+    /// <returns></returns>
+    public SelectableCharacter GetSelectedCharacterBy(bool isPlayer)
+    {
+        return GetPlayerDataBy(isPlayer).SelectedCharacter;
     }
 
     /// <summary>
@@ -232,80 +312,11 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     }
 
     /// <summary>
-    /// プレイヤーのフィールドに配置したカードの種類を設定します
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    /// <param name="cardType"></param>
-    public void RegisterCardTypeBy(bool isPlayer, CardType cardType)
-    {
-        GetPlayerDataBy(isPlayer).SetCardType(cardType);
-    }
-
-    /// <summary>
-    /// ポイントを加算します
-    /// </summary>
-    /// <param name="isPlayer"></param>
-    public void AddPointTo(bool isPlayer)
-    {
-        // 獲得ポイント含めたこれまでの取得ポイント
-        int totalPoint = GetPlayerDataBy(isPlayer).Point + EarnPoint(GetPlayerDataBy(isPlayer).IsUsingSpInRound);
-
-        GetPlayerDataBy(isPlayer).SetPoint(totalPoint);
-    }
-
-    /// <summary>
-    /// 獲得ポイント
-    /// </summary>
-    /// <returns></returns>
-    public int EarnPoint(bool isUsingSpSkillInRound)
-    {
-        int earnPoint = _earnedPoint;
-        //このラウンドの間必殺技を使用していた場合
-        if (isUsingSpSkillInRound)
-            earnPoint *= SPECIAL_SKILL_MAGNIFICATION_BONUS;
-
-        return earnPoint;
-    }
-
-    /// <summary>
-    /// ラウンドの増加
-    /// </summary>
-    public void AddRoundCount()
-    {
-        _roundCount++;
-    }
-
-    /// <summary>
-    /// バトルの結果を取得する
-    /// </summary>
-    public BattleResult JudgeBattleResult()
-    {
-        int playerPoint = _player.Point;
-        int enemyPoint = _enemy.Point;
-
-        if (playerPoint > enemyPoint) return BATTLE_WIN;
-        if (playerPoint == enemyPoint) return BATTLE_DRAW;
-        return BATTLE_LOSE;
-    }
-
-    /// <summary>
     /// 必殺技発動の演出中かどうかを設定する
     /// </summary>
     /// <param name="_isDuring"></param>
     public void SetIsDuringDirectingSpSkill(bool _isDuring)
     {
         _isDuringDirectingSpSkill = _isDuring;
-    }
-
-    /// <summary>
-    /// 自身の選択ターンかどうかを返します
-    /// </summary>
-    /// <returns></returns>
-    public bool MySelectionTurn()
-    {
-        bool myTurn = GetPlayerTurnBy(true);
-        bool selectionPhase = (_battlePhase == SELECTION);
-        bool placeable = (GetIsFieldCardPlacedBy(true) == false);
-        return myTurn && selectionPhase && placeable;
     }
 }
