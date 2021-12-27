@@ -752,6 +752,30 @@ PrefabInstance:
       propertyPath: _battleField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1525997562}
+    - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToRetryBattle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePun2Script, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1525997562}
+    - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToTitle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePun2Script, App
+      objectReference: {fileID: 0}
     - target: {fileID: 2587482146931703968, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _enemyUI
       value: 
