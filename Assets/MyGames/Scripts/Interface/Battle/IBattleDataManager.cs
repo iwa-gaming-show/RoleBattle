@@ -29,7 +29,7 @@ public interface IBattleDataManager
     /// <summary>
     /// プレイヤーデータの初期化
     /// </summary>
-    void InitPlayerData();
+    void InitPlayerData(bool isFirst);
 
     /// <summary>
     /// エネミーが必殺技を使用するラウンドを設定します
