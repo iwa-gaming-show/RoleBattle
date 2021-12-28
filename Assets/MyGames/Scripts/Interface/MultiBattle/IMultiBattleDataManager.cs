@@ -9,22 +9,15 @@ public interface IMultiBattleDataManager
     Room Room { get; }
 
     /// <summary>
-    /// プレイヤーを設定します
+    /// 初期化処理
     /// </summary>
-    /// <param name="player"></param>
-    void SetPlayer(Player player);
+    void Init();
 
     /// <summary>
     /// 対戦相手を設定します
     /// </summary>
     /// <param name="player"></param>
     void SetEnemy(Player enemy);
-
-    /// <summary>
-    /// ルームを設定します
-    /// </summary>
-    /// <param name="room"></param>
-    void SetRoom(Room room);
 
     /// <summary>
     /// プレイヤーのデータの初期化

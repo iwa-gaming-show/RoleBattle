@@ -28,12 +28,13 @@ public class MultiBattleDataManager : MonoBehaviour,
     }
 
     /// <summary>
-    /// プレイヤーを設定します
+    /// 初期化処理
     /// </summary>
-    /// <param name="player"></param>
-    public void SetPlayer(Player player)
+    public void Init()
     {
-        _player = player;
+        _player = PhotonNetwork.LocalPlayer;
+        _room = PhotonNetwork.CurrentRoom;
+        InitPlayerData();
     }
 
     /// <summary>
@@ -43,15 +44,6 @@ public class MultiBattleDataManager : MonoBehaviour,
     public void SetEnemy(Player enemy)
     {
         _enemy = enemy;
-    }
-
-    /// <summary>
-    /// ルームを設定します
-    /// </summary>
-    /// <param name="room"></param>
-    public void SetRoom(Room room)
-    {
-        _room = room;
     }
 
     /// <summary>

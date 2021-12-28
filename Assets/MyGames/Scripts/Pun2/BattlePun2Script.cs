@@ -52,9 +52,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         _multiBattleManager.InitPlayerIcon();
-        _multiBattleDataManager.SetPlayer(PhotonNetwork.LocalPlayer);
-        _multiBattleDataManager.SetRoom(PhotonNetwork.CurrentRoom);
-        _multiBattleDataManager.InitPlayerData();
+        _multiBattleDataManager.Init();
 
         if (PhotonNetwork.PlayerList.Length == _maxPlayers)
         {
