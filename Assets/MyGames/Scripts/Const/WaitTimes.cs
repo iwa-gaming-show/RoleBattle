@@ -42,4 +42,9 @@ public static class WaitTimes
     /// 保存通知のダイアログの表示時間
     /// </summary>
     public static readonly float SAVED_DIALOG_DISPLAY_TIME = 1f;
+
+    /// <summary>
+    /// 切断通知のダイアログの表示時間
+    /// </summary>
+    public static readonly float DISCONECTED_DIALOG_DISPLAY_TIME = 1f;
 }

@@ -124,4 +124,13 @@ public class MultiBattleUIManager : SuperBattleUIManager
     {
         await MoveRandomCardToField(isPlayer);
     }
+
+    /// <summary>
+    /// 切断通知のダイアログを表示する
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask ViewDisconectedDialog()
+    {
+        await _IdirectionalityUI.ViewDisconectedDialog();
+    }
 }

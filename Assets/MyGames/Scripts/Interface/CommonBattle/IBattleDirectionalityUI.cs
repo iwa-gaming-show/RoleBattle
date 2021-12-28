@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-interface IBattleDirectionalityUI
+public interface IBattleDirectionalityUI
 {
     /// <summary>
     /// ラウンド数を表示する
@@ -43,4 +43,10 @@ interface IBattleDirectionalityUI
     /// 開始時にUIを非表示にします
     /// </summary>
     void HideUIAtStart();
+
+    /// <summary>
+    /// 切断されたことをダイアログで表示します
+    /// </summary>
+    /// <returns></returns>
+    UniTask ViewDisconectedDialog();
 }

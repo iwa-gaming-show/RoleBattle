@@ -1054,6 +1054,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickToTitle
       objectReference: {fileID: 0}
+    - target: {fileID: 4708454731437355936, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4708454731571761763, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Name
       value: BattleResultText

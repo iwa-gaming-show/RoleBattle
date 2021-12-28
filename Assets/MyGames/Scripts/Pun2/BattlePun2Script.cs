@@ -162,7 +162,16 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks,
     /// <param name="otherPlayer"></param>
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log("対戦相手の通信が切断されました。タイトルへ戻ります");
+        LeaveRoomAfterPlayerDisconnected().Forget();
+    }
+
+    /// <summary>
+    /// 切断された時、部屋を退室します
+    /// </summary>
+    /// <returns></returns>
+    async UniTask LeaveRoomAfterPlayerDisconnected()
+    {
+        await _multiBattleUIManager.ViewDisconectedDialog();
         PhotonNetwork.LeaveRoom();
     }
 

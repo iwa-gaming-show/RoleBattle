@@ -947,7 +947,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5177612686196052158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -985,6 +985,7 @@ MonoBehaviour:
   _battleResultUI: {fileID: 5177612686665470954}
   _judgementResultText: {fileID: 5177612684890859666}
   _battleResultText: {fileID: 5177612685525037436}
+  _disconectedDialog: {fileID: 0}
 --- !u!1 &5177612686382589699
 GameObject:
   m_ObjectHideFlags: 0

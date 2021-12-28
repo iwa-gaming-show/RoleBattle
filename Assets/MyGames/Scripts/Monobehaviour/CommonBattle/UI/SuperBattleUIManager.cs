@@ -42,7 +42,7 @@ public abstract class SuperBattleUIManager : MonoBehaviour
     BattleDirectionalityUI _battleDirectionalityUI;
 
     IConfirmationPanelManager _confirmationPanelManager;
-    IBattleDirectionalityUI _IdirectionalityUI;
+    protected IBattleDirectionalityUI _IdirectionalityUI;
 
     protected void Awake()
     {

@@ -41,6 +41,10 @@ public class BattleDirectionalityUI : MonoBehaviour,
     [Header("バトルの勝敗の結果表示のテキスト")]
     TextMeshProUGUI _battleResultText;
 
+    [SerializeField]
+    [Header("切断通知のダイアログを設定する")]
+    GameObject _disconectedDialog;
+
     /// <summary>
     /// ラウンド数を表示する
     /// </summary>
@@ -205,5 +209,26 @@ public class BattleDirectionalityUI : MonoBehaviour,
     public void SetBattleResultText(string text)
     {
         _battleResultText.text = text;
+    }
+
+    /// <summary>
+    /// 切断通知のダイアログを表示する
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask ViewDisconectedDialog()
+    {
+        ToggleDisplayDisconectedDialog(true);
+        await UniTask.Delay(TimeSpan.FromSeconds(DISCONECTED_DIALOG_DISPLAY_TIME));
+        ToggleDisplayDisconectedDialog(false);
+        await UniTask.Yield();
+    }
+
+    /// <summary>
+    /// 切断通知のダイアログの表示を切り替える
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleDisplayDisconectedDialog(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_disconectedDialog, isActive, transform);
     }
 }
