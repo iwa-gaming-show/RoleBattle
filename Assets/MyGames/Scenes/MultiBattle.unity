@@ -374,9 +374,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxPlayers: 2
-  _maxRoundCount: 3
-  _defaultCountDownTime: 15
   _multiBattleUIManager: {fileID: 1346771253206073630}
+  _multiBattleManager: {fileID: 2118203708}
 --- !u!4 &1525997563
 Transform:
   m_ObjectHideFlags: 0
@@ -826,6 +825,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2118203706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2118203707}
+  - component: {fileID: 2118203708}
+  - component: {fileID: 2118203709}
+  m_Layer: 0
+  m_Name: MultiBattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2118203707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118203706}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2118203708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118203706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c33034bc3984d049ea5e00a23bf82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxRoundCount: 3
+  _defaultCountDownTime: 10
+  _multiBattleUIManager: {fileID: 1346771253206073630}
+--- !u!114 &2118203709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118203706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2132003483 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4238336880313978633, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
@@ -869,26 +937,26 @@ PrefabInstance:
     - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1525997562}
+      objectReference: {fileID: 2118203708}
     - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickToRetryBattle
       objectReference: {fileID: 0}
     - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BattlePun2Script, App
+      value: MultiBattleManager, App
       objectReference: {fileID: 0}
     - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1525997562}
+      objectReference: {fileID: 2118203708}
     - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickToTitle
       objectReference: {fileID: 0}
     - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BattlePun2Script, App
+      value: MultiBattleManager, App
       objectReference: {fileID: 0}
     - target: {fileID: 2301335013144387003, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_text
@@ -1222,6 +1290,10 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5151567911956731835, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_text
+      value: 0P
+      objectReference: {fileID: 0}
     - target: {fileID: 5438969055338014442, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1306,6 +1378,10 @@ PrefabInstance:
       propertyPath: _inactiveUIWhenTimeOut.Array.data[1]
       value: 
       objectReference: {fileID: 1175556500}
+    - target: {fileID: 8502938201092303533, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_text
+      value: 0P
+      objectReference: {fileID: 0}
     - target: {fileID: 8579531872667090708, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
