@@ -324,6 +324,8 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     {
         IMultiBattleDataManager dataM = _multiBattleDataManager;
         if (dataM.GetIsMyTurn(dataM.GetPlayerBy(true)) == false) return;
+        if (dataM.Room.GetIntBattlePhase() != (int)SELECTION) return;
+
         //確認画面を全て閉じ、ランダムにカードを移動
         _multiBattleUIManager.InactiveUIIfCountDownTimeOut();
         _multiBattleUIManager.MoveRandomCardToField(true).Forget();
