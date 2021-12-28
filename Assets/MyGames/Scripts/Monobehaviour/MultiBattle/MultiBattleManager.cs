@@ -396,8 +396,10 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     public void JudgePlayerProgress()
     {
         //お互いにカードをフィールドに配置していたらバトルをします。
-        if (_multiBattleDataManager.IsEachPlayerFieldCardPlaced()) JudgeTheCard().Forget();
-        else Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
+        if (_multiBattleDataManager.IsEachPlayerFieldCardPlaced())
+            JudgeTheCard().Forget();
+        else
+            Debug.Log("フィールドにカードを配置していないプレイヤーが存在します。");
     }
 
     /// <summary>
@@ -502,6 +504,7 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     /// <param name="turn"></param>
     void IPunTurnManagerCallbacks.OnTurnCompleted(int turn)
     {
+        StopAllCoroutines();//カウントダウンを止めます
         JudgePlayerProgress();
     }
 
