@@ -68,8 +68,6 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     /// </summary>
     public void RetryBattle()
     {
-        _multiBattleDataManager.InitPlayerData();
-
         if (_multiBattleDataManager.IsMasterClient())
         {
             _multiBattleDataManager.InitRoomData();
@@ -173,12 +171,16 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     {
         IMultiBattleDataManager dataM = _multiBattleDataManager;
         //1ラウンド目に行う処理
-        if (isFirstBattle) _multiBattleUIManager.InitSpSkillDescriptions();
+        if (isFirstBattle)
+        {
+            _multiBattleUIManager.InitSpSkillDescriptions();
+            _multiBattleDataManager.InitPlayerData();
+            DecideTheTurn();
+        }
         dataM.ResetPlayerState();
         _multiBattleUIManager.HideUIAtStart();
         _multiBattleUIManager.ResetFieldCards();
         await _multiBattleUIManager.ShowRoundCountText(dataM.Room.GetRoundCount(), _maxRoundCount);
-        if (isFirstBattle) DecideTheTurn();
         _multiBattleUIManager.DistributeCards();
         StartTurn();
     }
