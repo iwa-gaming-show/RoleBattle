@@ -49,4 +49,10 @@ public interface IBattleDirectionalityUI
     /// </summary>
     /// <returns></returns>
     UniTask ViewDisconectedDialog();
+
+    /// <summary>
+    /// 部屋退室用のボタンの表示を切り替える
+    /// </summary>
+    /// <param name="isActive"></param>
+    void ToggleDisplayLeaveRoomButton(bool isActive);
 }

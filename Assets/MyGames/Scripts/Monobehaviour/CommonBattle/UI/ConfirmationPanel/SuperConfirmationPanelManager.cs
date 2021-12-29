@@ -121,7 +121,7 @@ public abstract class SuperConfirmationPanelManager : MonoBehaviour,
     /// フィールドへの確認画面の押下を待ちます
     /// </summary>
     /// <returns></returns>
-    async UniTask WaitFieldConfirmationButton(IRequiredConfirmation confirmationPanel)
+    public async UniTask WaitFieldConfirmationButton(IRequiredConfirmation confirmationPanel)
     {
         await UniTask.WaitUntil(() => confirmationPanel.IsConfirmed);
         GameManager._instance.PlaySE(STANDARD_CLICK);

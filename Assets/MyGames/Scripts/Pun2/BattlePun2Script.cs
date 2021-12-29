@@ -24,6 +24,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     {
         await Fade._instance.StartFadeIn();
         Loading._instance.ToggleUI(true);
+        _multiBattleUIManager.ToggleDisplayLeaveRoomButton(true);
         PhotonNetwork.ConnectUsingSettings();
         _multiBattleDataManager = ServiceLocator.Resolve<IMultiBattleDataManager>();
     }
@@ -43,6 +44,7 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         //タイトルへ
+        Loading._instance.ToggleUI(false);
         GameManager._instance.ClickToLoadScene(SceneType.GameTitle);
     }
 
@@ -105,7 +107,6 @@ public class BattlePun2Script : MonoBehaviourPunCallbacks
     async UniTask LeaveRoomAfterPlayerDisconnected()
     {
         await _multiBattleUIManager.ViewDisconectedDialog();
-        Loading._instance.ToggleUI(false);
         PhotonNetwork.LeaveRoom();
     }
 

@@ -245,13 +245,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1113270532850154834, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113270532850154834, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113270532850154834, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113270533425361505, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1113270533425361506, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1998370339}
+    - target: {fileID: 1113270533425361506, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1113270533425361508, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
       propertyPath: fadeDuration
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113270533425361508, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: _isFirstFadeInComp
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1113270533425361509, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
       propertyPath: m_Pivot.x
@@ -1025,6 +1049,10 @@ PrefabInstance:
     - target: {fileID: 3530061004183932495, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ConfirmationPanelToSp, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775689778108530302, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4708454730430509303, guid: 9a19abc98783c4ec690e535b4c39abe4, type: 3}
       propertyPath: m_Name

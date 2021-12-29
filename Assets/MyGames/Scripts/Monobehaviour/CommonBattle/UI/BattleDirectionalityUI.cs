@@ -45,6 +45,10 @@ public class BattleDirectionalityUI : MonoBehaviour,
     [Header("切断通知のダイアログを設定する")]
     GameObject _disconectedDialog;
 
+    [SerializeField]
+    [Header("部屋退室用のボタンを設定する")]
+    GameObject _leaveRoomButton;
+
     /// <summary>
     /// ラウンド数を表示する
     /// </summary>
@@ -230,5 +234,14 @@ public class BattleDirectionalityUI : MonoBehaviour,
     void ToggleDisplayDisconectedDialog(bool isActive)
     {
         CanvasForObjectPool._instance.ToggleUIGameObject(_disconectedDialog, isActive, transform);
+    }
+
+    /// <summary>
+    /// 部屋退室用のボタンの表示を切り替える
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleDisplayLeaveRoomButton(bool isActive)
+    {
+        CanvasForObjectPool._instance.ToggleUIGameObject(_leaveRoomButton, isActive, transform);
     }
 }

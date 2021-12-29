@@ -133,4 +133,13 @@ public class MultiBattleUIManager : SuperBattleUIManager
     {
         await _IdirectionalityUI.ViewDisconectedDialog();
     }
+
+    /// <summary>
+    /// 部屋退室用のボタンの表示を切り替える
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ToggleDisplayLeaveRoomButton(bool isActive)
+    {
+        _IdirectionalityUI.ToggleDisplayLeaveRoomButton(isActive);
+    }
 }

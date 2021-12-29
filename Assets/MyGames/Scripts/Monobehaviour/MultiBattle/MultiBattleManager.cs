@@ -61,6 +61,7 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
         if (_multiBattleDataManager.Player.GetIsRetryingBattle()) return;
         _multiBattleDataManager.Player.SetIsRetryingBattle(true);
         Loading._instance.ToggleUI(true);
+        _multiBattleUIManager.ToggleDisplayLeaveRoomButton(true);
     }
 
     /// <summary>
@@ -161,6 +162,7 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     void RpcStartBattle(bool isFirstBattle)
     {
         Loading._instance.ToggleUI(false);
+        _multiBattleUIManager.ToggleDisplayLeaveRoomButton(false);
         StartBattle(isFirstBattle).Forget();
     }
 

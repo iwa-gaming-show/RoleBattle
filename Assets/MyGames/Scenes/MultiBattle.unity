@@ -180,6 +180,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3889ce1c98d5d42a6a480a84fd2d07fb, type: 3}
+--- !u!1 &398371468 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7700530259170986191, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &507343248 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1251142499480016468, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
@@ -527,10 +532,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1113270532850154834, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1113270533425361506, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1995176568}
+    - target: {fileID: 1113270533425361508, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
+      propertyPath: _isFirstFadeInComp
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1113270533425361509, guid: 4fda167d88e83441e8b2af22a575fa3d, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -910,6 +923,14 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 690022724810419926, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Text
+      value: "\u90E8\u5C4B\u3092\u9000\u5BA4\u3057\u30BF\u30A4\u30C8\u30EB\u3078\u623B\u308A\u307E\u3059\u304B\uFF1F"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1251142499480016468, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _leaveRoomButton
+      value: 
+      objectReference: {fileID: 398371468}
     - target: {fileID: 1251142499480016468, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _disconectedDialog
       value: 
@@ -945,6 +966,10 @@ PrefabInstance:
     - target: {fileID: 2301335011550758801, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MultiBattleManager, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 2301335012079092837, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2301335012856331655, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1101,6 +1126,14 @@ PrefabInstance:
     - target: {fileID: 4238336878983756486, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_Name
       value: BattleResultText
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336879348561728, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1518745199
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238336879348561728, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4238336879348561729, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -1358,6 +1391,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7700530259170986189, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700530259170986189, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1346771253206073634}
+    - target: {fileID: 7700530259170986189, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickToConfirmLeavingRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700530259170986189, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MultiConfirmationPanelManager, App
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700530259170986191, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Name
+      value: LeaveRoomButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700530259170986191, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _confirmationPanelToSp
       value: 
@@ -1366,6 +1423,10 @@ PrefabInstance:
       propertyPath: _confirmationPanelToField
       value: 
       objectReference: {fileID: 1346771253206073637}
+    - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: _confirmationPanelToLeaveRoom
+      value: 
+      objectReference: {fileID: 1346771253206073633}
     - target: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
       propertyPath: _inactiveUIWhenTimeOut.Array.size
       value: 2
@@ -1414,9 +1475,18 @@ PrefabInstance:
       propertyPath: _battleField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8859334205414838302, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_Name
+      value: ToReaveRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 8859334205414838302, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1346771253206073636, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
     - {fileID: 5954796338845295647, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+    - {fileID: 4569456977747029380, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
 --- !u!224 &1346771253206073629 stripped
 RectTransform:
@@ -1454,6 +1524,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0212773908814e7ba7351caf639800d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1346771253206073633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3805791077285051170, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6d7df395c6444a709de1b2d0925c676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1346771253206073634 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8428161091006245437, guid: 431d6d8aa50ca4b308677ac0a2df68df, type: 3}
+  m_PrefabInstance: {fileID: 1346771253206073628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47484cb223f4e47c8b4465b7182594dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1346771253206073637 stripped
