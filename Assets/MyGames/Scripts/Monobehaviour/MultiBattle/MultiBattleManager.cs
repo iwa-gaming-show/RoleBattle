@@ -59,6 +59,7 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
     {
         //二重送信防止
         if (_multiBattleDataManager.Player.GetIsRetryingBattle()) return;
+        _multiBattleDataManager.InitPlayerData();
         _multiBattleDataManager.Player.SetIsRetryingBattle(true);
         Loading._instance.ToggleUI(true);
         _multiBattleUIManager.ToggleDisplayLeaveRoomButton(true);
@@ -176,7 +177,6 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
         if (isFirstBattle)
         {
             _multiBattleUIManager.InitSpSkillDescriptions();
-            _multiBattleDataManager.InitPlayerData();
             DecideTheTurn();
         }
         dataM.ResetPlayerState();
