@@ -53,7 +53,7 @@ public class BattleManager : MonoBehaviour,
         _battleDataManager = ServiceLocator.Resolve<IBattleDataManager>();
         _battleDataManager.CreatePlayerData();
         _battleDataManager.InitPlayerData(true);
-        _battleUIManager.InitPlayerCharacter();
+        _battleUIManager.InitPlayerCharacter(_battleDataManager);
         PrepareBattle().Forget();
     }
 

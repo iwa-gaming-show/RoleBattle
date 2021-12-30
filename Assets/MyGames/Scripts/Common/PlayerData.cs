@@ -43,10 +43,9 @@ public class PlayerData
     /// 選択キャラクターを保持します
     /// </summary>
     /// <param name="isPlayer"></param>
-    public void SetSelectedCharacter(bool isPlayer, GameManager gm)
+    public void SetSelectedCharacter(SelectableCharacter character)
     {
-        if (isPlayer) _selectedCharacter = gm.GetPlayerCharacter();
-        else _selectedCharacter = gm.GetRandomPlayerCharacter();
+        _selectedCharacter = character;
     }
 
     /// <summary>

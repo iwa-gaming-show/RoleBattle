@@ -61,22 +61,22 @@ public class BattleDataManager : MonoBehaviour, IBattleDataManager
     /// </summary>
     public void InitPlayerData(bool isFirst)
     {
-        InitDataBy(true, isFirst);
-        InitDataBy(false, isFirst);
+        InitDataBy(_player, isFirst, GameManager._instance.GetPlayerCharacter());
+        InitDataBy(_enemy, isFirst, GameManager._instance.GetRandomPlayerCharacter());
     }
 
     /// <summary>
     /// プレイヤーごとに状態をリセットする
     /// </summary>
     /// <param name="isPlayer"></param>
-    void InitDataBy(bool isPlayer, bool isFirst)
+    void InitDataBy(PlayerData player, bool isFirst, SelectableCharacter character)
     {
-        GetPlayerDataBy(isPlayer).SetPoint(INITIAL_POINT);
-        GetPlayerDataBy(isPlayer).SetCanUseSpSkill(true);
-        GetPlayerDataBy(isPlayer).SetIsMyTurn(false);
+        player.SetPoint(INITIAL_POINT);
+        player.SetCanUseSpSkill(true);
+        player.SetIsMyTurn(false);
 
         if (isFirst == false) return;//初回だけキャラクターデータを設定します
-        GetPlayerDataBy(isPlayer).SetSelectedCharacter(isPlayer, GameManager._instance);
+        player.SetSelectedCharacter(character);
     }
 
     /// <summary>

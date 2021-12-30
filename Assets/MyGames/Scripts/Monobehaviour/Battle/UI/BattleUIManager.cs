@@ -53,10 +53,10 @@ public class BattleUIManager : SuperBattleUIManager
     /// <summary>
     /// プレイヤーキャラクターの初期化処理
     /// </summary>
-    public void InitPlayerCharacter()
+    public void InitPlayerCharacter(IBattleDataManager dataM)
     {
-        _playerUI.SetPlayerCharacter(_battleDataManager.GetSelectedCharacterBy(true));//playerの設定
-        _enemyUI.SetPlayerCharacter(_battleDataManager.GetSelectedCharacterBy(false));//enemyの設定
+        _playerUI.SetPlayerCharacter(dataM.GetSelectedCharacterBy(true));//playerの設定
+        _enemyUI.SetPlayerCharacter(dataM.GetSelectedCharacterBy(false));//enemyの設定
     }
 
     /// <summary>
