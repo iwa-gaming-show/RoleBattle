@@ -48,21 +48,10 @@ public class EditPlayerNameField : MonoBehaviour,
     {
         string input = _editInputField.textComponent.text;
 
-        if (ValidateString(input))
+        if (BooleanUtil.ValidateString(input))
             ReflectPlayerName(input);
         else
             DoWhenDisabled();
-    }
-
-    /// <summary>
-    /// 文字列の入力チェックをします
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    bool ValidateString(string input)
-    {
-        //nullや空文字では無ければtrue
-        return (string.IsNullOrWhiteSpace(input) == false);
     }
 
     /// <summary>
@@ -71,7 +60,7 @@ public class EditPlayerNameField : MonoBehaviour,
     void DoWhenDisabled()
     {
         //すでに入力されていたらなら設定せずに編集画面を閉じる
-        if (ValidateString(_playerName.text))
+        if (BooleanUtil.ValidateString(_playerName.text))
             ActivateEditOrView(false);
         else
             Debug.Log("入力内容は有効ではありません");

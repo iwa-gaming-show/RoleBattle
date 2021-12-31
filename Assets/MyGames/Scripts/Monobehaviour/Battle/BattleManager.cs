@@ -359,7 +359,7 @@ public class BattleManager : MonoBehaviour,
     public void DecideTheTurn()
     {
         //trueなら自身を先攻にする
-        if (RandomBool()) _battleDataManager.SetIsPlayerTurnBy(true, true);
+        if (BooleanUtil.RandomBool()) _battleDataManager.SetIsPlayerTurnBy(true, true);
         else _battleDataManager.SetIsPlayerTurnBy(false, true);
     }
 
@@ -370,14 +370,5 @@ public class BattleManager : MonoBehaviour,
     {
         int spSkillRound = UnityEngine.Random.Range(INITIAL_ROUND_COUNT, _maxRoundCount + INITIAL_ROUND_COUNT);
         _battleDataManager.SetEnemySpSkillRound(spSkillRound);
-    }
-
-    /// <summary>
-    /// bool型をランダムに取得する
-    /// </summary>
-    /// <returns></returns>
-    bool RandomBool()
-    {
-        return UnityEngine.Random.Range(0, 2) == 0;
     }
 }

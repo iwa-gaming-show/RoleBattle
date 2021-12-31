@@ -226,7 +226,7 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
         if (dataM.IsMasterClient() == false) return;
 
         //trueならmasterClientを先攻にする
-        if (RandomBool()) dataM.SetIsMyTurn(dataM.GetMasterClient(), true);
+        if (BooleanUtil.RandomBool()) dataM.SetIsMyTurn(dataM.GetMasterClient(), true);
         else dataM.SetIsMyTurn(dataM.GetOtherPlayer(), true);
     }
 
@@ -383,15 +383,6 @@ public class MultiBattleManager : MonoBehaviourPunCallbacks,
         int totalRoundCount = _multiBattleDataManager.Room.GetRoundCount();
         totalRoundCount++;
         _multiBattleDataManager.Room.SetRoundCount(totalRoundCount);
-    }
-
-    /// <summary>
-    /// bool型をランダムに取得する
-    /// </summary>
-    /// <returns></returns>
-    bool RandomBool()
-    {
-        return UnityEngine.Random.Range(0, 2) == 0;
     }
 
     /// <summary>
