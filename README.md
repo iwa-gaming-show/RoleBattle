@@ -7,7 +7,8 @@
 
 ### ----カード相性----
   カードには相性が存在し、PRINCESS->BRAVE->DEVIL->PRINCESSといったそれぞれ矢印の方向に強いといった特性を持ちます。<br>
-  https://user-images.githubusercontent.com/96030906/147855802-95f5c60a-794f-49cd-9d6f-d8541b9c7289.png
+  
+  ![affinity](https://user-images.githubusercontent.com/96030906/147855802-95f5c60a-794f-49cd-9d6f-d8541b9c7289.png)
 
 ### ----進行----
 カードでのバトルで勝利するとポイントを獲得します。
